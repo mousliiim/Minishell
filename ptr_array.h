@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_array.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 01:41:53 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/24 04:25:40 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,12 @@ typedef struct s_split_line {
     size_t      error_position;
 } t_split_line;
 
+typedef struct s_tab_struct
+{
+	int				ID;
+	char			*commands;
+}	t_tab_struct;
+
 typedef struct s_command_status {
     bool exit_shell;
     int  status;
@@ -55,7 +61,7 @@ void pa_add(t_ptr_array *pa, void *ptr);
 
 size_t	pa_size(t_ptr_array *pa);
 void * pa_get(t_ptr_array *pa, size_t index);
-t_split_line split_line(const char line[], int stop);
+t_split_line split_line(const char line[]);
 
 
 

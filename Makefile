@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 22:36:18 by mparisse          #+#    #+#              #
-#    Updated: 2023/02/23 07:30:30 by mparisse         ###   ########.fr        #
+#    Updated: 2023/02/24 04:22:14 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ LIBS = libft.a -lreadline
 
 CFLAGS = -Wall -Werror -Wextra -lreadline
 
-CC = gcc
+CC = gcc -g3
 
 all : ${NAME}
 
