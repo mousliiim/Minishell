@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 05:45:35 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/24 19:45:36 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,67 @@ t_split_line	split_line(const char *line)
 	return (res);
 }
 
+int	print_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	if (!env)
+		return (ft_printf("there is no env\n"), 0);
+	
+	while (env[i])
+	{
+		ft_printf("%s\n", env[i]);
+		i++;
+	}
+	return (0);
+}
+
+// 
+char	**set_path(t_global *global)
+{
+	int		i;
+	char	**path;
+
+	i = 0;
+	if (!global->env)
+		return (0);
+	else
+	{
+		while (global->env[i])
+		{
+			if (ft_strnstr(global->env[i], "PATH=", 5))
+			{
+				path = ft_split(global->env[i] + 5, ':');
+				if (!path || !*path)
+					return (0);
+				return (path);
+			}
+			i++;
+		}
+	}
+	return (0);
+}
+
+void	print_global(t_global *global)
+{
+	int	i;
+	
+	i = 0;
+	print_env(global->path);
+	while (i < global->nb)
+	{
+		printf("global->commands[i] >> %s\n", global->struct_id[i].commands);
+		i++;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	int					nb_of_cmd;
 	char				*input;
-	static t_tab_struct	*tab_struct;
+	static	t_tab_struct	*tab_struct;
+	static	t_global global;
 	t_split_line		splitted_line;
 
 	if (ac != 1)
@@ -77,14 +133,16 @@ int	main(int ac, char **av, char **env)
 		tab_struct = malloc(sizeof(t_tab_struct) * nb_of_cmd);
 		splitted_line = split_line(input);
 		printf("nb_of_cmd >> %d\n", nb_of_cmd);
+		global.nb = nb_of_cmd;
 		while (nb_of_cmd--)
 		{
 			tab_struct[nb_of_cmd].id = nb_of_cmd;
 			tab_struct[nb_of_cmd].commands = splitted_line.strings.array[nb_of_cmd];
 			printf("tab_struct[%d] >> %s\n", nb_of_cmd, (char *)tab_struct[nb_of_cmd].commands);
 		}
-		// splitted_line = split_line(input, 42);
-		// tab_struct[0].line_split.strings.array[0] = splitted_line.strings.array[0];
-		// // printf("tab_struct[0] >> %s\n", (char *)tab_struct[0].line_split.strings.array[0]);
+		global.env = env;
+		global.struct_id = tab_struct;
+		global.path = set_path(&global);
+		print_global(&global);
 	}
 }

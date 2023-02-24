@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 05:45:44 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/24 19:43:03 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,22 @@ typedef struct s_ptr_array
 	char	**path;
 }	t_ptr_array;
 
+typedef struct s_tab_struct
+{
+	int		id;
+	char	*commands;
+	char	**env;
+}	t_tab_struct;
+
+typedef struct s_global
+{
+	char			**basic_env;
+	t_tab_struct	*struct_id;
+	char			**env;
+	char			**path;
+	int				nb;
+}	t_global;
+
 typedef struct s_split_line
 {
 	t_ptr_array	strings;
@@ -38,12 +54,7 @@ typedef struct s_split_line
 	size_t		error_position;
 }	t_split_line;
 
-typedef struct s_tab_struct
-{
-	int		id;
-	char	*commands;
-}	t_tab_struct;
-
+// pas encore utiliser 
 typedef struct s_command_status
 {
 	bool	exit_shell;
@@ -51,11 +62,6 @@ typedef struct s_command_status
 	int		errnum;
 }	t_command_status;
 
-typedef struct s_global
-{
-	char			**basic_env;
-	t_split_line	*split_line;
-}	t_global;
 
 t_ptr_array		pa_new(void);
 void			pa_delete(t_ptr_array *pa);
