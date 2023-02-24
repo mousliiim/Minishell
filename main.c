@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 19:45:36 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/24 21:33:16 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ int	print_env(char **env)
 	return (0);
 }
 
-// 
 char	**set_path(t_global *global)
 {
 	int		i;
@@ -109,12 +108,55 @@ void	print_global(t_global *global)
 	
 	i = 0;
 	print_env(global->path);
+	// print_env(global->env);
 	while (i < global->nb)
 	{
 		printf("global->commands[i] >> %s\n", global->struct_id[i].commands);
 		i++;
 	}
 }
+
+// int	find_path(t_command *command, char *av)
+// {
+// 	int		i;
+// 	char	*command_w_path;
+
+// 	i = -1;
+// 	if (!command->absolute_command[0])
+// 		return (0);
+// 	if (ft_strchr(command->absolute_command[0], '/')
+// 		&& access(command->absolute_command[0], F_OK | X_OK) == 0)
+// 		return (1);
+// 	if (errno == 13)
+// 		return (ft_printf("pipex: %s: Permission denied\n", av), 0);
+// 	while (command->path[++i])
+// 	{
+// 		command_w_path = ft_sup_strjoin(command->path[i], '/',
+// 				command->absolute_command[0]);
+// 		if (!command_w_path)
+// 			return (free_and_exit(command), 0);
+// 		if (access(command_w_path, F_OK | X_OK) != -1)
+// 		{
+// 			free(command->absolute_command[0]);
+// 			return (command->absolute_command[0] = command_w_path, 1);
+// 		}
+// 		free(command_w_path);
+// 	}
+// 	return (0);
+// }
+
+// int	find_path_for_each_command(t_global *global)
+// {
+// 	int	i;
+// 	char	*command_w_path;
+	
+// 	i = -1;
+	
+// 	while ()
+// 	{
+// 		;
+// 	}
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -138,11 +180,12 @@ int	main(int ac, char **av, char **env)
 		{
 			tab_struct[nb_of_cmd].id = nb_of_cmd;
 			tab_struct[nb_of_cmd].commands = splitted_line.strings.array[nb_of_cmd];
-			printf("tab_struct[%d] >> %s\n", nb_of_cmd, (char *)tab_struct[nb_of_cmd].commands);
+			// printf("tab_struct[%d] >> %s\n", nb_of_cmd, (char *)tab_struct[nb_of_cmd].commands);
 		}
 		global.env = env;
 		global.struct_id = tab_struct;
 		global.path = set_path(&global);
+		// find_path_for_each_command(&global);
 		print_global(&global);
 	}
 }
