@@ -6,11 +6,11 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 04:43:02 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/24 05:45:35 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ptr_array.h"
+#include "minishell.h"
 
 int	ft_isspace(char c)
 {
@@ -49,39 +49,17 @@ t_split_line	split_line(const char *line)
 	{
 		while (ft_isspace(line[i]))
 			i++;
-		if (!line[i] || line[i] == '|')
-			break ;
 		start = i;
-		while (line[i] && !ft_isspace(line[i]) && line[i] != '|')
+		while (line[i] && line[i] != '|')
 			i++;
 		if (i > start)
 			pa_add(&res.strings, ft_substr(line, start, i - start));
-		if (!line[i] || line[i] == '|')
-		break ;
+		if (!line[i])
+			break ;
+		i++;
 	}
 	return (res);
 }
-
-void	print_my_commands(int nb, void **cmds)
-{
-	int				i;
-	int				j;
-	t_split_line	*ptr;
-
-	j = 0;
-	while (j < nb)
-	{
-		i = 0;
-		ptr = cmds[j];
-		while (i < ptr->strings.size)
-		{
-			printf("command[%d] >> %s\n", i,
-				(char *)ptr->strings.array[i]);
-			i++;
-		}
-		j++;
-	}
-}	
 
 int	main(int ac, char **av, char **env)
 {
@@ -98,12 +76,11 @@ int	main(int ac, char **av, char **env)
 		nb_of_cmd = parse(input);
 		tab_struct = malloc(sizeof(t_tab_struct) * nb_of_cmd);
 		splitted_line = split_line(input);
-		printf("Number of commands: %d\n", nb_of_cmd);
+		printf("nb_of_cmd >> %d\n", nb_of_cmd);
 		while (nb_of_cmd--)
 		{
-			tab_struct[nb_of_cmd].ID = nb_of_cmd;
-			if (ft_strcmp((char *)splitted_line.strings.array[nb_of_cmd], "|"))
-				tab_struct[nb_of_cmd].commands = (char *)splitted_line.strings.array[nb_of_cmd];
+			tab_struct[nb_of_cmd].id = nb_of_cmd;
+			tab_struct[nb_of_cmd].commands = splitted_line.strings.array[nb_of_cmd];
 			printf("tab_struct[%d] >> %s\n", nb_of_cmd, (char *)tab_struct[nb_of_cmd].commands);
 		}
 		// splitted_line = split_line(input, 42);

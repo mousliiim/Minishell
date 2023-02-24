@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/01 15:04:07 by mparisse          #+#    #+#             */
-/*   Updated: 2023/01/16 21:03:36 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/24 05:34:12 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,3 @@ int	ft_atoi(const char *str)
 		return (INT_MIN);
 	return (res * negatif);
 }
-/*
-int main()
-{
-	printf("%d \n", ft_atoi("  -489"));
-	//printf("%d", atoi(" --489"));
-}*/

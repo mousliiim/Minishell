@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pa_utils.c                                         :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 05:35:37 by mmourdal         ###   ########.fr       */
+/*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
+/*   Updated: 2023/02/24 05:38:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_ptr_array	pa_new(void)
+int	ft_atoi(const char *nptr)
 {
-	t_ptr_array	new;
+	int		sign;
+	long	result;
 
-	new.size = 0;
-	new.capacity = 8;
-	new.array = malloc(sizeof(void *) * 8);
-	return (new);
-}
-
-void	pa_delete(t_ptr_array *pa)
-{
-	free(pa->array);
-}
-
-void	pa_add(t_ptr_array *pa, void *new_str)
-{	
-	if (pa->size == pa->capacity)
+	sign = 1;
+	result = 0;
+	while ((*nptr >= 7 && *nptr <= 13) || *nptr == 32)
+		nptr++;
+	if (*nptr == '-' || *nptr == '+')
 	{
-		pa->capacity *= 2;
-		pa->array = realloc(pa->array, pa->capacity * sizeof(void *));
+		if (*nptr == '-')
+			sign = -1;
+		nptr++;
 	}
-	pa->array[pa->size++] = new_str;
+	while (*nptr >= '0' && *nptr <= '9')
+	{
+		result = result * 10 + *nptr - '0';
+		if ((result * sign) > LLONG_MAX || (result * sign) < LLONG_MIN)
+			exit(1);
+		nptr++;
+	}
+	return (result * sign);
 }
-

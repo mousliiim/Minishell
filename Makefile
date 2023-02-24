@@ -6,11 +6,11 @@
 #    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 22:36:18 by mparisse          #+#    #+#              #
-#    Updated: 2023/02/24 04:22:14 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/02/24 05:34:36 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = main.c pa_utils.c
+SRCS = main.c pa_utils.c utils.c
 
 OBJS = ${SRCS:.c=.o}
 
