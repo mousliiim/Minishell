@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 18:59:14 by mparisse          #+#    #+#             */
-/*   Updated: 2022/11/18 23:29:11 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 18:18:51 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	conv(char c, va_list *args)
 	{
 		p = (uintptr_t)va_arg(*args, void *);
 		if (!p)
-			return (write(1, "(nil)", 5));
+			return (write(2, "(nil)", 5));
 		return (ft_putstr("0x") + ft_putnbr(p, 16, 0));
 	}
 	return (ft_putchar(c));

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 03:15:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/25 19:39:31 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdio.h>
 # include <ctype.h>
 # include <limits.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 # include "libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -51,6 +53,9 @@ typedef struct s_global
 	t_tab_struct	*struct_id;
 	char			**env;
 	char			**path;
+	int				*forkstates;
+	int				link[2];
+	int				prev;
 	int				nb;
 }	t_global;
 
@@ -79,4 +84,11 @@ t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
 int				parse(char *str);
+
+// exec 
+int	go_exec(t_global *global);
+int	find_path_for_each_command(t_global *global);
+int	forking(t_global *global, int i);
+void	waiting(int *forkstates, int size_wait);
+
 #endif

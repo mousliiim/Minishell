@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 14:23:25 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 19:47:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,18 @@
 // char **commands for ls -l -a ls is [0] -l is [1] -a is [2]
 // gerer les pipes si elle sont vide a gauche ou a droite genre | | | ou ||| ou || || ||
 // MAXOU C FAIT SA GRACE A DISPLAY_SPLIT TU PEU VISUALISER BIEN REGARDE
+
+// Bah ecoute moi aussi ca avance de mon cote les pipes marchent j'ai l'impression
+// que tout est carre de ce cote la 
+// next -> redirection
+
+// note il faut que on essaie de garder dans le main.c
+// toutes les fonctions qui l'on appelle dans le main
+
+// test a reverifirer pour l'exec
+// cat | cat | ls
+// cat | ls
+// ls | cat
 
 int	ft_isspace(char c)
 {
@@ -131,40 +143,44 @@ void display_split(t_tab_struct *tab_struct)
 	}
 }
 
-int	find_path_for_each_command(t_global *global)
+void	waiting(int *forkstates, int size_wait)
 {
-	int				i;
-	int				j;
-	t_tab_struct	*struc;
-	char			*command_w_path;
-	
+	int	i;
+	int	status;
+	int	exit_code;
+	int	signal_code;
+
 	i = 0;
-	struc = global->struct_id;
-	while (i < struc->nb_cmd)
+	status = 0;
+	exit_code = 0;
+	signal_code = 0;
+	// ft_printf("il y a %d processus a attendre\n", size_wait);
+	while (i < size_wait)
 	{
-		j = 0;
-		while (global->path[j])
+		// ft_printf("le processus a attendre est %d\n", forkstates[i]);
+		waitpid(forkstates[i], &status, 0);
+		if (WIFEXITED(status))
 		{
-			command_w_path = ft_sup_strjoin(global->path[j], '/', struc[i].split_command[0]);
-			if (access(command_w_path, F_OK | X_OK) != -1)
-			{
-				free(struc[i].split_command[0]);
-				struc[i].split_command[0] = command_w_path;
-				break ;
-			}
-			free(command_w_path);
-			j++;
+			if (WEXITSTATUS(status) != 0)
+				exit_code = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) != 0)
+				signal_code = WTERMSIG(status);
 		}
 		i++;
 	}
-	return (0);
+	(void) signal_code;
+	(void) exit_code;
+	//free resources
+	// if (exit_code != 0)
+	// 	exit(exit_code);
+	// else
+	// 	exit(signal_code);
 }
 
-int	go_exec(t_global *global)
-{
-	find_path_for_each_command(global);
-	return (0);
-}
+
 
 int	main(int ac, char **av, char **env)
 {
@@ -180,6 +196,7 @@ int	main(int ac, char **av, char **env)
 	while (42)
 	{
 		input = readline(GB"→  "EB BB"$Mini"EB WB"Boos"EB RB"ted: "EB);
+		// input = readline("test : ");
 		splitted_line = split_line(input);
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
 		global.nb = splitted_line.strings.size;
@@ -188,7 +205,7 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		tab_struct->nb_cmd = splitted_line.strings.size;
 		i = splitted_line.strings.size;
-		printf("Number of command = %ld\n", splitted_line.strings.size);
+		// printf("Number of command = %ld\n", splitted_line.strings.size);
 		j = 0;
 		while (j < i)
 		{
@@ -198,6 +215,7 @@ int	main(int ac, char **av, char **env)
 			j++;
 		}
 		go_exec(&global);
-		display_split(tab_struct);
+		// waiting(global.forkstates, global.nb);
+		// display_split(tab_struct);
 	}
 }
