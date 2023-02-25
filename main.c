@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 03:31:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/25 03:54:38 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,3 +208,40 @@ int	main(int ac, char **av, char **env)
 		// print_global(&global);
 	}
 }
+
+/*
+Erreur de syntaxe:
+Chacun doit avoir leur propre message d erreur de syntaxe
+Quote non fermer "
+ls "-la"" quote non fermer erreur de syntaxe
+"" """"""""""""""""""""""""""  "'"  '  "" verifier si les toute les quotes toute seul sont bien entourer elle meme de quote seul genre "" "" "" ""
+"" """"""""""""""""""""""""""  "'"  '  """"""""sdsdadsa"" ' sa commant not found
+"" """"""""""""""""""""""""""  "'"  '  """"""""sdsdadsa"" sa c erreur de syntax a differencier les 2
+
+// typedef struct token{
+// 	char *token
+// 	int type;
+// 	struct token *next;
+// }
+
+
+// [{ls}, {b}, {-la}]
+// // enum{
+// // 	redir = 0;
+// // 	commande = 1;
+// // }
+
+
+// // typedef struct command{
+// // 	
+// // 	token *token;
+// // }
+
+
+
+// // typedef struct token{
+// // 	char *token
+// // 	int type;
+// // 	struct token *next;
+// // }
+*/
