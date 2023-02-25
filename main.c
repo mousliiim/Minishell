@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/25 03:54:38 by mmourdal         ###   ########.fr       */
-=======
-/*   Updated: 2023/02/25 19:47:41 by mparisse         ###   ########.fr       */
->>>>>>> maxou
+/*   Updated: 2023/02/25 22:31:38 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +121,7 @@ char	**set_path(t_global *global)
 // 	// }
 // }
 
-void display_split(t_tab_struct *tab_struct)
+void	display_split(t_tab_struct *tab_struct)
 {
 	int i;
 	int j;
@@ -184,7 +180,38 @@ void	waiting(int *forkstates, int size_wait)
 	// 	exit(signal_code);
 }
 
+int	quote_checker(char *line)
+{
+	int	i;
+	int	single_quote;
+	int	double_quote;
 
+	i = 0;
+	single_quote = 0;
+	double_quote = 1;
+	while (line[i])
+	{
+		if (line[i] == '"' && double_quote == 1 && single_quote == 0)
+			double_quote = 0;
+		else if (line[i] == '"' && double_quote == 0 && single_quote == 0)
+			double_quote = 1;
+		else if (line[i] == '\'' && double_quote == 1 && single_quote == 0)
+			single_quote = 1;
+		else if (line[i] == '\'' && double_quote == 1 && single_quote == 1)
+			single_quote = 0;
+		i++;
+	}
+	if (single_quote == double_quote)
+		return (0);
+	return (1);
+}
+
+int	syntax_checker(char *line)
+{
+	if (!quote_checker(line))
+		return (0);
+	return (1);
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -199,9 +226,16 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	while (42)
 	{
-		input = readline(GB"→  "EB BB"$Mini"EB WB"Boos"EB RB"ted: "EB);
-		// input = readline("test : ");
+		input = readline(GB"→  "EB CB"$MiniBoosted " BRB"✗ "EB);
+		if (!input)
+			exit(0);
+		if (!syntax_checker(input))
+		{
+			ft_printf("Syntax error : quote not closed\n");
+			continue ;
+		}
 		splitted_line = split_line(input);
+		add_history(input);
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
 		global.nb = splitted_line.strings.size;
 		global.env = env;
