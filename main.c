@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/25 03:54:38 by mmourdal         ###   ########.fr       */
+=======
+/*   Updated: 2023/02/25 19:47:41 by mparisse         ###   ########.fr       */
+>>>>>>> maxou
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +20,18 @@
 // char **commands for ls -l -a ls is [0] -l is [1] -a is [2]
 // gerer les pipes si elle sont vide a gauche ou a droite genre | | | ou ||| ou || || ||
 // MAXOU C FAIT SA GRACE A DISPLAY_SPLIT TU PEU VISUALISER BIEN REGARDE
+
+// Bah ecoute moi aussi ca avance de mon cote les pipes marchent j'ai l'impression
+// que tout est carre de ce cote la 
+// next -> redirection
+
+// note il faut que on essaie de garder dans le main.c
+// toutes les fonctions qui l'on appelle dans le main
+
+// test a reverifirer pour l'exec
+// cat | cat | ls
+// cat | ls
+// ls | cat
 
 int	ft_isspace(char c)
 {
@@ -109,48 +125,6 @@ char	**set_path(t_global *global)
 // 	// }
 // }
 
-// int	find_path(t_command *command, char *av)
-// {
-// 	int		i;
-// 	char	*command_w_path;
-
-// 	i = -1;
-// 	if (!command->absolute_command[0])
-// 		return (0);
-// 	if (ft_strchr(command->absolute_command[0], '/')
-// 		&& access(command->absolute_command[0], F_OK | X_OK) == 0)
-// 		return (1);
-// 	if (errno == 13)
-// 		return (ft_printf("pipex: %s: Permission denied\n", av), 0);
-// 	while (command->path[++i])
-// 	{
-// 		command_w_path = ft_sup_strjoin(command->path[i], '/',
-// 				command->absolute_command[0]);
-// 		if (!command_w_path)
-// 			return (free_and_exit(command), 0);
-// 		if (access(command_w_path, F_OK | X_OK) != -1)
-// 		{
-// 			free(command->absolute_command[0]);
-// 			return (command->absolute_command[0] = command_w_path, 1);
-// 		}
-// 		free(command_w_path);
-// 	}
-// 	return (0);
-// }
-
-// int	find_path_for_each_command(t_global *global)
-// {
-// 	int	i;
-// 	char	*command_w_path;
-	
-// 	i = -1;
-	
-// 	while ()
-// 	{
-// 		;
-// 	}
-// }
-
 void display_split(t_tab_struct *tab_struct)
 {
 	int i;
@@ -173,6 +147,45 @@ void display_split(t_tab_struct *tab_struct)
 	}
 }
 
+void	waiting(int *forkstates, int size_wait)
+{
+	int	i;
+	int	status;
+	int	exit_code;
+	int	signal_code;
+
+	i = 0;
+	status = 0;
+	exit_code = 0;
+	signal_code = 0;
+	// ft_printf("il y a %d processus a attendre\n", size_wait);
+	while (i < size_wait)
+	{
+		// ft_printf("le processus a attendre est %d\n", forkstates[i]);
+		waitpid(forkstates[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			if (WEXITSTATUS(status) != 0)
+				exit_code = WEXITSTATUS(status);
+		}
+		else if (WIFSIGNALED(status))
+		{
+			if (WTERMSIG(status) != 0)
+				signal_code = WTERMSIG(status);
+		}
+		i++;
+	}
+	(void) signal_code;
+	(void) exit_code;
+	//free resources
+	// if (exit_code != 0)
+	// 	exit(exit_code);
+	// else
+	// 	exit(signal_code);
+}
+
+
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -187,6 +200,7 @@ int	main(int ac, char **av, char **env)
 	while (42)
 	{
 		input = readline(GB"→  "EB BB"$Mini"EB WB"Boos"EB RB"ted: "EB);
+		// input = readline("test : ");
 		splitted_line = split_line(input);
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
 		global.nb = splitted_line.strings.size;
@@ -195,7 +209,7 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		tab_struct->nb_cmd = splitted_line.strings.size;
 		i = splitted_line.strings.size;
-		printf("Number of command = %ld\n", splitted_line.strings.size);
+		// printf("Number of command = %ld\n", splitted_line.strings.size);
 		j = 0;
 		while (j < i)
 		{
@@ -204,8 +218,9 @@ int	main(int ac, char **av, char **env)
 			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands, ' ');
 			j++;
 		}
-		display_split(tab_struct);
-		// print_global(&global);
+		go_exec(&global);
+		// waiting(global.forkstates, global.nb);
+		// display_split(tab_struct);
 	}
 }
 

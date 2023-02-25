@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:19:22 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/23 06:52:43 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 14:15:16 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlcpy(char *ds, const char *src, size_t size);
 char	*ft_itoa(int nb);
 char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_sup_strjoin(char const *s1, char c, char const *s2);
 char	*ft_strchr(const char *s, int c);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strndup(char const *s, int stop);

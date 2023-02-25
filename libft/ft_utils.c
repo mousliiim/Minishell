@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 17:33:07 by mparisse          #+#    #+#             */
-/*   Updated: 2022/11/18 23:28:35 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 18:18:24 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,15 +18,15 @@ int	ft_putstr(const char *str)
 
 	i = 0;
 	if (!str)
-		return (write(1, "(null)", 6));
+		return (write(2, "(null)", 6));
 	while (str[i])
 		i++;
-	return (write(1, str, i));
+	return (write(2, str, i));
 }
 
 int	ft_putchar(int c)
 {
-	return (write(1, &c, 1));
+	return (write(2, &c, 1));
 }
 
 int	ft_putnbr(uintptr_t n, uintptr_t base, int upper)
