@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/24 19:43:03 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 03:15:42 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@
 # include "libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
+# define BB "\033[1;34m"
+# define WB "\033[1;37m"
+# define RB "\033[1;31m"
+# define GB "\033[1;32m"
+# define EB "\033[0m"
 
 typedef struct s_ptr_array
 {
@@ -33,9 +38,11 @@ typedef struct s_ptr_array
 
 typedef struct s_tab_struct
 {
-	int		id;
-	char	*commands;
+	long int		id;
+	char	**commands;
 	char	**env;
+	char	**split_command;
+	long int	nb_cmd;
 }	t_tab_struct;
 
 typedef struct s_global
