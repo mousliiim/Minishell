@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 03:31:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/25 14:23:25 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,48 +109,6 @@ char	**set_path(t_global *global)
 // 	// }
 // }
 
-// int	find_path(t_command *command, char *av)
-// {
-// 	int		i;
-// 	char	*command_w_path;
-
-// 	i = -1;
-// 	if (!command->absolute_command[0])
-// 		return (0);
-// 	if (ft_strchr(command->absolute_command[0], '/')
-// 		&& access(command->absolute_command[0], F_OK | X_OK) == 0)
-// 		return (1);
-// 	if (errno == 13)
-// 		return (ft_printf("pipex: %s: Permission denied\n", av), 0);
-// 	while (command->path[++i])
-// 	{
-// 		command_w_path = ft_sup_strjoin(command->path[i], '/',
-// 				command->absolute_command[0]);
-// 		if (!command_w_path)
-// 			return (free_and_exit(command), 0);
-// 		if (access(command_w_path, F_OK | X_OK) != -1)
-// 		{
-// 			free(command->absolute_command[0]);
-// 			return (command->absolute_command[0] = command_w_path, 1);
-// 		}
-// 		free(command_w_path);
-// 	}
-// 	return (0);
-// }
-
-// int	find_path_for_each_command(t_global *global)
-// {
-// 	int	i;
-// 	char	*command_w_path;
-	
-// 	i = -1;
-	
-// 	while ()
-// 	{
-// 		;
-// 	}
-// }
-
 void display_split(t_tab_struct *tab_struct)
 {
 	int i;
@@ -171,6 +129,41 @@ void display_split(t_tab_struct *tab_struct)
 		write(1, "\n", 1);
 	i++;
 	}
+}
+
+int	find_path_for_each_command(t_global *global)
+{
+	int				i;
+	int				j;
+	t_tab_struct	*struc;
+	char			*command_w_path;
+	
+	i = 0;
+	struc = global->struct_id;
+	while (i < struc->nb_cmd)
+	{
+		j = 0;
+		while (global->path[j])
+		{
+			command_w_path = ft_sup_strjoin(global->path[j], '/', struc[i].split_command[0]);
+			if (access(command_w_path, F_OK | X_OK) != -1)
+			{
+				free(struc[i].split_command[0]);
+				struc[i].split_command[0] = command_w_path;
+				break ;
+			}
+			free(command_w_path);
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	go_exec(t_global *global)
+{
+	find_path_for_each_command(global);
+	return (0);
 }
 
 int	main(int ac, char **av, char **env)
@@ -204,7 +197,7 @@ int	main(int ac, char **av, char **env)
 			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands, ' ');
 			j++;
 		}
+		go_exec(&global);
 		display_split(tab_struct);
-		// print_global(&global);
 	}
 }
