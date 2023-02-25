@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 19:37:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 22:31:47 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ int	forking(t_global *global, int i)
 	global->forkstates[i] = fork();
 	if (global->forkstates[i] == 0)
 	{
-		// printf("global nb>>%d\n", global->nb);
-		// printf("i      >>%d\n", i);
 		if (i == global->nb - 1)
 		{
 			if (global->nb != 1)
@@ -76,7 +74,6 @@ int	forking(t_global *global, int i)
 		}
 		else if (i == 0)
 		{
-			// dup2(global->link[0], STDIN_FILENO);
 			dup2(global->link[1], STDOUT_FILENO);
 			close(global->link[0]);
 		}
@@ -96,6 +93,5 @@ int	forking(t_global *global, int i)
 	global->prev = global->link[0];
 	if (i == global->nb - 1)
 		close(global->link[0]);
-	// global->prev = global->link[0];
 	return (0);
 }
