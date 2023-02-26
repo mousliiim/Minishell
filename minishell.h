@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 19:39:31 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/25 22:28:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,11 @@
 # include <readline/history.h>
 # include <readline/readline.h>
 # define BB "\033[1;34m"
+# define CB "\033[1;36m"
 # define WB "\033[1;37m"
 # define RB "\033[1;31m"
 # define GB "\033[1;32m"
+# define BRB "\033[1;33m"
 # define EB "\033[0m"
 
 typedef struct s_ptr_array
@@ -83,12 +85,12 @@ void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
-int				parse(char *str);
 
-// exec 
-int	go_exec(t_global *global);
-int	find_path_for_each_command(t_global *global);
-int	forking(t_global *global, int i);
-void	waiting(int *forkstates, int size_wait);
+/*********************** EXEC ***********************/
+int				go_exec(t_global *global);
+int				find_path_for_each_command(t_global *global);
+int				forking(t_global *global, int i);
+void			waiting(int *forkstates, int size_wait);
+/***************************************************/
 
 #endif
