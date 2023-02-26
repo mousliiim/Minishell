@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 22:31:38 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/26 21:37:12 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -206,10 +206,74 @@ int	quote_checker(char *line)
 	return (1);
 }
 
+int is_operator(char *c, int j)
+{
+	if (c[j] == '|' || c[j] == '<' || c[j] == '>' || (c[j] == '>' && c[j + 1] == '>') || (c[j] == '<' && c[j + 1] == '<'))
+		return (1);
+	return (0);
+}
+
+void line_negatif(char *line)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+		{
+			j = i + 1;
+			while (line[j] && (line[j] != '"' || line[j] == '\''))
+			{
+				if (line[j] == '"' || line[j] == '\'')
+					break ;
+				if (ft_isspace(line[j]) || is_operator(line, j))
+					line[j] = line[j] * -1;
+				j++;
+			}
+		}
+		i++;
+	}
+}
+
+void line_positif(char *line)
+{
+	int i;
+	int j;
+
+	i = 0;
+	j = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+		{
+			j = i + 1;
+			while (line[j] && (line[j] != '"' || line[j] == '\''))
+			{
+				if (line[j] == '"' || line[j] == '\'')
+					break ;
+				if (ft_isspace(line[j]) || is_operator(line, j))
+					line[j] = line[j] * -1;
+				j++;
+			}
+		}
+		i++;
+	}
+}
+
 int	syntax_checker(char *line)
 {
 	if (!quote_checker(line))
+	{
+		ft_printf("Syntax error : quote not closed\n");
 		return (0);
+	}
+	line_negatif(line);
+	printf("line negatif = %s\n", line);
+	line_positif(line);
+	printf("line positif = %s\n", line);
 	return (1);
 }
 
@@ -230,10 +294,7 @@ int	main(int ac, char **av, char **env)
 		if (!input)
 			exit(0);
 		if (!syntax_checker(input))
-		{
-			ft_printf("Syntax error : quote not closed\n");
 			continue ;
-		}
 		splitted_line = split_line(input);
 		add_history(input);
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
@@ -241,7 +302,7 @@ int	main(int ac, char **av, char **env)
 		global.env = env;
 		global.struct_id = tab_struct;
 		global.path = set_path(&global);
-		tab_struct->nb_cmd = splitted_line.strings.size;
+		global.nb_cmd = splitted_line.strings.size;
 		i = splitted_line.strings.size;
 		// printf("Number of command = %ld\n", splitted_line.strings.size);
 		j = 0;

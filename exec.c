@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 19:37:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/26 21:39:08 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	find_path_for_each_command(t_global *global)
 	int				j;
 	t_tab_struct	*struc;
 	char			*command_w_path;
-	
+
 	i = 0;
 	struc = global->struct_id;
-	while (i < struc->nb_cmd)
+	while (i < global->nb_cmd)
 	{
 		j = 0;
 		while (global->path[j])

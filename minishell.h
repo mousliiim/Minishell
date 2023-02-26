@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 22:28:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/26 21:37:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@
 # include "libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
-# define BB "\033[1;34m"
-# define CB "\033[1;36m"
-# define WB "\033[1;37m"
-# define RB "\033[1;31m"
-# define GB "\033[1;32m"
-# define BRB "\033[1;33m"
-# define EB "\033[0m"
+# define BB "\001\033[1;34m\002"
+# define CB "\001\033[1;36m\002"
+# define WB "\001\033[1;37m\002"
+# define RB "\001\033[1;31m\002"
+# define GB "\001\033[1;32m\002"
+# define BRB "\001\033[1;33m\002"
+# define EB "\001\033[0m\002"
 
 typedef struct s_ptr_array
 {
@@ -46,7 +46,7 @@ typedef struct s_tab_struct
 	char	**commands;
 	char	**env;
 	char	**split_command;
-	long int	nb_cmd;
+	size_t	nb_cmd;
 }	t_tab_struct;
 
 typedef struct s_global
@@ -59,6 +59,7 @@ typedef struct s_global
 	int				link[2];
 	int				prev;
 	int				nb;
+	int				nb_cmd;
 }	t_global;
 
 typedef struct s_split_line
