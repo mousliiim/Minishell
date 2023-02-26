@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 22:28:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/26 21:42:45 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ typedef struct s_tab_struct
 	char	**commands;
 	char	**env;
 	char	**split_command;
-	long int	nb_cmd;
 }	t_tab_struct;
 
 typedef struct s_global
@@ -58,7 +57,7 @@ typedef struct s_global
 	int				*forkstates;
 	int				link[2];
 	int				prev;
-	int				nb;
+	size_t			nb;
 }	t_global;
 
 typedef struct s_split_line
@@ -76,6 +75,7 @@ typedef struct s_command_status
 	int		errnum;
 }	t_command_status;
 
+typedef void (*builtins)(t_global *, int);
 
 t_ptr_array		pa_new(void);
 void			pa_delete(t_ptr_array *pa);

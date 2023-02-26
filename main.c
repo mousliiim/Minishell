@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 22:31:38 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/26 21:44:25 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,12 @@
 
 // A FAIRE :
 // char **commands for ls -l -a ls is [0] -l is [1] -a is [2]
-// gerer les pipes si elle sont vide a gauche ou a droite genre | | | ou ||| ou || || ||
+// gerer les pipes si elle sont vide a gauche ou a droite genre | | | ou ||| ou
+// || || ||
 // MAXOU C FAIT SA GRACE A DISPLAY_SPLIT TU PEU VISUALISER BIEN REGARDE
 
 // Bah ecoute moi aussi ca avance de mon cote les pipes marchent j'ai l'impression
-// que tout est carre de ce cote la 
+// que tout est carre de ce cote la
 // next -> redirection
 
 // note il faut que on essaie de garder dans le main.c
@@ -40,6 +41,7 @@ t_split_line	split_line(const char *line)
 {
 	t_split_line	res;
 	int				i;
+	char			*tmp;
 	int				start;
 
 	res.strings = pa_new();
@@ -52,7 +54,11 @@ t_split_line	split_line(const char *line)
 		while ((line[i] && line[i] != '|'))
 			i++;
 		if (i > start)
-			pa_add(&res.strings, ft_substr(line, start, i - start));
+		{
+			tmp = ft_substr(line, start, i - start);
+			pa_add(&res.strings, tmp);
+			// free(tmp);
+		}
 		if (!line[i])
 			break ;
 		i++;
@@ -67,7 +73,6 @@ int	print_env(char **env)
 	i = 0;
 	if (!env)
 		return (ft_printf("there is no env\n"), 0);
-
 	while (env[i])
 	{
 		ft_printf("%s\n", env[i]);
@@ -101,33 +106,40 @@ char	**set_path(t_global *global)
 	return (0);
 }
 
-// void	print_global(t_global *global)
-// {
-// 	// int	i;
+// // void	print_global(t_global *global)
+// // {
+// // 	// int	i;
 
-// 	// i = 0;
-// 	// print_env(global->path);
-// 	// print_env(global->env);
-// 	// while (i < global->nb)
-// 	// {
-// 		printf("global->commands[0] >> %s\n", global->struct_id[0].commands[0]);
-// 		// printf("global->commands[0] >> %s\n", global->struct_id[0].commands[1]);
-// 		// printf("global->commands[0] >> %s\n", global->struct_id[0].commands[2]);
-// 		// printf("global->commands[0] >> %s\n", global->struct_id[0].commands[2]);
-// 		// printf("global->commands[1] >> %s\n", global->struct_id[1].commands[0]);
-// 		// printf("global->commands[1] >> %s\n", global->struct_id[0].commands[1]);
-// 		// printf("global->commands[1] >> %s\n", global->struct_id[0].commands[2]);
-// 		// i++;
-// 	// }
-// }
+// // 	// i = 0;
+// // 	// print_env(global->path);
+// // 	// print_env(global->env);
+// // 	// while (i < global->nb)
+// // 	// {
+// // 		printf("global->commands[0] >> %s\n",
+// global->struct_id[0].commands[0]);
+// // 		// printf("global->commands[0] >> %s\n",
+// 				global->struct_id[0].commands[1]);
+// // 		// printf("global->commands[0] >> %s\n",
+// 				global->struct_id[0].commands[2]);
+// // 		// printf("global->commands[0] >> %s\n",
+// 				global->struct_id[0].commands[2]);
+// // 		// printf("global->commands[1] >> %s\n",
+// 				global->struct_id[1].commands[0]);
+// // 		// printf("global->commands[1] >> %s\n",
+// 				global->struct_id[0].commands[1]);
+// // 		// printf("global->commands[1] >> %s\n",
+// 				global->struct_id[0].commands[2]);
+// // 		// i++;
+// // 	// }
+// // }
 
-void	display_split(t_tab_struct *tab_struct)
+void	display_split(t_tab_struct *tab_struct, t_global *info)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
-	while (i < tab_struct->nb_cmd)
+	while (i < info->nb)
 	{
 		j = 0;
 		while (tab_struct[i].split_command[j])
@@ -139,7 +151,7 @@ void	display_split(t_tab_struct *tab_struct)
 			j++;
 		}
 		write(1, "\n", 1);
-	i++;
+		i++;
 	}
 }
 
@@ -171,8 +183,8 @@ void	waiting(int *forkstates, int size_wait)
 		}
 		i++;
 	}
-	(void) signal_code;
-	(void) exit_code;
+	(void)signal_code;
+	(void)exit_code;
 	//free resources
 	// if (exit_code != 0)
 	// 	exit(exit_code);
@@ -213,48 +225,73 @@ int	syntax_checker(char *line)
 	return (1);
 }
 
+void	free_double_str(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
-	static	t_tab_struct	*tab_struct;
-	static	t_global global;
+	static t_tab_struct	*tab_struct;
+	static t_global		global;
 	t_split_line		splitted_line;
-	int i;
-	int j;
+	int					i;
+	int					j;
 
 	if (ac != 1)
 		return (0);
+	global.env = env;
+	global.path = set_path(&global);
 	while (42)
 	{
-		input = readline(GB"→  "EB CB"$MiniBoosted " BRB"✗ "EB);
+		input = readline(GB "→  " EB CB "$MiniBoosted " BRB "✗ " EB);
 		if (!input)
-			exit(0);
-		if (!syntax_checker(input))
+			exit(1);
+		else
 		{
-			ft_printf("Syntax error : quote not closed\n");
-			continue ;
+			if (!syntax_checker(input))
+			{
+				ft_printf("Syntax error : quote not closed\n");
+				continue ;
+			}
+			splitted_line = split_line(input);
+			add_history(input);
+			tab_struct = malloc(sizeof(t_tab_struct)
+					* splitted_line.strings.size);
+			global.nb = splitted_line.strings.size;
+			global.env = env;
+			global.struct_id = tab_struct;
+			global.path = set_path(&global);
+			global.nb = splitted_line.strings.size;
+			i = splitted_line.strings.size;
+			j = 0;
+			while (j < i)
+			{
+				fprintf(stderr, "%s \n",
+						(char *)splitted_line.strings.array[j]);
+				tab_struct[j].id = j;
+				tab_struct[j].commands = splitted_line.strings.array[j];
+				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
+														' ');
+				j++;
+			}
+			pa_delete(&splitted_line.strings);
+			go_exec(&global);
+			// free_double_str(tab_struct[0].split_command);
+			free(tab_struct);
+			// pa_delete(tab_struct[0].commands.strings.array[0]);
+			// waiting(global.forkstates, global.nb);
+			// display_split(tab_struct);
 		}
-		splitted_line = split_line(input);
-		add_history(input);
-		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
-		global.nb = splitted_line.strings.size;
-		global.env = env;
-		global.struct_id = tab_struct;
-		global.path = set_path(&global);
-		tab_struct->nb_cmd = splitted_line.strings.size;
-		i = splitted_line.strings.size;
-		// printf("Number of command = %ld\n", splitted_line.strings.size);
-		j = 0;
-		while (j < i)
-		{
-			tab_struct[j].id = j;
-			tab_struct[j].commands = splitted_line.strings.array[j];
-			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands, ' ');
-			j++;
-		}
-		go_exec(&global);
-		// waiting(global.forkstates, global.nb);
-		// display_split(tab_struct);
 	}
 }
 
