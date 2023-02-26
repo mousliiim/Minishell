@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/25 19:37:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/26 18:55:19 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,12 +86,14 @@ int	forking(t_global *global, int i)
 			dup2(global->link[1], STDOUT_FILENO);
 			close(global->link[0]);
 		}
-		close(global->prev);
+		if (global->prev != -1)
+			close(global->prev);
 		close(global->link[1]);
 		execve(global->struct_id[i].split_command[0], global->struct_id[i].split_command, global->env);
 		exit(0);
 	}
-	close(global->prev);
+	if (global->prev != -1)
+		close(global->prev);
 	close(global->link[1]);
 	global->prev = global->link[0];
 	if (i == global->nb - 1)
