@@ -6,29 +6,19 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 04:39:30 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/27 04:49:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 // A FAIRE :
-// char **commands for ls -l -a ls is [0] -l is [1] -a is [2]
-// gerer les pipes si elle sont vide a gauche ou a droite genre | | | ou ||| ou
-// || || ||
-// MAXOU C FAIT SA GRACE A DISPLAY_SPLIT TU PEU VISUALISER BIEN REGARDE
-
-// Bah ecoute moi aussi ca avance de mon cote les pipes marchent j'ai l'impression
-// que tout est carre de ce cote la
-// next -> redirection
-
-// note il faut que on essaie de garder dans le main.c
-// toutes les fonctions qui l'on appelle dans le main
-
-// test a reverifirer pour l'exec
-// cat | cat | ls
-// cat | ls
-// ls | cat
+// JM MA TROUVER SA COMME ERREUR DANS LA SYNTAXE :
+// →  $MiniBoosted ✗ < d> a>>d
+// →  $MiniBoosted ✗ < d> >>d
+// →  $MiniBoosted ✗ < d> >>d
+// →  $MiniBoosted ✗ < d> >a
+// →  $MiniBoosted ✗ < d> >d
 
 // RECONSTRUIRE L'ENV !
 
@@ -358,7 +348,10 @@ int	main(int ac, char **av, char **env)
 		j++;
 		}
 		if (i == -42)
+		{
+			free_splitted_line(&splitted_line);
 			continue ;
+		}
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
 		global.nb = splitted_line.strings.size;
 		global.struct_id = tab_struct;
