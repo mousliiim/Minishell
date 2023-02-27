@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 04:32:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:47:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,13 @@ t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				print_env(char **env);
 int				ft_isspace(char c);
+
+/*********************** PARSING ***********************/
+int	quote_checker(char *line);
+int is_operator(char *c, int j);
+void line_negatif(char *line);
+void line_positif(char *line);
+int	rafter_checker(char *str);
 
 /*********************** EXEC ***********************/
 int				go_exec(t_global *global);

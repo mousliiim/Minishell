@@ -6,11 +6,11 @@
 #    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 22:36:18 by mparisse          #+#    #+#              #
-#    Updated: 2023/02/25 19:38:13 by mparisse         ###   ########.fr        #
+#    Updated: 2023/02/27 17:49:01 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = main.c pa_utils.c utils.c exec.c
+SRCS = main.c pa_utils.c utils.c exec.c parsing.c
 
 OBJS = ${SRCS:.c=.o}
 
