@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 17:48:52 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/27 18:08:39 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,6 +201,22 @@ void	free_splitted_line(t_split_line *del)
 	pa_delete(&del->strings);
 }
 
+t_ptr_array	build_personal_env(char **env)
+{
+	int			i;
+	t_ptr_array	res;
+
+	i = 0;
+	res = pa_new();
+	while (env[i])
+	{
+		// printf("env[i] >> %s \n", env[i]);
+		pa_add(&res, env[i]);
+		i++;
+	}
+	return (res);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -213,6 +229,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (0);
 	global.env = env;
+	global.personal_env = build_personal_env(env);
 	global.path = set_path(&global);
 	while (42)
 	{

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 17:47:41 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/27 17:56:04 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ typedef struct s_global
 	char			**basic_env;
 	t_tab_struct	*struct_id;
 	char			**env;
+	t_ptr_array		personal_env;
 	char			**path;
 	int				*forkstates;
 	int				link[2];
