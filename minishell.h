@@ -6,7 +6,11 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/26 23:21:42 by mmourdal         ###   ########.fr       */
+=======
+/*   Updated: 2023/02/27 02:43:55 by mparisse         ###   ########.fr       */
+>>>>>>> maxou
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +88,7 @@ size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
+int				print_env(char **env);
 int				ft_isspace(char c);
 
 /*********************** EXEC ***********************/
