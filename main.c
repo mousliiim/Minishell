@@ -6,11 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/27 04:08:55 by mmourdal         ###   ########.fr       */
-=======
-/*   Updated: 2023/02/27 02:39:28 by mparisse         ###   ########.fr       */
->>>>>>> maxou
+/*   Updated: 2023/02/27 04:39:30 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,57 +344,21 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (!*input)
 			continue ;
-		if (!syntax_checker(input))
-		{
-<<<<<<< HEAD
-			add_history(input);
-			splitted_line = split_line(input);
-			i = splitted_line.strings.size;
-			j = 0;
-			while (j < i)
-			{
-				if (!syntax_checker(splitted_line.strings.array[j]))
-				{
-					i = -42;
-					break ;
-				}
-			j++;
-			}
-			if (i == -42)
-				continue ;
-			tab_struct = malloc(sizeof(t_tab_struct)
-					* splitted_line.strings.size);
-			global.nb = splitted_line.strings.size;
-			global.env = env;
-			global.struct_id = tab_struct;
-			global.path = set_path(&global);
-			global.nb = splitted_line.strings.size;
-			i = splitted_line.strings.size;
-			j = 0;
-			while (j < i)
-			{
-				fprintf(stderr, "%s \n",
-						(char *)splitted_line.strings.array[j]);
-				tab_struct[j].id = j;
-				tab_struct[j].commands = splitted_line.strings.array[j];
-				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
-														' ');
-				j++;
-			}
-			pa_delete(&splitted_line.strings);
-			go_exec(&global);
-			// free_double_str(tab_struct[0].split_command);
-			free(tab_struct);
-			// pa_delete(tab_struct[0].commands.strings.array[0]);
-			// waiting(global.forkstates, global.nb);
-			// display_split(tab_struct);
-=======
-			ft_printf("Syntax error : quote not closed\n");
-			continue ;
->>>>>>> maxou
-		}
-		splitted_line = split_line(input);
 		add_history(input);
+		splitted_line = split_line(input);
+		i = splitted_line.strings.size;
+		j = 0;
+		while (j < i)
+		{
+			if (!syntax_checker(splitted_line.strings.array[j]))
+			{
+				i = -42;
+				break ;
+			}
+		j++;
+		}
+		if (i == -42)
+			continue ;
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
 		global.nb = splitted_line.strings.size;
 		global.struct_id = tab_struct;
