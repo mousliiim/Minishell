@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/26 21:44:25 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/27 02:39:28 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,11 +231,23 @@ void	free_double_str(char **str)
 
 	i = 0;
 	while (str[i])
+		free(str[i++]);
+	free(str);
+}
+
+void	free_splitted_line(t_split_line *del)
+{
+	size_t	size;
+	int		i;
+
+	i = 0;
+	size = pa_size(&del->strings);
+	while (i < size)
 	{
-		free(str[i]);
+		free(pa_get(&del->strings, i));
 		i++;
 	}
-	free(str);
+	pa_delete(&del->strings);
 }
 
 int	main(int ac, char **av, char **env)
@@ -255,55 +267,42 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline(GB "→  " EB CB "$MiniBoosted " BRB "✗ " EB);
 		if (!input)
-			exit(1);
-		else
+			break ;
+		if (!*input)
+			continue ;
+		if (!syntax_checker(input))
 		{
-			if (!syntax_checker(input))
-			{
-				ft_printf("Syntax error : quote not closed\n");
-				continue ;
-			}
-			splitted_line = split_line(input);
-			add_history(input);
-			tab_struct = malloc(sizeof(t_tab_struct)
-					* splitted_line.strings.size);
-			global.nb = splitted_line.strings.size;
-			global.env = env;
-			global.struct_id = tab_struct;
-			global.path = set_path(&global);
-			global.nb = splitted_line.strings.size;
-			i = splitted_line.strings.size;
-			j = 0;
-			while (j < i)
-			{
-				fprintf(stderr, "%s \n",
-						(char *)splitted_line.strings.array[j]);
-				tab_struct[j].id = j;
-				tab_struct[j].commands = splitted_line.strings.array[j];
-				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
-														' ');
-				j++;
-			}
-			pa_delete(&splitted_line.strings);
-			go_exec(&global);
-			// free_double_str(tab_struct[0].split_command);
-			free(tab_struct);
-			// pa_delete(tab_struct[0].commands.strings.array[0]);
-			// waiting(global.forkstates, global.nb);
-			// display_split(tab_struct);
+			ft_printf("Syntax error : quote not closed\n");
+			continue ;
 		}
+		splitted_line = split_line(input);
+		add_history(input);
+		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
+		global.nb = splitted_line.strings.size;
+		global.struct_id = tab_struct;
+		global.nb = splitted_line.strings.size;
+		i = splitted_line.strings.size;
+		j = 0;
+		while (j < i)
+		{
+			tab_struct[j].id = j;
+			tab_struct[j].commands = splitted_line.strings.array[j];
+			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
+													' ');
+			j++;
+		}
+		// display_split(tab_struct,&global);
+		free_splitted_line(&splitted_line);
+		go_exec(&global);
+		for (int k = 0; k < i; k++)
+			free_double_str(tab_struct[k].split_command);
+		free(tab_struct);
 	}
+	free_double_str(global.path);
 }
 
 /*
 Erreur de syntaxe:
-Chacun doit avoir leur propre message d erreur de syntaxe
-Quote non fermer "
-ls "-la"" quote non fermer erreur de syntaxe
-"" """"""""""""""""""""""""""  "'"  '  "" verifier si les toute les quotes toute seul sont bien entourer elle meme de quote seul genre "" "" "" ""
-"" """"""""""""""""""""""""""  "'"  '  """"""""sdsdadsa"" ' sa commant not found
-"" """"""""""""""""""""""""""  "'"  '  """"""""sdsdadsa"" sa c erreur de syntax a differencier les 2
-
 // typedef struct token{
 // 	char *token
 // 	int type;
