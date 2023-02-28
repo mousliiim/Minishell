@@ -6,25 +6,11 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/02/28 03:08:15 by mparisse         ###   ########.fr       */
-=======
-/*   Updated: 2023/02/28 01:41:06 by mmourdal         ###   ########.fr       */
->>>>>>> mouss
+/*   Updated: 2023/02/28 03:36:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-// A FAIRE :
-// JM MA TROUVER SA COMME ERREUR DANS LA SYNTAXE :
-// →  $MiniBoosted ✗ < d> a>>d
-// →  $MiniBoosted ✗ < d> >>d
-// →  $MiniBoosted ✗ < d> >>d
-// →  $MiniBoosted ✗ < d> >a
-// →  $MiniBoosted ✗ < d> >d
-
-// RECONSTRUIRE L'ENV !
 
 int	ft_isspace(char c)
 {
@@ -116,10 +102,10 @@ void	display_split(t_tab_struct *tab_struct, t_global *info)
 		j = 0;
 		while (tab_struct[i].split_command[j])
 		{
-			if (j == 0)
-				ft_printf("CMD = %s\nARGS = ", tab_struct[i].split_command[j]);
+			if (j == 0 || tab_struct[i].split_command[j][0] == '<' || tab_struct[i].split_command[j][0] == '>')
+				ft_printf("CMD = %s\n", tab_struct[i].split_command[j]);
 			else
-				ft_printf("%s ", tab_struct[i].split_command[j]);
+				ft_printf("ARGS = %s\n", tab_struct[i].split_command[j]);
 			j++;
 		}
 		write(1, "\n", 1);
@@ -170,12 +156,9 @@ int	syntax_checker(char *line)
 		ft_printf("bash: syntax error near unexpected token 'newline'\n");
 		return (0);
 	}
-<<<<<<< HEAD
-=======
 	// printf("line negatif = %s\n", line);
 	// line_positif(line);
 	// printf("line positif = %s\n", line);
->>>>>>> mouss
 	return (1);
 }
 
@@ -242,7 +225,7 @@ int	main(int ac, char **av, char **env)
 	global.path = set_path(&global);
 	while (42)
 	{
-		input = readline(GB "→  " EB CB "$MiniBoosted " BRB "✗ " EB);
+		input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
 		if (!input)
 			break ;
 		if (!*input)
@@ -278,6 +261,7 @@ int	main(int ac, char **av, char **env)
 													' ');
 			j++;
 		}
+		display_split(tab_struct, &global);
 		free_splitted_line(&splitted_line);
 		go_exec(&global);
 		for (int k = 0; k < i; k++)
