@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 04:14:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/28 04:21:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,25 @@ void	waiting(int *forkstates, int size_wait)
 	(void)exit_code;
 }
 
+int	pipe_checker(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '|')
+		{
+			if (line[i + 1] == '|')
+				return (0);
+			if (line[i + 1] == '\0')
+				return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
 int	syntax_checker(char *line)
 {
 	if (!quote_checker(line))
@@ -157,9 +176,11 @@ int	syntax_checker(char *line)
 		ft_printf("bash: syntax error near unexpected token 'newline'\n");
 		return (0);
 	}
-	// printf("line negatif = %s\n", line);
-	// line_positif(line);
-	// printf("line positif = %s\n", line);
+	if (!pipe_checker(line))
+	{
+		ft_printf("bash: syntax error near unexpected token '|'\n");
+		return (0);
+	}
 	return (1);
 }
 
@@ -205,8 +226,9 @@ t_ptr_array	build_personal_env(char **env)
 
 void	print_tab(char **str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	while (str[i])
 		ft_printf("%s\n", str[i++]);
 }
