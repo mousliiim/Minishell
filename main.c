@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/02/28 03:08:15 by mparisse         ###   ########.fr       */
+=======
+/*   Updated: 2023/02/28 01:41:06 by mmourdal         ###   ########.fr       */
+>>>>>>> mouss
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,11 +164,18 @@ int	syntax_checker(char *line)
 		ft_printf("Syntax error : quote not closed\n");
 		return (0);
 	}
+	line_negatif(line);
 	if (!rafter_checker(line))
 	{
 		ft_printf("bash: syntax error near unexpected token 'newline'\n");
 		return (0);
 	}
+<<<<<<< HEAD
+=======
+	// printf("line negatif = %s\n", line);
+	// line_positif(line);
+	// printf("line positif = %s\n", line);
+>>>>>>> mouss
 	return (1);
 }
 
