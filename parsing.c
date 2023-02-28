@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 01:45:53 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/28 04:07:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,19 @@ int	quote_checker(char *line)
 	return (1);
 }
 
-int is_operator(char *c, int j)
+int	is_operator(char *c, int j)
 {
-	if (c[j] == '|' || c[j] == '<' || c[j] == '>' || (c[j] == '>' && c[j + 1] == '>') || (c[j] == '<' && c[j + 1] == '<'))
+	if (c[j] == '|' || c[j] == '<' || c[j] == '>'
+		|| (c[j] == '>' && c[j + 1] == '>')
+		|| (c[j] == '<' && c[j + 1] == '<'))
 		return (1);
 	return (0);
 }
 
-void line_negatif(char *line)
+void	line_negatif(char *line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -70,10 +72,10 @@ void line_negatif(char *line)
 	}
 }
 
-void line_positif(char *line)
+void	line_positif(char *line)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	j = 0;
@@ -93,69 +95,85 @@ void line_positif(char *line)
 		}
 		i++;
 	}
+}
+
+int	rafter_checker_simple(char *str, int i, int *flag1, int *flag2)
+{
+	int	j;
+
+	flag1 = 0;
+	j = i + 1;
+	if (str[j] == '<' || str[j] == '>')
+		return (0);
+	while (ft_isspace(str[j]))
+		j++;
+	if (is_operator(str, j))
+		return (0);
+	if (str[j] == '\0')
+		return (0);
+	while (str[j])
+	{
+		if (flag1 == 0 && is_operator(str, j))
+			break ;
+		if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
+		{
+			flag2 = 0;
+			break ;
+		}
+		j++;
+	}
+	return (1);
+}
+
+int	rafter_checker_double(char *str, int i, int *flag1, int *flag2)
+{
+	int	j;
+
+	flag1 = 0;
+	j = i + 2;
+	if (str[j] == '<' || str[j] == '>')
+		return (0);
+	while (ft_isspace(str[j]))
+		j++;
+	if (is_operator(str, j))
+		return (0);
+	if (str[j] == '\0')
+		return (0);
+	while (str[j])
+	{
+		if (flag1 == 0 && is_operator(str, j))
+			break ;
+		if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
+		{
+			flag2 = 0;
+			break ;
+		}
+		j++;
+	}
+	return (1);
 }
 
 int	rafter_checker(char *str)
 {
 	int	i;
-	int	j;
-	int flag1;
-	int flag2;
-	
+	int	flag1;
+	int	flag2;
+
 	i = 0;
-	if ((ft_strlen(str) == 1 && (str[i] == '<' || str[i] == '>')) || ((ft_strlen(str) == 2 && (str[i] == '<' || str[i] == '>')) && (ft_isspace(str[i + 1]) && !str[i + 2])))
-		return (0);
-	if (ft_strlen(str) == 2 && ((str[i] == '<' && str[i + 1] == '<') || (str[i] == '>' && str[i + 1] == '>')))
-		return (0);
 	flag1 = 1;
 	flag2 = 1;
 	while (str[i])
 	{
-		if ((str[i] == '<' && str[i + 1] == '<') || (str[i] == '>' && str[i + 1] == '>'))
+		if ((str[i] == '<' && str[i + 1] == '<')
+			|| (str[i] == '>' && str[i + 1] == '>'))
 		{
-			flag1 = 0;
-			j = i + 2;
-			if (str[j] == '<' || str[j] == '>')
+			if (!rafter_checker_double(str, i, &flag1, &flag2))
 				return (0);
-			while(ft_isspace(str[j]))
-				j++;
-			if (is_operator(str, j))
-				return (0);
-			if (str[j] == '\0')
-				return (0);
-			while (str[j])
-			{
-				if (flag1 == 0 && is_operator(str, j))
-					break ;
-				if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
-					flag2 = 0;
-				j++;
-			}
 		}
-		else if ((str[i] == '<' || str[i] == '>') && (str[i + 1] != '<' || str[i + 1] != '>'))
-		{
-			flag1 = 0;
-			j = i + 1;
-			if (str[j] == '<' || str[j] == '>')
+		else if ((str[i] == '<' || str[i] == '>')
+			&& (str[i + 1] != '<' || str[i + 1] != '>'))
+			if (!rafter_checker_simple(str, i, &flag1, &flag2))
 				return (0);
-			while(ft_isspace(str[j]))
-				j++;
-			if (is_operator(str, j))
-				return (0);
-			if (str[j] == '\0')
-				return (0);
-			while (str[j])
-			{
-				if (flag1 == 0 && is_operator(str, j))
-					break ;
-				if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
-				{
-					flag2 = 0;
-					break ;
-				}
-				j++;
-			}
-		}
 		if (flag1 != flag2)
 			return (0);
 		i++;

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 03:36:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/28 04:14:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ void	display_split(t_tab_struct *tab_struct, t_global *info)
 		j = 0;
 		while (tab_struct[i].split_command[j])
 		{
-			if (j == 0 || tab_struct[i].split_command[j][0] == '<' || tab_struct[i].split_command[j][0] == '>')
+			if (j == 0 || tab_struct[i].split_command[j][0] == '<'
+				|| tab_struct[i].split_command[j][0] == '>')
 				ft_printf("CMD = %s\n", tab_struct[i].split_command[j]);
 			else
 				ft_printf("ARGS = %s\n", tab_struct[i].split_command[j]);

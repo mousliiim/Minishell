@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 00:04:33 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/28 04:06:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ typedef struct s_command_status
 	int		errnum;
 }	t_command_status;
 
-typedef void (*builtins)(t_global *, int);
+typedef void	(*builtins)(t_global *, int);
 
 t_ptr_array		pa_new(void);
 void			pa_delete(t_ptr_array *pa);
@@ -89,11 +89,12 @@ int				print_env(char **env);
 int				ft_isspace(char c);
 
 /*********************** PARSING ***********************/
-int	quote_checker(char *line);
-int is_operator(char *c, int j);
-void line_negatif(char *line);
-void line_positif(char *line);
-int	rafter_checker(char *str);
+int				quote_checker(char *line);
+int				is_operator(char *c, int j);
+void			line_negatif(char *line);
+void			line_positif(char *line);
+int				rafter_checker(char *str);
+/******************************************************/
 
 /*********************** EXEC ***********************/
 int				go_exec(t_global *global);
@@ -102,6 +103,9 @@ int				forking(t_global *global, int i);
 void			waiting(int *forkstates, int size_wait);
 /***************************************************/
 
-void	print_tab(char **str);
+/*********************** UTILS ***********************/
+void			print_tab(char **str);
+void			display_split(t_tab_struct *tab_struct, t_global *info);
+/*****************************************************/
 
 #endif
