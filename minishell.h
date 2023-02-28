@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 17:56:04 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/28 00:04:33 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_global
 {
 	char			**basic_env;
 	t_tab_struct	*struct_id;
-	char			**env;
+	// char			**env;
 	t_ptr_array		personal_env;
 	char			**path;
 	int				*forkstates;
@@ -101,5 +101,7 @@ int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
 void			waiting(int *forkstates, int size_wait);
 /***************************************************/
+
+void	print_tab(char **str);
 
 #endif

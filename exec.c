@@ -6,30 +6,19 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 17:42:21 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/28 02:45:40 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	add_env(t_global *global, char *env)
+void	add_env(t_global *global, char *added)
 {
-	int	i;
-
-	print_env(global->env);
-	while (global->env[i])
-	{
-		i++;
-	}
-	// ft_printf("global->env[i] >> %s\n", global->env[i]);
+	pa_add(&global->personal_env, ft_strdup(added));
 }
 
 void	export(t_global *global, int j)
 {
-	int	i;
-	int	start;
-
-	i = 0;
 	if (ft_isdigit(global->struct_id[j].split_command[1][0]) == 1
 		&& global->struct_id[j].split_command[1][0] == '=')
 	{
@@ -37,46 +26,41 @@ void	export(t_global *global, int j)
 					global->struct_id[j].split_command[1]);
 		return ;
 	}
-	while (global->struct_id[j].split_command[1][i])
-	{
-		if (global->struct_id[j].split_command[1][i] == '=')
-			start = i;
-		i++;
-	}
-	fprintf(stderr, ">> %s\n", &global->struct_id[j].split_command[1][++start]);
-	add_env(global, &global->struct_id[j].split_command[1][++start]);
+	pa_add(&global->personal_env,
+			ft_strdup(global->struct_id[j].split_command[1]));
 }
 
 int	go_exec(t_global *global)
 {
-	int			i;
-	// builtins	tab[1];
+	size_t	i;
+	size_t	count_nb_bultin;
 
+	// builtins	tab[1];
 	// tab[0] = &export;
 	i = 0;
+	count_nb_bultin = 0;
 	find_path_for_each_command(global);
 	global->forkstates = malloc(sizeof(int) * global->nb);
 	// protege
 	global->prev = -1;
+	global->link[0] = -1;
 	while (i < global->nb)
 	{
-		// printf("i >. %d\n", i);
 		if (!ft_strcmp("export", global->struct_id[i].split_command[0]))
 		{
-			ft_printf("cette commande est export\n");
-			// tab[0](global, i);
 			export(global, i);
-			global->nb--;
+			count_nb_bultin++;
 		}
 		else
 		{
 			pipe(global->link);
-			forking(global, i) ;
+			forking(global, i);
 		}
 		i++;
 	}
-	waiting(global->forkstates, global->nb);
-	close(global->link[0]);
+	waiting(global->forkstates, global->nb - count_nb_bultin);
+	if (global->link[0] != -1)
+		close(global->link[0]);
 	free(global->forkstates);
 	return (0);
 }
@@ -133,7 +117,7 @@ int	forking(t_global *glo, int i)
 		close(glo->link[1]);
 		execve(glo->struct_id[i].split_command[0],
 				glo->struct_id[i].split_command,
-				glo->env);
+				(char **)glo->personal_env.array);
 		exit(0);
 	}
 	else if (glo->forkstates[i] > 0)
@@ -143,5 +127,6 @@ int	forking(t_global *glo, int i)
 			close(glo->prev);
 		glo->prev = glo->link[0];
 	}
+	// ft_printf("-------------\n\n");
 	return (0);
 }

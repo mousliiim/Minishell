@@ -3,56 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   pa_utils.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 04:31:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/27 23:18:16 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "stdlib.h"
 
-// void *
-// ft_realloc(ptr, newSize)
-//     char 	 *ptr;		/* Ptr to currently allocated block.  If
-// 				 * it's 0, then this procedure behaves
-// 				 * identically to malloc. */
-//     unsigned int newSize;	/* Size of block after it is extended */
-// {
-//     unsigned int curSize;
-//     char *newPtr;
+void	*ft_realloc(void **old, size_t old_capacity, size_t	new_capacity)
+{
+	void	**new;
+	size_t		i;
 
-//     if (ptr == 0) {
-// 	return malloc(newSize);
-//     }
-//     curSize = Mem_Size(ptr);
-//     if (newSize <= curSize) {
-// 	return ptr;
-//     }
-//     newPtr = malloc(newSize);
-//     bcopy(ptr, newPtr, (int) curSize);
-//     free(ptr);
-//     return(newPtr);
-// }
+	i = 0;
+	new = ft_calloc(sizeof(void *), new_capacity);
+	while (i < old_capacity)
+	{
+		new[i] = old[i];
+		i++;
+	}
+	// ft_memset(new[i], 0, new_capacity);
+	return (new);
+}
 
-// void	*ft_realloc(void *ptr, size_t realloc)
-// {
-// 	void	*new;
-
-// 	new = ft_calloc(sizeof(char), realloc);
-// 	if (!new)
-// 	{
-// 		free(ptr);
-// 		exit(1);
-// 	}
-// 	while (ptr)
-// 	{
-// 		new = ptr++;
-// 	}
-// 	free(ptr);
-// 	return (new);
-// }
+void	pa_pop(t_ptr_array	*array, size_t index)
+{
+	array->array[index] = 0;
+	ft_memmove(array->array + index, array->array + index, array->size);
+	array->size--;
+}
 
 t_ptr_array	pa_new(void)
 {
@@ -60,7 +42,7 @@ t_ptr_array	pa_new(void)
 
 	new.size = 0;
 	new.capacity = 8;
-	new.array = malloc(sizeof(void *) * 8);
+	new.array = ft_calloc(sizeof(void *), 8);
 	return (new);
 }
 
@@ -76,7 +58,8 @@ void	pa_add(t_ptr_array *pa, void *new_str)
 	if (pa->size == pa->capacity)
 	{
 		pa->capacity *= 2;
-		pa->array = realloc(pa->array, pa->capacity * sizeof(void *));
+		pa->array = ft_realloc(pa->array, pa->size,pa->capacity * sizeof(void *));
+		// pa->array = realloc(pa->array, pa->capacity * sizeof(void *));
 	}
 	pa->array[pa->size++] = new_str;
 }

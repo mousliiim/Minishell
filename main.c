@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 18:08:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/02/28 03:08:15 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,15 +79,18 @@ char	**set_path(t_global *global)
 	char	**path;
 
 	i = 0;
-	if (!global->env)
+	if (global->personal_env.size == 0)
+	{
+		fprintf(stderr, "env ok\n");
 		return (0);
+	}
 	else
 	{
-		while (global->env[i])
+		while (i < global->personal_env.size) //(global->env[i])
 		{
-			if (ft_strnstr(global->env[i], "PATH=", 5))
+			if (ft_strnstr((char *)global->personal_env.array[i], "PATH=", 5))
 			{
-				path = ft_split(global->env[i] + 5, ':');
+				path = ft_split((char *)global->personal_env.array[i] + 5, ':');
 				if (!path || !*path)
 					return (0);
 				return (path);
@@ -131,10 +134,8 @@ void	waiting(int *forkstates, int size_wait)
 	status = 0;
 	exit_code = 0;
 	signal_code = 0;
-	// ft_printf("il y a %d processus a attendre\n", size_wait);
 	while (i < size_wait)
 	{
-		// ft_printf("le processus a attendre est %d\n", forkstates[i]);
 		waitpid(forkstates[i], &status, 0);
 		if (WIFEXITED(status))
 		{
@@ -150,11 +151,6 @@ void	waiting(int *forkstates, int size_wait)
 	}
 	(void)signal_code;
 	(void)exit_code;
-	//free resources
-	// if (exit_code != 0)
-	// 	exit(exit_code);
-	// else
-	// 	exit(signal_code);
 }
 
 int	syntax_checker(char *line)
@@ -169,10 +165,6 @@ int	syntax_checker(char *line)
 		ft_printf("bash: syntax error near unexpected token 'newline'\n");
 		return (0);
 	}
-	// line_negatif(line);
-	// printf("line negatif = %s\n", line);
-	// line_positif(line);
-	// printf("line positif = %s\n", line);
 	return (1);
 }
 
@@ -210,11 +202,18 @@ t_ptr_array	build_personal_env(char **env)
 	res = pa_new();
 	while (env[i])
 	{
-		// printf("env[i] >> %s \n", env[i]);
-		pa_add(&res, env[i]);
+		pa_add(&res, ft_strdup(env[i]));
 		i++;
 	}
 	return (res);
+}
+
+void	print_tab(char **str)
+{
+	int i = 0;
+
+	while (str[i])
+		ft_printf("%s\n", str[i++]);
 }
 
 int	main(int ac, char **av, char **env)
@@ -228,7 +227,6 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (0);
-	global.env = env;
 	global.personal_env = build_personal_env(env);
 	global.path = set_path(&global);
 	while (42)
@@ -257,7 +255,6 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
-		global.nb = splitted_line.strings.size;
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
 		i = splitted_line.strings.size;
@@ -270,7 +267,6 @@ int	main(int ac, char **av, char **env)
 													' ');
 			j++;
 		}
-		// display_split(tab_struct,&global);
 		free_splitted_line(&splitted_line);
 		go_exec(&global);
 		for (int k = 0; k < i; k++)
