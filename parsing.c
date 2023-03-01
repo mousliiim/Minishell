@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 04:55:54 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:20:49 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,15 @@ void	line_positif(char *line)
 	}
 }
 
-int	rafter_checker_simple(char *str, int i, int *flag1, int *flag2)
+int	rafter_check(char *str, int i, int *flag, int choice)
 {
 	int	j;
 
-	flag1 = 0;
-	j = i + 1;
+	flag[0] = 0;
+	if (choice == 1)
+		j = i + 1;
+	else
+		j = i + 2;
 	if (str[j] == '<' || str[j] == '>')
 		return (0);
 	while (ft_isspace(str[j]))
@@ -113,39 +116,12 @@ int	rafter_checker_simple(char *str, int i, int *flag1, int *flag2)
 		return (0);
 	while (str[j])
 	{
-		if (flag1 == 0 && is_operator(str, j))
+		if (flag[0] == 0 && is_operator(str, j))
 			break ;
-		if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
+		if (flag[0] == 0 && str[j] && !ft_isspace(str[j]) 
+			&& !is_operator(str, j))
 		{
-			flag2 = 0;
-			break ;
-		}
-		j++;
-	}
-	return (1);
-}
-
-int	rafter_checker_double(char *str, int i, int *flag1, int *flag2)
-{
-	int	j;
-
-	flag1 = 0;
-	j = i + 2;
-	if (str[j] == '<' || str[j] == '>')
-		return (0);
-	while (ft_isspace(str[j]))
-		j++;
-	if (is_operator(str, j))
-		return (0);
-	if (str[j] == '\0')
-		return (0);
-	while (str[j])
-	{
-		if (flag1 == 0 && is_operator(str, j))
-			break ;
-		if (flag1 == 0 && str[j] && !ft_isspace(str[j]) && !is_operator(str, j))
-		{
-			flag2 = 0;
+			flag[1] = 0;
 			break ;
 		}
 		j++;
@@ -156,25 +132,24 @@ int	rafter_checker_double(char *str, int i, int *flag1, int *flag2)
 int	rafter_checker(char *str)
 {
 	int	i;
-	int	flag1;
-	int	flag2;
+	int	flag[2];
 
 	i = 0;
-	flag1 = 1;
-	flag2 = 1;
+	flag[0] = 1;
+	flag[1] = 1;
 	while (str[i])
 	{
 		if ((str[i] == '<' && str[i + 1] == '<')
 			|| (str[i] == '>' && str[i + 1] == '>'))
 		{
-			if (!rafter_checker_double(str, i, &flag1, &flag2))
+			if (!rafter_check(str, i, flag, 2))
 				return (0);
 		}
 		else if ((str[i] == '<' || str[i] == '>')
 			&& (str[i + 1] != '<' || str[i + 1] != '>'))
-			if (!rafter_checker_simple(str, i, &flag1, &flag2))
+			if (!rafter_check(str, i, flag, 1))
 				return (0);
-		if (flag1 != flag2)
+		if (flag[0] != flag[1])
 			return (0);
 		i++;
 	}

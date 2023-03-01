@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 02:38:28 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:16:04 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ int				is_operator(char *c, int j);
 void			line_negatif(char *line);
 void			line_positif(char *line);
 int				rafter_checker(char *str);
+int				rafter_check(char *str, int i, int *flag, int choice);
 int				pipe_checker(char *line);
 /******************************************************/
 
