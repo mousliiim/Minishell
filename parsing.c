@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 04:07:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/02/28 04:55:54 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,6 +176,27 @@ int	rafter_checker(char *str)
 				return (0);
 		if (flag1 != flag2)
 			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	pipe_checker(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (i == 0 && line[i] == '|')
+			return (0);
+		if (line[i] == '|')
+		{
+			if (line[i + 1] == '|')
+				return (0);
+			if (line[i + 1] == '\0')
+				return (0);
+		}
 		i++;
 	}
 	return (1);
