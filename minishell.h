@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 02:38:28 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/01 22:01:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdio.h>
 # include <ctype.h>
 # include <limits.h>
+# include <errno.h>
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
@@ -38,7 +39,6 @@ typedef struct s_ptr_array
 	size_t	size;
 	size_t	capacity;
 	void	**array;
-	char	**path;
 }	t_ptr_array;
 
 typedef struct s_tab_struct
@@ -80,8 +80,10 @@ typedef struct s_command_status
 typedef int	(*builtins)(t_global *, int);
 
 t_ptr_array		pa_new(void);
+void			pa_pop(t_ptr_array	*array, size_t index);
 void			pa_delete(t_ptr_array *pa);
 void			pa_add(t_ptr_array *pa, void *ptr);
+void			pa_pop_replace(t_ptr_array	*array, size_t index, void *new);
 size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);

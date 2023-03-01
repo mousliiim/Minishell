@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 02:32:47 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/01 22:10:39 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,8 +274,8 @@ int	main(int ac, char **av, char **env)
 			j++;
 		}
 		display_split(tab_struct, &global);
-		free_splitted_line(&splitted_line);
 		go_exec(&global);
+		free_splitted_line(&splitted_line);
 		for (int k = 0; k < i; k++)
 			free_double_str(tab_struct[k].split_command);
 		free(tab_struct);
