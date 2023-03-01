@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 02:45:40 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/01 00:51:52 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,35 @@ void	export(t_global *global, int j)
 			ft_strdup(global->struct_id[j].split_command[1]));
 }
 
+void	unset(t_global *glo, int i)
+{
+	(void) glo;
+	(void) i;
+	fprintf(stderr, "im unset");
+}
+
+builtins	find_ptr_builtin(char *ptr)
+{
+	static const builtins func[2] = {&export, &unset};
+	static const char	*str[2] = {"export", "unset"};
+	int	i;
+
+	i = 0;
+	while (i < 2)
+	{
+		if (!ft_strcmp(str[i], ptr))
+			return (func[i]);
+		i++;
+	}
+	return (0);
+}
+
 int	go_exec(t_global *global)
 {
-	size_t	i;
-	size_t	count_nb_bultin;
+	size_t		i;
+	size_t		count_nb_bultin;
+	builtins	ok;
 
-	// builtins	tab[1];
 	// tab[0] = &export;
 	i = 0;
 	count_nb_bultin = 0;
@@ -46,9 +69,10 @@ int	go_exec(t_global *global)
 	global->link[0] = -1;
 	while (i < global->nb)
 	{
-		if (!ft_strcmp("export", global->struct_id[i].split_command[0]))
+		ok = find_ptr_builtin(global->struct_id[i].split_command[0]);
+		if (ok)
 		{
-			export(global, i);
+			ok(global, i);
 			count_nb_bultin++;
 		}
 		else
@@ -103,8 +127,60 @@ void	dupnclose(int fd1, int fd2)
 	close(fd1);
 }
 
+int	open_files(t_global *glo, int i)
+{
+	if (!ft_strcmp(glo->struct_id[i].split_command[1], ">"))
+	{
+		fprintf(stderr, "ok %s\n", glo->struct_id[i].split_command[1]);
+	}
+	return (0);
+}
+
+int	open_file(char *glo, int os)
+{
+	int	fd;
+	
+	fd = -1;
+	if (os == 1)
+	{
+		fd = open(glo, O_TRUNC | O_CREAT | O_WRONLY, 0666);
+		if (fd == -1)
+			return (fd);
+		dup2(fd, STDIN_FILENO);
+	}
+	return (fd);
+}
+
+int	open_states(t_global *glo, int j)
+{
+	int	i;
+	int	fd;
+	int	count;
+	int	end;
+
+	i = 0;
+	count = 0;
+	while (glo->struct_id[j].split_command[i])
+	{
+		if (!ft_strcmp(glo->struct_id[j].split_command[i], ">"))
+		{
+			if (count == 0)
+				end = i;
+			fprintf(stderr, "its good >> %s\n", glo->struct_id[j].split_command[i + 1]);
+			fd = open_file((char *)glo->struct_id[j].split_command[i + 1], 1);
+			dup2(fd, STDOUT_FILENO);
+			count++;
+		}
+		i++;
+	}
+	glo->struct_id[j].split_command[end] = 0;
+	return (fd);
+}
+
 int	forking(t_global *glo, int i)
 {
+	// int	os;
+
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
@@ -113,6 +189,8 @@ int	forking(t_global *glo, int i)
 		if (i != (glo->nb - 1))
 			dup2(glo->link[1], STDOUT_FILENO);
 		// openfiles
+		// open_files(glo, i);
+		// open_states(glo, i);
 		close(glo->link[0]);
 		close(glo->link[1]);
 		execve(glo->struct_id[i].split_command[0],
@@ -130,3 +208,4 @@ int	forking(t_global *glo, int i)
 	// ft_printf("-------------\n\n");
 	return (0);
 }
+
