@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 00:51:52 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/01 03:12:49 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,34 +17,61 @@ void	add_env(t_global *global, char *added)
 	pa_add(&global->personal_env, ft_strdup(added));
 }
 
-void	export(t_global *global, int j)
+int	export(t_global *global, int j)
 {
 	if (ft_isdigit(global->struct_id[j].split_command[1][0]) == 1
 		&& global->struct_id[j].split_command[1][0] == '=')
 	{
 		ft_printf("bash: export : '%s': not a valid identfier\n",
 					global->struct_id[j].split_command[1]);
-		return ;
+		return (1);
 	}
 	pa_add(&global->personal_env,
 			ft_strdup(global->struct_id[j].split_command[1]));
+	return (0);
 }
 
-void	unset(t_global *glo, int i)
+int	unset(t_global *glo, int i)
 {
 	(void) glo;
 	(void) i;
 	fprintf(stderr, "im unset");
+	return (0);
+}
+
+int	cd(t_global *global, int i)
+{
+	int	status;
+	int forkstatus;
+
+	status = 0;
+	if (status != 0)
+		perror("Error changing directory");
+    if (global->nb > 1)
+	{
+		forkstatus = fork();
+		if (forkstatus == 0)
+		{
+			status = chdir(global->struct_id[i].split_command[1]);
+			exit(0);
+		}
+		else
+		{
+			return (forkstatus);
+		}
+	}
+	status = chdir(global->struct_id[i].split_command[1]);
+	return (status);
 }
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins func[2] = {&export, &unset};
-	static const char	*str[2] = {"export", "unset"};
-	int	i;
+	static const builtins	func[3] = {&export, &unset, &cd};
+	static const char		*str[3] = {"export", "unset", "cd"};
+	int						i;
 
 	i = 0;
-	while (i < 2)
+	while (i < 3)
 	{
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
@@ -53,9 +80,11 @@ builtins	find_ptr_builtin(char *ptr)
 	return (0);
 }
 
+
 int	go_exec(t_global *global)
 {
 	size_t		i;
+	int			test;
 	size_t		count_nb_bultin;
 	builtins	ok;
 
@@ -72,8 +101,11 @@ int	go_exec(t_global *global)
 		ok = find_ptr_builtin(global->struct_id[i].split_command[0]);
 		if (ok)
 		{
-			ok(global, i);
-			count_nb_bultin++;
+			test = ok(global, i);
+			if (ok == &cd)
+				global->forkstates[i] = test;
+			else
+				count_nb_bultin++;
 		}
 		else
 		{

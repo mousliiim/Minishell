@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 04:52:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/01 02:32:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,7 +266,10 @@ int	main(int ac, char **av, char **env)
 		{
 			tab_struct[j].id = j;
 			tab_struct[j].commands = splitted_line.strings.array[j];
-			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
+			// if (rafter_line(tab_struct[j].commands))
+			// 	tab_struct[j].split_command = 
+			// else
+				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
 													' ');
 			j++;
 		}
