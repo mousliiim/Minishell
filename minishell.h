@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 22:01:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 05:19:59 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,14 @@ void			waiting(int *forkstates, int size_wait);
 /*********************** UTILS ***********************/
 void			print_tab(char **str);
 void			display_split(t_tab_struct *tab_struct, t_global *info);
+/*****************************************************/
+
+
+/*********************** UTILS ***********************/
+int				cd(t_global *global, int i);
+int				unset(t_global *glo, int j);
+int				export(t_global *global, int j);
+int	builtin_exit(t_global *global, int j);
 /*****************************************************/
 
 #endif

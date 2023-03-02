@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 21:57:40 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 04:57:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	pa_pop_replace(t_ptr_array	*array, size_t index, void *new)
 {
 	free(array->array[index]);
 	array->array[index] = new;
-	print_tab((char **)array->array);
+	// print_tab((char **)array->array);
 	array->size--;
 }
 

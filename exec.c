@@ -6,131 +6,18 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 22:19:47 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 05:20:21 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_strchr_int(const char *s, int c)
-{
-	char	*str;
-	int		i;
-
-	i = 0;
-	str = (char *)s;
-	while (s[i] && (s[i] != (char)c))
-	{
-		i++;
-	}
-	if (str[i] == '\0' && c != '\0')
-		return (0);
-	return (i);
-}
-
-int	export(t_global *global, int j)
-{
-	int	stuff;
-	int	i;
-
-	if (!global->struct_id[j].split_command[1])
-		return (0);
-	if (ft_isdigit(global->struct_id[j].split_command[1][0]) == 1
-		|| global->struct_id[j].split_command[1][0] == '=')
-	{
-		ft_printf("bash: export : '%s': not a valid identfier\n",
-					global->struct_id[j].split_command[1]);
-		return (0);
-	}
-	stuff = ft_strchr(global->struct_id[j].split_command[1], '=') - global->struct_id[j].split_command[1];
-	i = 0;
-	if (stuff > 0)
-	{
-		while (global->personal_env.array[i])
-		{
-			if (!ft_strncmp(global->struct_id[j].split_command[1], (char *)global->personal_env.array[i], stuff))
-			{
-				fprintf(stderr, "already exists\n");
-				pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[1]);
-				pa_add(&global->personal_env,
-						ft_strdup(global->struct_id[j].split_command[1]));
-				return (0);
-			}
-			i++;
-		}
-		pa_add(&global->personal_env,
-				ft_strdup(global->struct_id[j].split_command[1]));
-	}
-	return (0);
-}
-
-int	unset(t_global *glo, int j)
-{
-	int		i;
-	size_t	len;
-	
-	len = ft_strlen(glo->struct_id[j].split_command[1]);
-	i = 0;
-	while (glo->personal_env.array[i])
-	{
-		if (!ft_strncmp(glo->struct_id[j].split_command[1], (char *)glo->personal_env.array[i], len))
-		{
-			pa_pop(&glo->personal_env, i);
-			return (0);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	cd(t_global *global, int i)
-{
-	int	status;
-	int forkstatus;
-
-	status = 0;
-	if (status != 0)
-		perror("Error changing directory");
-    if (global->nb > 1)
-	{
-		forkstatus = fork();
-		if (forkstatus == 0)
-		{
-			status = chdir(global->struct_id[i].split_command[1]);
-			exit(0);
-		}
-		else
-		{
-			return (forkstatus);
-		}
-	}
-	status = chdir(global->struct_id[i].split_command[1]);
-	return (status);
-}
-
-builtins	find_ptr_builtin(char *ptr)
-{
-	static const builtins	func[3] = {&export, &unset, &cd};
-	static const char		*str[3] = {"export", "unset", "cd"};
-	int						i;
-
-	i = 0;
-	while (i < 3)
-	{
-		if (!ft_strcmp(str[i], ptr))
-			return (func[i]);
-		i++;
-	}
-	return (0);
-}
-
-
 int	go_exec(t_global *global)
 {
 	size_t		i;
-	int			test;
+	// int			test;
 	size_t		count_nb_bultin;
-	builtins	ok;
+	// builtins	ok;
 
 	i = 0;
 	count_nb_bultin = 0;
@@ -140,20 +27,9 @@ int	go_exec(t_global *global)
 	global->link[0] = -1;
 	while (i < global->nb)
 	{
-		ok = find_ptr_builtin(global->struct_id[i].split_command[0]);
-		if (ok)
-		{
-			test = ok(global, i);
-			if (test)
-				global->forkstates[i] = test;
-			else
-				count_nb_bultin++;
-		}
-		else
-		{
-			pipe(global->link);
-			forking(global, i);
-		}
+
+		pipe(global->link);
+		forking(global, i);
 		i++;
 	}
 	waiting(global->forkstates, global->nb - count_nb_bultin);
@@ -201,10 +77,29 @@ void	dupnclose(int fd1, int fd2)
 	close(fd1);
 }
 
+builtins	find_ptr_builtin(char *ptr)
+{
+	static const builtins	func[4] = {&export, &unset, &cd, &builtin_exit};
+	static const char		*str[4] = {"export", "unset", "cd", "exit"};
+	int						i;
+
+	i = 0;
+	while (i < 4)
+	{
+		if (!ft_strcmp(str[i], ptr))
+			return (func[i]);
+		i++;
+	}
+	return (0);
+}
+
 int	forking(t_global *glo, int i)
 {
-	// int	os;
+	builtins	built_ptr;
 
+	built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
+	if (glo->nb == 1 && built_ptr)
+		return (built_ptr(glo, i), 0);
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
@@ -212,11 +107,10 @@ int	forking(t_global *glo, int i)
 			dupnclose(glo->prev, STDIN_FILENO);
 		if (i != (glo->nb - 1))
 			dup2(glo->link[1], STDOUT_FILENO);
-		// openfiles
-		// open_files(glo, i);
-		// open_states(glo, i);
 		close(glo->link[0]);
 		close(glo->link[1]);
+		if (built_ptr)
+			built_ptr(glo, i);
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
 					glo->struct_id[i].split_command,
@@ -234,7 +128,6 @@ int	forking(t_global *glo, int i)
 			close(glo->prev);
 		glo->prev = glo->link[0];
 	}
-	// ft_printf("-------------\n\n");
 	return (0);
 }
 
