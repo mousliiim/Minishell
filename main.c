@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 22:40:46 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/02 02:01:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -246,72 +246,6 @@ int		rafter_line(char *line)
 	return (0);
 }
 
-char **ft_split_rafter(char *line)
-{
-	char	**res;
-	int		i;
-	int		j;
-	int		k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	res = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-	while (line[i])
-	{
-		if (line[i] == '>' && line[i + 1] == '>')
-		{
-			res[j] = malloc(sizeof(char) * (i - k + 1));
-			ft_strlcpy(res[j], line + k, i - k + 1);
-			j++;
-			res[j] = malloc(sizeof(char) * 3);
-			ft_strlcpy(res[j], line + i, 3);
-			j++;
-			i += 2;
-			k = i + 1;
-		}
-		else if (line[i] == '>' && line[i + 1] != '>')
-		{
-			res[j] = malloc(sizeof(char) * (i - k + 1));
-			ft_strlcpy(res[j], line + k, i - k + 1);
-			j++;
-			res[j] = malloc(sizeof(char) * 2);
-			ft_strlcpy(res[j], line + i, 2);
-			j++;
-			i++;
-			k = i + 1;
-		}
-		else if (line[i] == '<' && line[i + 1] == '<')
-		{
-			res[j] = malloc(sizeof(char) * (i - k + 1));
-			ft_strlcpy(res[j], line + k, i - k + 1);
-			j++;
-			res[j] = malloc(sizeof(char) * 3);
-			ft_strlcpy(res[j], line + i, 3);
-			j++;
-			i += 2;
-			k = i + 1;
-		}
-		else if (line[i] == '<' && line[i + 1] != '<')
-		{
-			res[j] = malloc(sizeof(char) * (i - k + 1));
-			ft_strlcpy(res[j], line + k, i - k + 1);
-			j++;
-			res[j] = malloc(sizeof(char) * 2);
-			ft_strlcpy(res[j], line + i, 2);
-			j++;
-			i++;
-			k = i + 1;
-		}
-		i++;
-	}
-	res[j] = malloc(sizeof(char) * (i - k + 1));
-	ft_strlcpy(res[j], line + k, i - k + 1);
-	j++;
-	res[j] = NULL;
-	return (res);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -367,6 +301,7 @@ int	main(int ac, char **av, char **env)
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
 				tab_struct[j].split_command = ft_split_rafter((char *)tab_struct[j].commands);
+				ft_have_two_word(tab_struct[j].split_command);
 				for (int k = 0; tab_struct[j].split_command[k]; k++)
 					ft_printf("raft split = %s\n", tab_struct[j].split_command[k]);
 			}
@@ -376,13 +311,13 @@ int	main(int ac, char **av, char **env)
 			j++;
 		}
 		// display_split(tab_struct, &global);
-		free_splitted_line(&splitted_line);
-		go_exec(&global);
-		for (int k = 0; k < i; k++)
-			free_double_str(tab_struct[k].split_command);
-		free(tab_struct);
+		// free_splitted_line(&splitted_line);
+		// go_exec(&global);
+		// for (int k = 0; k < i; k++)
+		// 	free_double_str(tab_struct[k].split_command);
+		// free(tab_struct);
 	}
-	free_double_str(global.path);
+	// free_double_str(global.path);
 }
 
 /*

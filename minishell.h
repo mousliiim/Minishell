@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 20:16:04 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/02 02:29:19 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,13 @@ typedef struct s_ptr_array
 	void	**array;
 	char	**path;
 }	t_ptr_array;
+
+typedef struct s_redirec
+{
+	char	*file_name;
+	int		type_redirec;
+	struct s_redirec *next;
+}	t_redirec;
 
 typedef struct s_tab_struct
 {
@@ -97,6 +104,9 @@ void			line_positif(char *line);
 int				rafter_checker(char *str);
 int				rafter_check(char *str, int i, int *flag, int choice);
 int				pipe_checker(char *line);
+char			**ft_split_rafter(char *line);
+size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
+int				ft_have_two_word(char **tab);
 /******************************************************/
 
 /*********************** EXEC ***********************/
