@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 05:36:03 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 23:09:44 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,50 @@
 
 int	export(t_global *global, int j)
 {
-	int	stuff;
-	int	i;
+	int		stuff;
+	int		idx_args;
+	int		i;
 
 	if (global->nb > 1)
 		exit(0);
-	if (!global->struct_id[j].split_command[1])
-		return (0);
-	if (ft_isdigit(global->struct_id[j].split_command[1][0]) == 1
-		|| global->struct_id[j].split_command[1][0] == '=')
+	idx_args = 1;
+	while (global->struct_id[j].split_command[idx_args])
 	{
-		ft_printf("bash: export : '%s': not a valid identfier\n",
-					global->struct_id[j].split_command[1]);
-		return (0);
-	}
-	stuff = ft_strchr(global->struct_id[j].split_command[1], '=') - global->struct_id[j].split_command[1];
-	i = 0;
-	if (stuff > 0)
-	{
-		while (global->personal_env.array[i])
+		if (!global->struct_id[j].split_command[idx_args])
 		{
-			if (!ft_strncmp(global->struct_id[j].split_command[1], (char *)global->personal_env.array[i], stuff))
-			{
-				pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[1]);
-				pa_add(&global->personal_env,
-						ft_strdup(global->struct_id[j].split_command[1]));
-				return (0);
-			}
-			i++;
+			ft_printf("bash: export : '%s': not a valid identfier\n",
+						global->struct_id[j].split_command[idx_args]);
+			idx_args++;
+			continue ;
 		}
-		pa_add(&global->personal_env,
-				ft_strdup(global->struct_id[j].split_command[1]));
+		if (ft_isdigit(global->struct_id[j].split_command[idx_args][0]) == 1
+			|| global->struct_id[j].split_command[idx_args][0] == '=')
+		{
+			ft_printf("bash: export : '%s': not a valid identfier\n",
+						global->struct_id[j].split_command[idx_args]);
+			idx_args++;
+			continue ;
+		}
+		stuff = ft_strchr(global->struct_id[j].split_command[idx_args], '=') - global->struct_id[j].split_command[idx_args];
+		i = 0;
+		if (stuff > 0)
+		{
+			while (global->personal_env.array[i])
+			{
+				if (!ft_strncmp(global->struct_id[j].split_command[idx_args], (char *)global->personal_env.array[i], stuff))
+				{
+					pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[idx_args]);
+					pa_add(&global->personal_env,
+							ft_strdup(global->struct_id[j].split_command[idx_args]));
+					idx_args++;
+					continue ;
+				}
+				i++;
+			}
+			pa_add(&global->personal_env,
+					ft_strdup(global->struct_id[j].split_command[idx_args]));
+		}
+		idx_args++;
 	}
 	return (0);
 }
@@ -52,20 +65,26 @@ int	export(t_global *global, int j)
 int	unset(t_global *glo, int j)
 {
 	int		i;
+	int		idx_args;
 	size_t	len;
 
 	if (glo->nb > 1)
 		exit(0);
-	len = ft_strlen(glo->struct_id[j].split_command[1]);
-	i = 0;
-	while (glo->personal_env.array[i])
+	idx_args = 1;
+	while (glo->struct_id[j].split_command[idx_args])
 	{
-		if (!ft_strncmp(glo->struct_id[j].split_command[1], (char *)glo->personal_env.array[i], len))
+		len = ft_strlen(glo->struct_id[j].split_command[idx_args]);
+		i = 0;
+		while (glo->personal_env.array[i])
 		{
-			pa_pop(&glo->personal_env, i);
-			return (0);
+			if (!ft_strncmp(glo->struct_id[j].split_command[idx_args], (char *)glo->personal_env.array[i], len))
+			{
+				pa_pop(&glo->personal_env, i);
+				break ;
+			}
+			i++;
 		}
-		i++;
+		idx_args++;
 	}
 	return (0);
 }
@@ -121,10 +140,10 @@ int	print_env(t_global *glo, int j)
 
 int	pwd(t_global *glo, int j)
 {
-	char	pwdd[4096];
+	char	pwdd[4096] = {0};
 
 	getcwd(pwdd, 4096);
-	printf("rpokfep%s\n", pwdd);
+	printf("%s\n", pwdd);
 	if (glo->nb > 1)
 		exit(0);
 	return (0);

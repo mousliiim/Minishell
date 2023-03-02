@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 05:19:59 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 22:28:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@
 # define BRB "\001\033[1;33m\002"
 # define EB "\001\033[0m\002"
 
+// int status = 0;
+
 typedef struct s_ptr_array
 {
 	size_t	size;
@@ -44,16 +46,15 @@ typedef struct s_ptr_array
 typedef struct s_tab_struct
 {
 	long int		id;
-	char	**commands;
-	char	**env;
-	char	**split_command;
+	char			**commands;
+	char			**env;
+	char			**split_command;
 }	t_tab_struct;
 
 typedef struct s_global
 {
 	char			**basic_env;
 	t_tab_struct	*struct_id;
-	// char			**env;
 	t_ptr_array		personal_env;
 	char			**path;
 	int				*forkstates;

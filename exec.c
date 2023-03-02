@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 05:20:21 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 22:22:54 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[6] = {&export, &unset, &cd, &builtin_exit, &print_env, &pwd};
-	static const char		*str[6] = {"export", "unset", "cd", "exit", "/usr/bin/env", "/usr/bin/pwd"};
+	static const builtins	func[8] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd};
+	static const char		*str[8] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd"};
 	int						i;
 
 	i = 0;
-	while (i < 6)
+	while (i < 8)
 	{
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
@@ -99,7 +99,7 @@ int	forking(t_global *glo, int i)
 
 	built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
 	if (glo->nb == 1 && built_ptr)
-		return (built_ptr(glo, i), 0);
+		return (built_ptr(glo, i), glo->nb--, 0);
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{

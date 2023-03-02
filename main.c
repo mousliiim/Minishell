@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/01 22:10:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 22:16:35 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,6 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (0);
 	global.personal_env = build_personal_env(env);
-	global.path = set_path(&global);
 	while (42)
 	{
 		input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
@@ -251,15 +250,12 @@ int	main(int ac, char **av, char **env)
 		{
 			tab_struct[j].id = j;
 			tab_struct[j].commands = splitted_line.strings.array[j];
-			// if (rafter_line(tab_struct[j].commands))
-			// 	tab_struct[j].split_command = 
-			// else
 				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
 													' ');
 			j++;
 		}
+		global.path = set_path(&global);
 		go_exec(&global);
-		// display_split(tab_struct, &global);
 		free_splitted_line(&splitted_line);
 		for (int k = 0; k < i; k++)
 			free_double_str(tab_struct[k].split_command);
