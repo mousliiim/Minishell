@@ -48,21 +48,6 @@ t_split_line	split_line(const char *line)
 	return (res);
 }
 
-int	print_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	if (!env)
-		return (ft_printf("there is no env\n"), 0);
-	while (env[i])
-	{
-		ft_printf("%s\n", env[i]);
-		i++;
-	}
-	return (0);
-}
-
 char	**set_path(t_global *global)
 {
 	int		i;
@@ -273,8 +258,8 @@ int	main(int ac, char **av, char **env)
 													' ');
 			j++;
 		}
-		display_split(tab_struct, &global);
 		go_exec(&global);
+		// display_split(tab_struct, &global);
 		free_splitted_line(&splitted_line);
 		for (int k = 0; k < i; k++)
 			free_double_str(tab_struct[k].split_command);

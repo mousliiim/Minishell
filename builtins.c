@@ -105,3 +105,27 @@ int	builtin_exit(t_global *global, int j)
 	}
 	exit ((unsigned char )ft_atoi(global->struct_id[j].split_command[1]));
 }
+
+int	print_env(t_global *glo, int j)
+{
+	int	i;
+
+	(void) j;
+	i = -1;
+		while (glo->personal_env.array[++i])
+		printf("%s\n", (char *)glo->personal_env.array[i]);
+	if (glo->nb > 1)
+		exit(0);
+	return (0);
+}
+
+int	pwd(t_global *glo, int j)
+{
+	char	pwdd[4096];
+
+	getcwd(pwdd, 4096);
+	printf("rpokfep%s\n", pwdd);
+	if (glo->nb > 1)
+		exit(0);
+	return (0);
+}

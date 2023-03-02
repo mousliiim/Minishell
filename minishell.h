@@ -88,7 +88,6 @@ size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
-int				print_env(char **env);
 int				ft_isspace(char c);
 
 /*********************** PARSING ***********************/
@@ -117,7 +116,9 @@ void			display_split(t_tab_struct *tab_struct, t_global *info);
 int				cd(t_global *global, int i);
 int				unset(t_global *glo, int j);
 int				export(t_global *global, int j);
-int	builtin_exit(t_global *global, int j);
+int				print_env(t_global *glo, int j);
+int	pwd(t_global *glo, int j);
+int				builtin_exit(t_global *global, int j);
 /*****************************************************/
 
 #endif
