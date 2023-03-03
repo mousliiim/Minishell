@@ -49,11 +49,10 @@ int	export(t_global *global, int j)
 			{
 				if (!ft_strncmp(global->struct_id[j].split_command[idx_args], (char *)global->personal_env.array[i], stuff))
 				{
-					pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[idx_args]);
-					pa_add(&global->personal_env,
-							ft_strdup(global->struct_id[j].split_command[idx_args]));
-					idx_args++;
-					continue ;
+					pa_pop(&global->personal_env, i);
+					// pa_add(&global->personal_env,
+					// 		ft_strdup(global->struct_id[j].split_command[idx_args]));
+					break ;
 				}
 				i++;
 			}

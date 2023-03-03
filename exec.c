@@ -97,15 +97,13 @@ int	openfiles(t_global *glo, int j)
 {
 	int			i;
 	int			fd;
-	t_list_mini	list;
 
 	i = 0;
 	while (glo->struct_id[j].split_command[i])
 	{
 		if (!ft_strcmp(glo->struct_id[j].split_command[i], ">"))
 		{
-			list.redirect = 1;
-			fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
+				fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
 			if (fd == -1)
 				return (exit(0), 0);
 			dup2(fd, STDOUT_FILENO);
