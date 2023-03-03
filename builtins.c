@@ -96,11 +96,7 @@ int	cd(t_global *global, int i)
 	int	status;
 	char *env;
 
-	if (global->nb > 1)
-		exit(0);
 	status = 0;
-	if (status != 0)
-		perror("Error changing directory");
 	if (!global->struct_id[i].split_command[1])
 	{
 		env = getenv("HOME");
@@ -108,6 +104,10 @@ int	cd(t_global *global, int i)
 		return (status);
 	}
 	status = chdir(global->struct_id[i].split_command[1]);
+	if (status != 0)
+		perror("Error changing directory");
+	if (global->nb > 1)
+		exit(0);
 	return (status);
 }
 
@@ -183,6 +183,12 @@ char	**create_tab_color(char **cmd)
 	}
 	new[j] = 0;
 	return (new);
+}
+
+int	echo(t_global *glo, int j)
+{
+	fprintf(stderr, "hello from echo\n");
+	return (0);
 }
 
 int	ls_color(t_global *glo, int j)

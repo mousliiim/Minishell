@@ -117,7 +117,7 @@ int				forking(t_global *global, int i);
 void	waiting(t_global *global, int size_wait);
 // void			waiting(int *forkstates, int size_wait);
 /***************************************************/
-
+int	echo(t_global *glo, int j);
 /*********************** UTILS ***********************/
 void			print_tab(char **str);
 void			display_split(t_tab_struct *tab_struct, t_global *info);

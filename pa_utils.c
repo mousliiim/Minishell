@@ -1,29 +1,29 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   pa_utils.c                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 04:57:46 by mparisse         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+	/* ************************************************************************** */
+	/*                                                                            */
+	/*                                                        :::      ::::::::   */
+	/*   pa_utils.c                                         :+:      :+:    :+:   */
+	/*                                                    +:+ +:+         +:+     */
+	/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+	/*                                                +#+#+#+#+#+   +#+           */
+	/*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
+	/*   Updated: 2023/03/02 04:57:46 by mparisse         ###   ########.fr       */
+	/*                                                                            */
+	/* ************************************************************************** */
 
-#include "minishell.h"
-#include "stdlib.h"
+	#include "minishell.h"
+	#include "stdlib.h"
 
-void	*ft_realloc(void **old, size_t old_capacity, size_t	new_capacity)
-{
-	void	**new;
-	size_t		i;
-
-	i = 0;
-	new = ft_calloc(sizeof(void *), new_capacity);
-	while (i < old_capacity)
+	void	*ft_realloc(void **old, size_t old_capacity, size_t	new_capacity)
 	{
-		new[i] = old[i];
-		i++;
+		void	**new;
+		size_t		i;
+
+		i = 0;
+		new = ft_calloc(sizeof(void *), new_capacity);
+		while (i < old_capacity)
+		{
+			new[i] = old[i];
+			i++;
 	}
 	// ft_memset(new[i], 0, new_capacity);
 	return (new);

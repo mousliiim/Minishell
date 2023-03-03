@@ -79,12 +79,12 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[9] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &ls_color};
-	static const char		*str[9] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/ls"};
+	static const builtins	func[10] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &ls_color, &echo};
+	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/ls", "echo"};
 	int						i;
 
 	i = 0;
-	while (i < 9)
+	while (i < 10)
 	{
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
