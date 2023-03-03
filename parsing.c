@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 05:36:25 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/03 04:44:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,37 +197,6 @@ int	count_raft(char *line)
 	return (count);
 }
 
-int count_word(char **tab)
-{
-	int		i;
-	int		j;
-	int		count;
-
-	i = 0;
-	count = 0;
-	while (tab[i])
-	{
-		j = 0;
-		while (isspace(tab[i][j]))
-			j++;
-		while (tab[i][j])
-		{
-			if (isspace(tab[i][j]))
-			{
-				while (isspace(tab[i][j]))
-					j++;
-				if (tab[i][j])
-					count++;
-			}
-			if (!tab[i][j])
-				break ;
-			j++;
-		}
-		i++;
-	}
-	return (count);
-}
-
 char	*ft_strcpy(char *dest, const char *src, int choice)
 {
 	int	i;
@@ -271,7 +240,6 @@ void	ft_strjoin2(char **line, const char *s1)
 
 	if (*line && **line)
 	{
-		printf("line = %s\n", *line);
 		i = 0;
 		while ((*line)[i])
 			i++;
@@ -290,23 +258,24 @@ void	ft_strjoin2(char **line, const char *s1)
 	*line = ft_strdup2(s1, 1);
 }
 
-int		ft_have_two_word(char **tab)
+char	**ft_have_two_word(char **tab)
 {
 	char 	*tmp;
 	char 	*arg;
 	int		i;
 	int		j;
-	int 	count;
 
-	count = count_word(tab);
-	if (count == 0)
-		return (0);
-	printf("count = %d\n", count);
 	arg = NULL;
 	i = 0;
+	printf("tab[0][0] = %s\n", tab[0]);
 	while (tab[i])
 	{
 		j = 0;
+		if (i == 0)
+		{
+			tmp = ft_substr(tab[i], 0, ft_strlen(tab[i]));
+			ft_strjoin2(&arg, tmp);
+		}
 		while (ft_isspace(tab[i][j]))
 			j++;
 		while (tab[i][j])
@@ -317,8 +286,11 @@ int		ft_have_two_word(char **tab)
 					j++;
 				if (tab[i][j] && !ft_isspace(tab[i][j]))
 				{
+					if (i == 0)
+						break ;
 					tmp = ft_strndup(tab[i] + j, ft_strlen(tab[i]) - j);
 					ft_strjoin2(&arg, tmp);
+					free(tmp);
 					break ;
 				}
 			}
@@ -328,8 +300,7 @@ int		ft_have_two_word(char **tab)
 		}
 		i++;
 	}
-	printf("arg = %s\n", arg);
-	return (1);
+	return (ft_split(arg, ' '));
 }
 
 char **ft_split_rafter(char *line)
@@ -384,7 +355,7 @@ char **ft_split_rafter(char *line)
 	res[j] = ft_substr(line, k, i - k);
 	j++;
 	res[j] = NULL;
-	printf("Count of simple ou double = %d\n", count_raft(line));
+	// printf("Count of simple ou double = %d\n", count_raft(line));
 	return (res);
 }
 
