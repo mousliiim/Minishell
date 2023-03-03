@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:47:04 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/03 05:00:24 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,6 @@ t_split_line	split_line(const char *line)
 	return (res);
 }
 
-int	print_env(char **env)
-{
-	int	i;
-
-	i = 0;
-	if (!env)
-		return (ft_printf("there is no env\n"), 0);
-	while (env[i])
-	{
-		ft_printf("%s\n", env[i]);
-		i++;
-	}
-	return (0);
-}
-
 char	**set_path(t_global *global)
 {
 	int		i;
@@ -70,10 +55,7 @@ char	**set_path(t_global *global)
 
 	i = 0;
 	if (global->personal_env.size == 0)
-	{
-		fprintf(stderr, "env ok\n");
 		return (0);
-	}
 	else
 	{
 		while (i < global->personal_env.size) //(global->env[i])
@@ -114,11 +96,11 @@ void	display_split(t_tab_struct *tab_struct, t_global *info)
 	}
 }
 
-void	waiting(int *forkstates, int size_wait)
+void	waiting(t_global *global, int size_wait)
 {
 	int	i;
-	int	status;
 	int	exit_code;
+	int	status;
 	int	signal_code;
 
 	i = 0;
@@ -127,19 +109,23 @@ void	waiting(int *forkstates, int size_wait)
 	signal_code = 0;
 	while (i < size_wait)
 	{
-		waitpid(forkstates[i], &status, 0);
+		waitpid(global->forkstates[i], &status, 0);
 		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status) != 0)
-				exit_code = WEXITSTATUS(status);
+			exit_code = WEXITSTATUS(status);
 		}
-		else if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) != 0)
-				signal_code = WTERMSIG(status);
-		}
+		// }
+		// else if (WIFSIGNALED(status))
+		// {
+		// 	if (WTERMSIG(status) != 0)
+		// 		signal_code = WTERMSIG(status);
+		// }
 		i++;
 	}
+	// if (exit_code != 0)
+	global->status = exit_code;
+	// else
+	// 	global->status = signal_code;
 	(void)signal_code;
 	(void)exit_code;
 }
@@ -246,10 +232,13 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (0);
 	global.personal_env = build_personal_env(env);
-	global.path = set_path(&global);
+	global.status = 0;
 	while (42)
 	{
-		input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+		if (global.status == 0)
+			input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+		else
+			input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
 		if (!input)
 			break ;
 		if (!*input)
@@ -270,7 +259,7 @@ int	main(int ac, char **av, char **env)
 				i = -42;
 				break ;
 			}
-		j++;
+			j++;
 		}
 		if (i == -42)
 		{
@@ -286,24 +275,26 @@ int	main(int ac, char **av, char **env)
 		{
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
-				tab_struct[j].commands = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
-				for (int k = 0; tab_struct[j].commands[k]; k++)
-					ft_printf("1 : %s\n", tab_struct[j].commands[k]);
-				printf("\n\n");
-				tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
+				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
 				for (int k = 0; tab_struct[j].split_command[k]; k++)
-					ft_printf("2 : %s\n", tab_struct[j].split_command[k]);
+					ft_printf("1 : %s\n", tab_struct[j].split_command[k]);
+				printf("\n\n");
+				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
+				for (int k = 0; tab_struct[j].commands[k]; k++)
+					ft_printf("2 : %s\n", tab_struct[j].commands[k]);
 			}
+			else
+				tab_struct[j].split_command = ft_split((char *)splitted_line.strings.array[j], ' ');
 			j++;
 		}
-		// display_split(tab_struct, &global);
-		// free_splitted_line(&splitted_line);
-		// go_exec(&global);
-		// for (int k = 0; k < i; k++)
-		// 	free_double_str(tab_struct[k].split_command);
-		// free(tab_struct);
+		global.path = set_path(&global);
+		go_exec(&global);
+		free_splitted_line(&splitted_line);
+		for (int k = 0; k < i; k++)
+			free_double_str(tab_struct[k].split_command);
+		free(tab_struct);
 	}
-	// free_double_str(global.path);
+	// free_double_str(global.personal_env);
 }
 
 /*

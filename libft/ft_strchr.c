@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/07 18:27:33 by mparisse          #+#    #+#             */
-/*   Updated: 2022/11/10 15:10:00 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/01 19:09:24 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,3 @@ char	*ft_strchr(const char *s, int c)
 		return (NULL);
 	return (str + i);
 }
-/*
-#include <stdio.h>
-
-int main()
-{
-	char s[] = "tripouille";
-	char *ret = strchr(s, 'z');
-	printf("%s", ret);
-}*/

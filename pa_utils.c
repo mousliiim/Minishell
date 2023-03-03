@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/27 23:18:16 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/02 04:57:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,23 @@ void	*ft_realloc(void **old, size_t old_capacity, size_t	new_capacity)
 	return (new);
 }
 
+void	pa_pop_replace(t_ptr_array	*array, size_t index, void *new)
+{
+	free(array->array[index]);
+	array->array[index] = new;
+	// print_tab((char **)array->array);
+	array->size--;
+}
+
 void	pa_pop(t_ptr_array	*array, size_t index)
 {
+	free(array->array[index]);
 	array->array[index] = 0;
-	ft_memmove(array->array + index, array->array + index, array->size);
+	while (index < array->size)
+	{
+		array->array[index] = array->array[index + 1];
+		index++;
+	}
 	array->size--;
 }
 
