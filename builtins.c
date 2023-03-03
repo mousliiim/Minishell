@@ -6,11 +6,14 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 23:09:44 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/03 03:33:33 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+// METTRE LA FLECHE EN COULEUR PAR RAPPORT A VALIDE OU PAS
+// LES DOSSIER ET FICHIER EN COULEUR ( LS PRENDRA L'OPTION LS --COLOR )
 
 int	export(t_global *global, int j)
 {
@@ -92,12 +95,19 @@ int	unset(t_global *glo, int j)
 int	cd(t_global *global, int i)
 {
 	int	status;
+	char *env;
 
 	if (global->nb > 1)
 		exit(0);
 	status = 0;
 	if (status != 0)
 		perror("Error changing directory");
+	if (!global->struct_id[i].split_command[1])
+	{
+		env = getenv("HOME");
+		status = chdir(env);
+		return (status);
+	}
 	status = chdir(global->struct_id[i].split_command[1]);
 	return (status);
 }
@@ -140,11 +150,58 @@ int	print_env(t_global *glo, int j)
 
 int	pwd(t_global *glo, int j)
 {
-	char	pwdd[4096] = {0};
+	char	pwdd[PATH_MAX] = {0};
 
-	getcwd(pwdd, 4096);
+	(void) j;
+	getcwd(pwdd, PATH_MAX);
 	printf("%s\n", pwdd);
 	if (glo->nb > 1)
 		exit(0);
+	return (0);
+}
+
+char	**create_tab_color(char **cmd)
+{
+	int i;
+	int size;
+	int j;
+	char **new;
+
+	i = 0;
+	while (cmd[i])
+		i++;
+	size = i + 2;
+	new = malloc(sizeof(char *) * size);
+	i = 1;
+	j = 2;
+	new[1] = ft_strdup("--color");
+	new[0] = ft_strdup("/usr/bin/ls");
+	while (cmd[i])
+	{
+		new[j] = ft_strdup(cmd[i]);
+		j++;
+		i++;
+	}
+	new[j] = 0;
+	return (new);
+}
+
+int	ls_color(t_global *glo, int j)
+{
+	int	forks;
+	int status = 0;
+	
+	glo->struct_id[j].split_command = create_tab_color(glo->struct_id[j].split_command);
+	if (glo->nb == 1)
+	{
+		forks = fork();
+		if (forks == 0)
+		{
+			execve(glo->struct_id[j].split_command[0], glo->struct_id[j].split_command, (char **)glo->personal_env.array);
+		}
+		waitpid(forks, &status, 0);
+	}
+	else
+		execve(glo->struct_id[j].split_command[0], glo->struct_id[j].split_command, (char **)glo->personal_env.array);
 	return (0);
 }

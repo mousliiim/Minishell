@@ -1,47 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec.c                                             :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:01:57 by mparisse         ###   ########.fr       */
+/*   Created: 2023/03/03 00:02:26 by mparisse          #+#    #+#             */
+/*   Updated: 2023/03/03 02:37:45 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	go_exec(t_global *global)
-{
-	size_t		i;
-	// int			test;
-	size_t		count_nb_bultin;
-	// builtins	ok;
-
-	i = 0;
-	count_nb_bultin = 0;
-	find_path_for_each_command(global);
-	global->forkstates = malloc(sizeof(int) * global->nb);
-	global->prev = -1;
-	global->link[0] = -1;
-	while (i < global->nb)
-	{
-
-		pipe(global->link);
-		forking(global, i);
-		i++;
-	}
-	waiting(global, global->nb - count_nb_bultin);
-	if (global->link[0] != -1)
-		close(global->link[0]);
-	free(global->forkstates);
-	return (0);
-}
-
 int	find_path_for_each_command(t_global *global)
 {
-	int				i;
+	size_t				i;
 	int				j;
 	t_tab_struct	*struc;
 	char			*command_w_path;
@@ -93,33 +66,6 @@ builtins	find_ptr_builtin(char *ptr)
 	return (0);
 }
 
-int	openfiles(t_global *glo, int j)
-{
-	int			i;
-	int			fd;
-	t_list_mini	list;
-
-	i = 0;
-	while (glo->struct_id[j].split_command[i])
-	{
-		if (!ft_strcmp(glo->struct_id[j].split_command[i], ">"))
-		{
-			list.redirect = 1;
-			fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
-			if (fd == -1)
-				return (exit(0), 0);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-			free(glo->struct_id[j].split_command[i]);
-			free(glo->struct_id[j].split_command[i + 1]);
-			glo->struct_id[j].split_command[i] = 0;
-			glo->struct_id[j].split_command[i + 1] = 0;
-		}
-		i++;
-	}
-	return (0);
-}
-
 int	forking(t_global *glo, int i)
 {
 	builtins	built_ptr;
@@ -132,13 +78,12 @@ int	forking(t_global *glo, int i)
 	{
 		if (i != 0)
 			dupnclose(glo->prev, STDIN_FILENO);
-		if (i != (glo->nb - 1))
+		if (i != (int)(glo->nb - 1))
 			dup2(glo->link[1], STDOUT_FILENO);
 		close(glo->link[0]);
 		close(glo->link[1]);
 		if (built_ptr)
 			built_ptr(glo, i);
-		openfiles(glo, i);
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
 					glo->struct_id[i].split_command,
@@ -147,7 +92,7 @@ int	forking(t_global *glo, int i)
 			fprintf(stderr, "miniboosted: command not found : %s\n", glo->struct_id[i].split_command[0]);
 		else
 			perror("miniboosted");
-		exit(127);
+		exit(0);
 	}
 	else if (glo->forkstates[i] > 0)
 	{
@@ -159,3 +104,37 @@ int	forking(t_global *glo, int i)
 	return (0);
 }
 
+int	go_exec(t_global *global)
+{
+	size_t		i;
+	// int			test;
+	size_t		count_nb_bultin;
+	// builtins	ok;
+
+	i = 0;
+	count_nb_bultin = 0;
+	find_path_for_each_command(global);
+	global->forkstates = malloc(sizeof(int) * global->nb);
+	global->prev = -1;
+	global->link[0] = -1;
+	while (i < global->nb)
+	{
+
+		pipe(global->link);
+		forking(global, i);
+		i++;
+	}
+	waiting(global->forkstates, global->nb - count_nb_bultin);
+	if (global->link[0] != -1)
+		close(global->link[0]);
+	free(global->forkstates);
+	return (0);
+}
+
+
+
+int main(int ac, char **av)
+{
+	(void) ac;
+	(void) av;
+}

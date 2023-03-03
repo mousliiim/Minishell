@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 22:28:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/03 03:43:15 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,23 @@
 # define BRB "\001\033[1;33m\002"
 # define EB "\001\033[0m\002"
 
-// int status = 0;
-
 typedef struct s_ptr_array
 {
 	size_t	size;
 	size_t	capacity;
 	void	**array;
 }	t_ptr_array;
+
+typedef struct s_list_mini
+{
+	int		redirect;
+	struct	s_list_mini	*next;
+} t_list_mini;
+
+typedef struct s_head
+{
+	t_list_mini	*first;
+} t_head;
 
 typedef struct s_tab_struct
 {
@@ -58,6 +67,8 @@ typedef struct s_global
 	t_ptr_array		personal_env;
 	char			**path;
 	int				*forkstates;
+	int				status;
+	t_head			*head;
 	int				link[2];
 	int				prev;
 	size_t			nb;
@@ -74,7 +85,6 @@ typedef struct s_split_line
 typedef struct s_command_status
 {
 	bool	exit_shell;
-	int		status;
 	int		errnum;
 }	t_command_status;
 
@@ -104,7 +114,8 @@ int				pipe_checker(char *line);
 int				go_exec(t_global *global);
 int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
-void			waiting(int *forkstates, int size_wait);
+void	waiting(t_global *global, int size_wait);
+// void			waiting(int *forkstates, int size_wait);
 /***************************************************/
 
 /*********************** UTILS ***********************/
@@ -118,7 +129,8 @@ int				cd(t_global *global, int i);
 int				unset(t_global *glo, int j);
 int				export(t_global *global, int j);
 int				print_env(t_global *glo, int j);
-int	pwd(t_global *glo, int j);
+int				pwd(t_global *glo, int j);
+int				ls_color(t_global *glo, int j);
 int				builtin_exit(t_global *global, int j);
 /*****************************************************/
 

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/02 22:16:35 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/03 04:05:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,7 @@ char	**set_path(t_global *global)
 
 	i = 0;
 	if (global->personal_env.size == 0)
-	{
-		fprintf(stderr, "env ok\n");
 		return (0);
-	}
 	else
 	{
 		while (i < global->personal_env.size) //(global->env[i])
@@ -99,11 +96,11 @@ void	display_split(t_tab_struct *tab_struct, t_global *info)
 	}
 }
 
-void	waiting(int *forkstates, int size_wait)
+void	waiting(t_global *global, int size_wait)
 {
 	int	i;
-	int	status;
 	int	exit_code;
+	int	status;
 	int	signal_code;
 
 	i = 0;
@@ -112,19 +109,23 @@ void	waiting(int *forkstates, int size_wait)
 	signal_code = 0;
 	while (i < size_wait)
 	{
-		waitpid(forkstates[i], &status, 0);
+		waitpid(global->forkstates[i], &status, 0);
 		if (WIFEXITED(status))
 		{
-			if (WEXITSTATUS(status) != 0)
-				exit_code = WEXITSTATUS(status);
+			exit_code = WEXITSTATUS(status);
 		}
-		else if (WIFSIGNALED(status))
-		{
-			if (WTERMSIG(status) != 0)
-				signal_code = WTERMSIG(status);
-		}
+		// }
+		// else if (WIFSIGNALED(status))
+		// {
+		// 	if (WTERMSIG(status) != 0)
+		// 		signal_code = WTERMSIG(status);
+		// }
 		i++;
 	}
+	// if (exit_code != 0)
+	global->status = exit_code;
+	// else
+	// 	global->status = signal_code;
 	(void)signal_code;
 	(void)exit_code;
 }
@@ -211,9 +212,13 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (0);
 	global.personal_env = build_personal_env(env);
+	global.status = 0;
 	while (42)
 	{
-		input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+		if (global.status == 0)
+			input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+		else
+			input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
 		if (!input)
 			break ;
 		if (!*input)
@@ -234,7 +239,7 @@ int	main(int ac, char **av, char **env)
 				i = -42;
 				break ;
 			}
-		j++;
+			j++;
 		}
 		if (i == -42)
 		{
@@ -250,7 +255,7 @@ int	main(int ac, char **av, char **env)
 		{
 			tab_struct[j].id = j;
 			tab_struct[j].commands = splitted_line.strings.array[j];
-				tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
+			tab_struct[j].split_command = ft_split((char *)tab_struct[j].commands,
 													' ');
 			j++;
 		}
@@ -261,7 +266,7 @@ int	main(int ac, char **av, char **env)
 			free_double_str(tab_struct[k].split_command);
 		free(tab_struct);
 	}
-	free_double_str(global.path);
+	// free_double_str(global.personal_env);
 }
 
 /*
