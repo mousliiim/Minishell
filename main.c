@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 01:07:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/04 20:43:04 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,6 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (0);
-	printf("%ld | %ld\n", sizeof(char *) * (10 + 1), sizeof(char *) * 10 + 1);
 	global.personal_env = build_personal_env(env);
 	global.status = 0;
 	while (42)
@@ -310,10 +309,6 @@ int	main(int ac, char **av, char **env)
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("3 : %s\n", tab_struct[j].split_command[k]);
 				}
-				// printf("\n\n");
-				// tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-				// for (int k = 0; tab_struct[j].commands[k]; k++)
-				// 	ft_printf("2 : %s\n", tab_struct[j].commands[k]);
 			}
 			else
 			{

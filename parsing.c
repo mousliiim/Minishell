@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 01:11:21 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/04 20:39:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,6 +301,7 @@ char	**ft_have_two_word(char **tab)
 		}
 		i++;
 	}
+	printf("arg = %s\n", arg);
 	return (ft_split(arg, ' '));
 }
 
@@ -315,11 +316,6 @@ char **ft_split_rafter(char *line)
 	int		flag;
 	int		flag2;
 
-	// if (check_first_char(line) == 1 || check_first_char(line) == 2)
-	// 	i = 1;
-	// else if (check_first_char(line) == 3 || check_first_char(line) == 4)
-	// 	i = 2;
-	// else
 	if (check_first_char(line))
 	{
 		flag = 1;
@@ -351,7 +347,8 @@ char **ft_split_rafter(char *line)
 			{
 				res[j] = ft_substr(line, i, 2);
 				j++;
-				k = i + 2;
+				i++;
+				k = i + 1;
 				flag = 0;
 			}
 		}
@@ -381,13 +378,14 @@ char **ft_split_rafter(char *line)
 				j++;
 				res[j] = ft_substr(line, i, 2);
 				j++;
-				i += 2;
+				i += 1;
 				k = i + 1;
 			}
 			else
 			{
 				res[j] = ft_substr(line, i, 2);
 				j++;
+				i++;
 				k = i + 1;
 				flag = 0;
 			}
@@ -412,17 +410,16 @@ char **ft_split_rafter(char *line)
 		}
 		i++;
 	}
-	if (!flag2)
-	{
+	// if (!flag2)
+	// {
 		res[j] = ft_substr(line, k, i - k);
 		j++;
-	}
-	else
-	{
-		res[j] = ft_substr(line, k, k);
-		j++;
-	}
+	// }
+	// else
+	// {
+		// res[j] = ft_substr(line, k, k);
+		// j++;
+	// }
 	res[j] = NULL;
-	// printf("Count of simple ou double = %d\n", count_raft(line));
 	return (res);
 }
