@@ -3,14 +3,14 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 22:36:18 by mparisse          #+#    #+#              #
-#    Updated: 2023/03/02 05:04:52 by mparisse         ###   ########.fr        #
+#    Updated: 2023/03/05 00:37:20 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = main.c pa_utils.c utils.c exec.c parsing.c builtins.c
+SRCS = main.c pa_utils.c utils.c exec.c parsing.c builtins.c rafter.c
 
 OBJS = ${SRCS:.c=.o}
 

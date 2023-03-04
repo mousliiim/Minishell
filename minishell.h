@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 23:01:45 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 00:41:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_tab_struct
 	char			**commands;
 	char			**env;
 	char			**split_command;
+	int				type;
 }	t_tab_struct;
 
 typedef struct s_global
@@ -120,11 +121,21 @@ char			**ft_split_rafter2(char *line);
 int				check_first_char(char *line);
 /******************************************************/
 
+/*********************** RAFTER ***********************/
+t_type			return_redir_enum(char *line);
+char			*return_file_name(char *line);
+t_list_mini		*ft_lstlaste(t_list_mini *lst);
+t_list_mini		*ft_lstnewe(void *content, t_type type);
+void			ft_lstadde_back(t_list_mini **lst, t_list_mini *new);
+void			ft_lst_display(t_list_mini *head);
+void			ft_lstcleare(t_list_mini **lst, void (*del)(void*));
+/******************************************************/
+
 /*********************** EXEC ***********************/
 int				go_exec(t_global *global);
 int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
-void	waiting(t_global *global, int size_wait);
+void			waiting(t_global *global, int size_wait);
 // void			waiting(int *forkstates, int size_wait);
 /***************************************************/
 

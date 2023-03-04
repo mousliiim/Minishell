@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 20:43:04 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 00:34:33 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,25 +291,49 @@ int	main(int ac, char **av, char **env)
 		j = 0;
 		while (j < i)
 		{
+			/*
+			* Ci dessous c'est dans le cas ou sa commence simplement par un chevron ou double chevron
+			* exemple : > file ou >> file ou < file ou << file
+			*/
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
-				global.head = malloc(sizeof(t_list_mini));
-				global.head->redirect = HERE_DOC;
-				printf("global.head->redirect = %d\n", global.head->redirect);
+				/*
+				* Ont va direct faire un ft_have_two_word pour que sa nous renvoi un tableau de string dans 
+				* le cas ou il y'a un espace avec une commande comme : > file ls ou sa marche aussi par exemple 
+				* pour cat < file -e
+				*/
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
 				if (tab_struct[j].split_command)
 				{
+					// dans mon split_command j'ai la commande
+					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("1 : %s\n", tab_struct[j].split_command[k]);
+						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					for (int k = 0; tab_struct[j].commands[k]; k++)
+						ft_printf("Split : %s\n", tab_struct[j].commands[k]);
 				}
+				/*
+				* Ci dessous c'est dans le cas dans le ft_have_two_word renvoi NULL donc il n'y a pas de commande
+				* a replacer il y'a pas de : > file ls par exemple
+				*/
 				if (tab_struct[j].split_command == NULL)
 				{
-					printf("tab_struct[j].split_command == NULL\n");
+					printf("PAS DE COMMANDE AVANT CHEVRON ET APRES\n");
 					tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("3 : %s\n", tab_struct[j].split_command[k]);
+						ft_printf("Split au Chevron : %s\n", tab_struct[j].split_command[k]);
+					for (int k = 0; tab_struct[j].split_command[k]; k += 2)
+						ft_lstadde_back(&global.head, ft_lstnewe(return_file_name(tab_struct[j].split_command[k + 1]), return_redir_enum(tab_struct[j].split_command[k])));
+					// Print la liste chainee remplis
+					ft_lst_display(global.head);
+					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
+					ft_lstcleare(&global.head, free);
 				}
 			}
+			/*
+			* Ici c'est dans le cas ou il y'a pas de chevron dans l'entree utilisateur dans le minishell
+			* juste un commande simple comme : ls -l ou cat file par exemple donc ont split juste au espace
+			*/
 			else
 			{
 				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');

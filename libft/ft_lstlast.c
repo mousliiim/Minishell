@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/11 23:08:18 by mparisse          #+#    #+#             */
-/*   Updated: 2022/11/13 13:06:19 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 21:47:28 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_list	*ft_lstlast(t_list *lst)
 	}
 	return (lst);
 }
+
 /*
 int main()
 {

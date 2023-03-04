@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 20:39:14 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/04 21:18:57 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,11 +301,10 @@ char	**ft_have_two_word(char **tab)
 		}
 		i++;
 	}
-	printf("arg = %s\n", arg);
+	if (arg == NULL)
+		return (NULL);
 	return (ft_split(arg, ' '));
 }
-
-// <<a<<b ne split pas besoin encore a regler le probleme
 
 char **ft_split_rafter(char *line)
 {
@@ -314,18 +313,11 @@ char **ft_split_rafter(char *line)
 	int		j;
 	int		k;
 	int		flag;
-	int		flag2;
 
 	if (check_first_char(line))
-	{
 		flag = 1;
-		flag2 = 1;
-	}
 	else
-	{
 		flag = 0;
-		flag2 = 0;
-	}
 	i = 0;
 	j = 0;
 	k = 0;
@@ -410,16 +402,8 @@ char **ft_split_rafter(char *line)
 		}
 		i++;
 	}
-	// if (!flag2)
-	// {
-		res[j] = ft_substr(line, k, i - k);
-		j++;
-	// }
-	// else
-	// {
-		// res[j] = ft_substr(line, k, k);
-		// j++;
-	// }
+	res[j] = ft_substr(line, k, i - k);
+	j++;
 	res[j] = NULL;
 	return (res);
 }
