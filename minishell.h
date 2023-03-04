@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:54:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/03 23:01:45 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,16 +41,20 @@ typedef struct s_ptr_array
 	void	**array;
 }	t_ptr_array;
 
+typedef enum s_type
+{
+	IN = 1,
+	OUT,
+	APPEND,
+	HERE_DOC
+}	t_type;
+
 typedef struct s_list_mini
 {
-	int		redirect;
-	struct	s_list_mini	*next;
-} t_list_mini;
-
-typedef struct s_head
-{
-	t_list_mini	*first;
-} t_head;
+	char				*file_name;
+	t_type				redirect;
+	struct s_list_mini	*next;
+}	t_list_mini;
 
 typedef struct s_tab_struct
 {
@@ -68,7 +72,7 @@ typedef struct s_global
 	char			**path;
 	int				*forkstates;
 	int				status;
-	t_head			*head;
+	t_list_mini		*head;
 	int				link[2];
 	int				prev;
 	size_t			nb;
@@ -112,6 +116,8 @@ int				pipe_checker(char *line);
 char			**ft_split_rafter(char *line);
 size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
+char			**ft_split_rafter2(char *line);
+int				check_first_char(char *line);
 /******************************************************/
 
 /*********************** EXEC ***********************/

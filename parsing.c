@@ -6,9 +6,11 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:44:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/04 01:11:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// HEREDOC DOIT SEXECUTER MEME SI IL Y SUIT UNE PIPE QUI A UNE SYNTAXE ERROR
 
 #include "minishell.h"
 
@@ -267,11 +269,10 @@ char	**ft_have_two_word(char **tab)
 
 	arg = NULL;
 	i = 0;
-	printf("tab[0][0] = %s\n", tab[0]);
 	while (tab[i])
 	{
 		j = 0;
-		if (i == 0)
+		if (i == 0 && !check_first_char(tab[0]))
 		{
 			tmp = ft_substr(tab[i], 0, ft_strlen(tab[i]));
 			ft_strjoin2(&arg, tmp);
@@ -303,59 +304,125 @@ char	**ft_have_two_word(char **tab)
 	return (ft_split(arg, ' '));
 }
 
+// <<a<<b ne split pas besoin encore a regler le probleme
+
 char **ft_split_rafter(char *line)
 {
 	char	**res;
 	int		i;
 	int		j;
 	int		k;
+	int		flag;
+	int		flag2;
 
+	// if (check_first_char(line) == 1 || check_first_char(line) == 2)
+	// 	i = 1;
+	// else if (check_first_char(line) == 3 || check_first_char(line) == 4)
+	// 	i = 2;
+	// else
+	if (check_first_char(line))
+	{
+		flag = 1;
+		flag2 = 1;
+	}
+	else
+	{
+		flag = 0;
+		flag2 = 0;
+	}
 	i = 0;
 	j = 0;
 	k = 0;
-	res = malloc(sizeof(char *) * ft_strlen(line) + 1);
+	res = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 	while (line[i])
 	{
 		if (line[i] == '>' && line[i + 1] == '>')
 		{
-			res[j] = ft_substr(line, k, i - k);
-			j++;
-			res[j] = ft_substr(line, i, 2);
-			j++;
-			i += 1;
-			k = i + 1;
+			if (flag == 0)
+			{
+				res[j] = ft_substr(line, k, i - k);
+				j++;
+				res[j] = ft_substr(line, i, 2);
+				j++;
+				i += 1;
+				k = i + 1;
+			}
+			else
+			{
+				res[j] = ft_substr(line, i, 2);
+				j++;
+				k = i + 2;
+				flag = 0;
+			}
 		}
 		else if (line[i] == '>' && line[i + 1] != '>')
 		{
-			res[j] = ft_substr(line, k, i - k);
-			j++;
-			res[j] = ft_substr(line, i, 1);
-			j++;
-			k = i + 1;
+			if (flag == 0)
+			{
+				res[j] = ft_substr(line, k, i - k);
+				j++;
+				res[j] = ft_substr(line, i, 1);
+				j++;
+				k = i + 1;
+			}
+			else
+			{
+				res[j] = ft_substr(line, i, 1);
+				j++;
+				k = i + 1;
+				flag = 0;
+			}
 		}
 		else if (line[i] == '<' && line[i + 1] == '<')
 		{
-			res[j] = ft_substr(line, k, i - k);
-			j++;
-			res[j] = ft_substr(line, i, 2);
-			j++;
-			i += 1;
-			k = i + 1;
+			if (flag == 0)
+			{
+				res[j] = ft_substr(line, k, i - k);
+				j++;
+				res[j] = ft_substr(line, i, 2);
+				j++;
+				i += 2;
+				k = i + 1;
+			}
+			else
+			{
+				res[j] = ft_substr(line, i, 2);
+				j++;
+				k = i + 1;
+				flag = 0;
+			}
 		}
 		else if (line[i] == '<' && line[i + 1] != '<')
 		{
-			res[j] = ft_substr(line, k, i - k);
-			j++;
-			res[j] = ft_substr(line, i, 1);
-			j++;
-			k = i + 1;
+			if (flag == 0)
+			{
+				res[j] = ft_substr(line, k, i - k);
+				j++;
+				res[j] = ft_substr(line, i, 1);
+				j++;
+				k = i + 1;
+			}
+			else
+			{
+				res[j] = ft_substr(line, i, 1);
+				j++;
+				k = i + 1;
+				flag = 0;
+			}
 		}
 		i++;
 	}
-	res[j] = ft_substr(line, k, i - k);
-	j++;
+	if (!flag2)
+	{
+		res[j] = ft_substr(line, k, i - k);
+		j++;
+	}
+	else
+	{
+		res[j] = ft_substr(line, k, k);
+		j++;
+	}
 	res[j] = NULL;
 	// printf("Count of simple ou double = %d\n", count_raft(line));
 	return (res);
 }
-

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 05:00:24 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/04 01:07:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,24 @@ int		rafter_line(char *line)
 	return (0);
 }
 
+int	check_first_char(char *line)
+{
+	int		i;
+
+	i = 0;
+	while (line[i] == ' ')
+		i++;
+	if (line[i] == '>' && line[i + 1] != '>')
+		return (1);
+	else if (line[i] == '<' && line[i + 1] != '<')
+		return (2);
+	else if (line[i] == '<' && line[i + 1] == '<')
+		return (3);
+	else if (line[i] == '>' && line[i + 1] == '>')
+		return (4);
+	return (0);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -231,6 +249,7 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (0);
+	printf("%ld | %ld\n", sizeof(char *) * (10 + 1), sizeof(char *) * 10 + 1);
 	global.personal_env = build_personal_env(env);
 	global.status = 0;
 	while (42)
@@ -275,24 +294,41 @@ int	main(int ac, char **av, char **env)
 		{
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
+				global.head = malloc(sizeof(t_list_mini));
+				global.head->redirect = HERE_DOC;
+				printf("global.head->redirect = %d\n", global.head->redirect);
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
-				for (int k = 0; tab_struct[j].split_command[k]; k++)
-					ft_printf("1 : %s\n", tab_struct[j].split_command[k]);
-				printf("\n\n");
-				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-				for (int k = 0; tab_struct[j].commands[k]; k++)
-					ft_printf("2 : %s\n", tab_struct[j].commands[k]);
+				if (tab_struct[j].split_command)
+				{
+					for (int k = 0; tab_struct[j].split_command[k]; k++)
+						ft_printf("1 : %s\n", tab_struct[j].split_command[k]);
+				}
+				if (tab_struct[j].split_command == NULL)
+				{
+					printf("tab_struct[j].split_command == NULL\n");
+					tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
+					for (int k = 0; tab_struct[j].split_command[k]; k++)
+						ft_printf("3 : %s\n", tab_struct[j].split_command[k]);
+				}
+				// printf("\n\n");
+				// tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
+				// for (int k = 0; tab_struct[j].commands[k]; k++)
+				// 	ft_printf("2 : %s\n", tab_struct[j].commands[k]);
 			}
 			else
-				tab_struct[j].split_command = ft_split((char *)splitted_line.strings.array[j], ' ');
+			{
+				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');
+				for (int k = 0; tab_struct[j].split_command[k]; k++)
+					ft_printf("4 : %s\n", tab_struct[j].split_command[k]);
+			}
 			j++;
 		}
-		global.path = set_path(&global);
-		go_exec(&global);
-		free_splitted_line(&splitted_line);
-		for (int k = 0; k < i; k++)
-			free_double_str(tab_struct[k].split_command);
-		free(tab_struct);
+		// global.path = set_path(&global);
+		// go_exec(&global);
+		// free_splitted_line(&splitted_line);
+		// for (int k = 0; k < i; k++)
+		// 	free_double_str(tab_struct[k].split_command);
+		// free(tab_struct);
 	}
 	// free_double_str(global.personal_env);
 }
