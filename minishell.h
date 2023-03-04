@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 03:43:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 00:16:39 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,7 @@ int				pipe_checker(char *line);
 int				go_exec(t_global *global);
 int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
+builtins	find_ptr_builtin(char *ptr);
 void	waiting(t_global *global, int size_wait);
 // void			waiting(int *forkstates, int size_wait);
 /***************************************************/

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 03:33:33 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 01:11:01 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ int	export(t_global *global, int j)
 				if (!ft_strncmp(global->struct_id[j].split_command[idx_args], (char *)global->personal_env.array[i], stuff))
 				{
 					pa_pop(&global->personal_env, i);
-					// pa_add(&global->personal_env,
-					// 		ft_strdup(global->struct_id[j].split_command[idx_args]));
 					break ;
 				}
 				i++;
@@ -105,7 +103,11 @@ int	cd(t_global *global, int i)
 	}
 	status = chdir(global->struct_id[i].split_command[1]);
 	if (status != 0)
-		perror("Error changing directory");
+	{
+		ft_putstr_fd("miniboosted: cd : ", 2);
+		ft_putstr_fd(global->struct_id[i].split_command[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
 	if (global->nb > 1)
 		exit(0);
 	return (status);
@@ -187,7 +189,58 @@ char	**create_tab_color(char **cmd)
 
 int	echo(t_global *glo, int j)
 {
-	fprintf(stderr, "hello from echo\n");
+	int	i;
+	int	idx_args;
+	int	option;
+	size_t	len_expand;
+	
+	idx_args = 1;
+	option = 0;
+	if (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
+	{
+		idx_args++;
+		option = 1;
+	}
+	while (glo->struct_id[j].split_command[idx_args])
+	{
+		if (glo->struct_id[j].split_command[idx_args][0] == '$')
+		{
+			if (!glo->struct_id[j].split_command[idx_args][1])
+			{
+				printf("$");
+				if (option == 0)
+					printf("\n");
+			}
+			else
+			{
+				i = 0;
+				len_expand = ft_strlen(&glo->struct_id[j].split_command[idx_args][1]);
+				while (glo->personal_env.array[i])
+				{
+					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
+					{
+						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+							break ;
+						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						break ;
+					}
+					i++;
+				}
+				if (option == 0)
+					printf("\n");
+			}
+		}
+		else
+		{
+			if (glo->struct_id[j].split_command[idx_args])
+				printf("%s", glo->struct_id[j].split_command[idx_args]);
+			if (option == 0)
+				printf("\n");
+		}
+		idx_args++;
+	}
+	if (glo->nb > 1)
+		exit(0);
 	return (0);
 }
 

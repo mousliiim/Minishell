@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:01:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 00:17:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	find_path_for_each_command(t_global *global)
 
 	i = 0;
 	struc = global->struct_id;
+	if (find_ptr_builtin(struc[i].split_command[0]))
+		return (0);
 	if (!global->path)
 		return (0);
 	while (i < global->nb)
@@ -79,8 +81,8 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[10] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &ls_color, &echo};
-	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/ls", "echo"};
+	static const builtins	func[10] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &echo, &echo};
+	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/echo", "echo"};
 	int						i;
 
 	i = 0;
