@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 01:15:51 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 01:23:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,12 +348,12 @@ int	main(int ac, char **av, char **env)
 			}
 			j++;
 		}
-		// global.path = set_path(&global);
-		// go_exec(&global);
-		// free_splitted_line(&splitted_line);
-		// for (int k = 0; k < i; k++)
-		// 	free_double_str(tab_struct[k].split_command);
-		// free(tab_struct);
+		global.path = set_path(&global);
+		go_exec(&global);
+		free_splitted_line(&splitted_line);
+		for (int k = 0; k < i; k++)
+			free_double_str(tab_struct[k].split_command);
+		free(tab_struct);
 	}
 	// free_double_str(global.personal_env);
 }
