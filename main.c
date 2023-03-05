@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:05:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 03:14:42 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,12 @@ void	print_tab(char **str)
 	while (str[i])
 		ft_printf("%s\n", str[i++]);
 }
+#include <signal.h>
+
+void	ctrlc(int sig)
+{
+	fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -211,8 +217,10 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (0);
-	global.personal_env = build_personal_env(env);
 	global.status = 0;
+	signal(SIGINT, & ctrlc);
+	global.personal_env = build_personal_env(env);
+	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
 		if (global.status == 0)

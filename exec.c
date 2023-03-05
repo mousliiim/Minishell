@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 00:17:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 01:44:18 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,16 @@ int	find_path_for_each_command(t_global *global)
 
 	i = 0;
 	struc = global->struct_id;
-	if (find_ptr_builtin(struc[i].split_command[0]))
-		return (0);
 	if (!global->path)
 		return (0);
 	while (i < global->nb)
 	{
 		j = 0;
+		if (find_ptr_builtin(struc[i].split_command[0]))
+		{
+			i++;
+			continue ;
+		}
 		while (global->path[j])
 		{
 			command_w_path = ft_sup_strjoin(global->path[j], '/',
@@ -138,7 +141,11 @@ int	forking(t_global *glo, int i)
 		close(glo->link[1]);
 		if (built_ptr)
 			built_ptr(glo, i);
-		openfiles(glo, i);
+		// openfiles(glo, i);
+		// fprintf(stderr, "---> %s\n", glo->struct_id[i].split_command[0]);
+		if (!glo->struct_id[i].split_command[0])
+			exit(0);
+		// ca depend du open file voir pedant les redirections 
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
 					glo->struct_id[i].split_command,
