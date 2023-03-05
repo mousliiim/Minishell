@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 04:51:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:02:04 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,31 +164,6 @@ int	pwd(t_global *glo, int j)
 	return (0);
 }
 
-char	**create_tab_color(char **cmd)
-{
-	int i;
-	int size;
-	int j;
-	char **new;
-
-	i = 0;
-	while (cmd[i])
-		i++;
-	size = i + 2;
-	new = malloc(sizeof(char *) * size);
-	i = 1;
-	j = 2;
-	new[1] = ft_strdup("--color");
-	new[0] = ft_strdup("/usr/bin/ls");
-	while (cmd[i])
-	{
-		new[j] = ft_strdup(cmd[i]);
-		j++;
-		i++;
-	}
-	new[j] = 0;
-	return (new);
-}
 
 int	echo(t_global *glo, int j)
 {
@@ -199,7 +174,7 @@ int	echo(t_global *glo, int j)
 	
 	idx_args = 1;
 	option = 0;
-	if (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
+	while (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
 	{
 		idx_args++;
 		option = 1;
@@ -232,15 +207,41 @@ int	echo(t_global *glo, int j)
 			if (glo->struct_id[j].split_command[idx_args])
 				printf("%s", glo->struct_id[j].split_command[idx_args]);
 		}
+		if (option == 0)
+			printf("\n");
+		else
+			printf(" ");
 		idx_args++;
 	}
-	if (option == 0)
-		printf("\n");
-	else
-		printf(" ");
 	if (glo->nb > 1)
 		exit(0);
 	return (0);
+}
+
+char	**create_tab_color(char **cmd)
+{
+	int i;
+	int size;
+	int j;
+	char **new;
+
+	i = 0;
+	while (cmd[i])
+		i++;
+	size = i + 2;
+	new = malloc(sizeof(char *) * size);
+	i = 1;
+	j = 2;
+	new[1] = ft_strdup("--color");
+	new[0] = ft_strdup("/usr/bin/ls");
+	while (cmd[i])
+	{
+		new[j] = ft_strdup(cmd[i]);
+		j++;
+		i++;
+	}
+	new[j] = 0;
+	return (new);
 }
 
 int	ls_color(t_global *glo, int j)
