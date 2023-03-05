@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 00:34:33 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 01:15:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,6 +291,8 @@ int	main(int ac, char **av, char **env)
 		j = 0;
 		while (j < i)
 		{
+			char *file_name;
+			t_type type;
 			/*
 			* Ci dessous c'est dans le cas ou sa commence simplement par un chevron ou double chevron
 			* exemple : > file ou >> file ou < file ou << file
@@ -323,7 +325,11 @@ int	main(int ac, char **av, char **env)
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Split au Chevron : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].split_command[k]; k += 2)
-						ft_lstadde_back(&global.head, ft_lstnewe(return_file_name(tab_struct[j].split_command[k + 1]), return_redir_enum(tab_struct[j].split_command[k])));
+					{
+						file_name = return_file_name(tab_struct[j].split_command[k + 1]);
+						type = return_redir_enum(tab_struct[j].split_command[k]);
+						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+					}
 					// Print la liste chainee remplis
 					ft_lst_display(global.head);
 					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
