@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:16:21 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:20:53 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,6 +199,12 @@ void	print_tab(char **str)
 	while (str[i])
 		ft_printf("%s\n", str[i++]);
 }
+#include <signal.h>
+
+void	ctrlc(int sig)
+{
+	fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
+}
 
 int		rafter_line(char *line)
 {
@@ -263,8 +269,10 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1)
 		return (0);
-	global.personal_env = build_personal_env(env);
 	global.status = 0;
+	signal(SIGINT, & ctrlc);
+	global.personal_env = build_personal_env(env);
+	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
 		if (global.status == 0)
@@ -408,5 +416,4 @@ int	main(int ac, char **av, char **env)
 			free_double_str(tab_struct[k].split_command);
 		free(tab_struct);
 	}
-	// free_double_str(global.personal_env);
 }

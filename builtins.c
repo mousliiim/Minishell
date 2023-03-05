@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:16:32 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:22:09 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ int	unset(t_global *glo, int j)
 	int		i;
 	int		idx_args;
 	size_t	len;
+	int		stuff;
 
 	if (glo->nb > 1)
 		exit(0);
@@ -112,7 +113,9 @@ int	unset(t_global *glo, int j)
 		i = 0;
 		while (glo->personal_env.array[i])
 		{
-			if (!ft_strncmp(glo->struct_id[j].split_command[idx_args], (char *)glo->personal_env.array[i], len))
+			stuff = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
+			if (!ft_strncmp(glo->struct_id[j].split_command[idx_args], (char *)glo->personal_env.array[i],
+					stuff))
 			{
 				pa_pop(&glo->personal_env, i);
 				break ;
@@ -177,7 +180,7 @@ int	print_env(t_global *glo, int j)
 
 	(void) j;
 	i = -1;
-		while (glo->personal_env.array[++i])
+	while (glo->personal_env.array[++i])
 		printf("%s\n", (char *)glo->personal_env.array[i]);
 	if (glo->nb > 1)
 		exit(0);
@@ -191,6 +194,60 @@ int	pwd(t_global *glo, int j)
 	(void) j;
 	getcwd(pwdd, PATH_MAX);
 	printf("%s\n", pwdd);
+	if (glo->nb > 1)
+		exit(0);
+	return (0);
+}
+
+
+int	echo(t_global *glo, int j)
+{
+	int	i;
+	int	idx_args;
+	int	option;
+	size_t	len_expand;
+	
+	idx_args = 1;
+	option = 0;
+	while (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
+	{
+		idx_args++;
+		option = 1;
+	}
+	while (glo->struct_id[j].split_command[idx_args])
+	{
+		if (glo->struct_id[j].split_command[idx_args][0] == '$')
+		{
+			if (!glo->struct_id[j].split_command[idx_args][1])
+				printf("$");
+			else
+			{
+				i = 0;
+				len_expand = ft_strlen(&glo->struct_id[j].split_command[idx_args][1]);
+				while (glo->personal_env.array[i])
+				{
+					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
+					{
+						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+							break ;
+						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						break ;
+					}
+					i++;
+				}
+			}
+		}
+		else
+		{
+			if (glo->struct_id[j].split_command[idx_args])
+				printf("%s", glo->struct_id[j].split_command[idx_args]);
+		}
+		if (option == 0)
+			printf("\n");
+		else
+			printf(" ");
+		idx_args++;
+	}
 	if (glo->nb > 1)
 		exit(0);
 	return (0);
@@ -220,63 +277,6 @@ char	**create_tab_color(char **cmd)
 	}
 	new[j] = 0;
 	return (new);
-}
-
-int	echo(t_global *glo, int j)
-{
-	int	i;
-	int	idx_args;
-	int	option;
-	size_t	len_expand;
-	
-	idx_args = 1;
-	option = 0;
-	if (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
-	{
-		idx_args++;
-		option = 1;
-	}
-	while (glo->struct_id[j].split_command[idx_args])
-	{
-		if (glo->struct_id[j].split_command[idx_args][0] == '$')
-		{
-			if (!glo->struct_id[j].split_command[idx_args][1])
-			{
-				printf("$");
-				if (option == 0)
-					printf("\n");
-			}
-			else
-			{
-				i = 0;
-				len_expand = ft_strlen(&glo->struct_id[j].split_command[idx_args][1]);
-				while (glo->personal_env.array[i])
-				{
-					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
-					{
-						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
-							break ;
-						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
-						break ;
-					}
-					i++;
-				}
-				if (option == 0)
-					printf("\n");
-			}
-		}
-		else
-		{
-			if (glo->struct_id[j].split_command[idx_args])
-				printf("%s", glo->struct_id[j].split_command[idx_args]);
-			if (option == 0)
-				printf("\n");
-		}
-		idx_args++;
-	}
-	if (glo->nb > 1)
-		exit(0);
-	return (0);
 }
 
 int	ls_color(t_global *glo, int j)
