@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/05 00:46:13 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 23:27:45 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void ft_lst_display(t_list_mini *head)
 	t_list_mini	*temp;
 
 	temp = head;
-	ft_printf("\n\nDISPLAY LINKED LIST : \n");
+	ft_printf("\n*******************\nDISPLAY LINKED LIST : \n");
 	while (temp != NULL)
 	{
 		if (temp->redirect == OUT)

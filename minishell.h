@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 01:22:17 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 23:01:44 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,7 @@ typedef struct s_list_mini
 
 typedef struct s_tab_struct
 {
-	long int		id;
 	char			**commands;
-	char			**env;
 	char			**split_command;
 	int				type;
 }	t_tab_struct;
@@ -117,7 +115,6 @@ int				pipe_checker(char *line);
 char			**ft_split_rafter(char *line);
 size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
-char			**ft_split_rafter2(char *line);
 int				check_first_char(char *line);
 /******************************************************/
 

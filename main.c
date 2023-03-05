@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 01:23:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:16:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,6 +238,20 @@ int	check_first_char(char *line)
 	return (0);
 }
 
+char *ft_no_take_first_word(char *line)
+{
+	int		i;
+	char	*res;
+
+	if (!line)
+		return (NULL);
+	i = 0;
+	while (line[i] && !ft_isspace(line[i]))
+		i++;
+	res = ft_substr(line, 0, i);
+	return (res);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -285,6 +299,8 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
+		if (!tab_struct)
+			return (0);
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
 		i = splitted_line.strings.size;
@@ -305,21 +321,58 @@ int	main(int ac, char **av, char **env)
 				* pour cat < file -e
 				*/
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
-				if (tab_struct[j].split_command)
+				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
+				printf("Value check first char = %s\n", tab_struct[j].split_command[0]);
+				if (tab_struct[j].split_command && check_first_char(tab_struct[j].commands[0]))
 				{
+					printf("1\n");
 					// dans mon split_command j'ai la commande
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
-						ft_printf("Split : %s\n", tab_struct[j].commands[k]);
+						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
+					for (int k = 0; tab_struct[j].commands[k]; k += 2)
+					{
+						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						type = return_redir_enum(tab_struct[j].commands[k]);
+						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+					}
+					// Print la liste chainee remplis
+					ft_lst_display(global.head);
+					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
+					ft_lstcleare(&global.head, free);
+				}
+				else if (tab_struct[j].split_command && !check_first_char(tab_struct[j].commands[0]))
+				{
+					printf("2\n");
+					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]); // a voir ici
+					for (int k = 0; tab_struct[j].split_command[k]; k++)
+						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					for (int k = 0; tab_struct[j].commands[k]; k++)
+					{
+						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
+					}
+					// for (int k = 0; tab_struct[j].commands[k]; k++)
+					// 	ft_printf("Split au Chevron : %s\n", tab_struct[j].commands[k]);
+					for (int k = 1; tab_struct[j].commands[k]; k += 2)
+					{
+						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						type = return_redir_enum(tab_struct[j].commands[k]);
+						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+					}
+					// Print la liste chainee remplis
+					ft_lst_display(global.head);
+					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
+					ft_lstcleare(&global.head, free);
 				}
 				/*
 				* Ci dessous c'est dans le cas dans le ft_have_two_word renvoi NULL donc il n'y a pas de commande
 				* a replacer il y'a pas de : > file ls par exemple
 				*/
-				if (tab_struct[j].split_command == NULL)
+				else if (tab_struct[j].split_command == NULL)
 				{
+					printf("3\n");
 					printf("PAS DE COMMANDE AVANT CHEVRON ET APRES\n");
 					tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
@@ -357,33 +410,3 @@ int	main(int ac, char **av, char **env)
 	}
 	// free_double_str(global.personal_env);
 }
-
-/*
-Erreur de syntaxe:
-// typedef struct token{
-// 	char *token
-// 	int type;
-// 	struct token *next;
-// }
-
-
-// [{ls}, {b}, {-la}]
-// // enum{
-// // 	redir = 0;
-// // 	commande = 1;
-// // }
-
-
-// // typedef struct command{
-// // 	
-// // 	token *token;
-// // }
-
-
-
-// // typedef struct token{
-// // 	char *token
-// // 	int type;
-// // 	struct token *next;
-// // }
-*/
