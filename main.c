@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 03:14:42 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/05 20:34:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,7 +274,6 @@ int	main(int ac, char **av, char **env)
 			free_double_str(tab_struct[k].split_command);
 		free(tab_struct);
 	}
-	// free_double_str(global.personal_env);
 }
 
 /*

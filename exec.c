@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/04 01:44:18 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/05 23:06:27 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 int	go_exec(t_global *global)
 {
 	size_t		i;
-	// int			test;
 	size_t		count_nb_bultin;
-	// builtins	ok;
 
 	i = 0;
 	count_nb_bultin = 0;
@@ -27,7 +25,6 @@ int	go_exec(t_global *global)
 	global->link[0] = -1;
 	while (i < global->nb)
 	{
-
 		pipe(global->link);
 		forking(global, i);
 		i++;
@@ -98,28 +95,52 @@ builtins	find_ptr_builtin(char *ptr)
 	return (0);
 }
 
-int	openfiles(t_global *glo, int j)
+int	replace_by_expand(t_global *glo, char *str, int idx_command, int idx_word)
 {
-	int			i;
-	int			fd;
+	int	i;
+	int	stuff;
 
 	i = 0;
-	while (glo->struct_id[j].split_command[i])
+	if (!str)
+		return (0);
+	while (glo->personal_env.array[i])
 	{
-		if (!ft_strcmp(glo->struct_id[j].split_command[i], ">"))
+		stuff = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
+		if (!ft_strncmp(str, (char *)glo->personal_env.array[i], stuff))
 		{
-				fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
-			if (fd == -1)
-				return (exit(0), 0);
-			dup2(fd, STDOUT_FILENO);
-			close(fd);
-			free(glo->struct_id[j].split_command[i]);
-			free(glo->struct_id[j].split_command[i + 1]);
-			glo->struct_id[j].split_command[i] = 0;
-			glo->struct_id[j].split_command[i + 1] = 0;
+			fprintf(stderr, "replace command\n");
+			glo->struct_id[idx_command].split_command[idx_word] = ft_substr((char *)glo->personal_env.array[i], stuff + 1, 56);
+			fprintf(stderr, ">> %s\n", str);
+			break ;
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	catch_expand(t_global *glo, int j)
+{
+	int	i;
+	int	word_idx;
+
+	word_idx = 0;
+	while (glo->struct_id[j].split_command[word_idx])
+	{
+		i = 0;
+		while (glo->struct_id[j].split_command[word_idx][i])
+		{
+			if (glo->struct_id[j].split_command[word_idx][i] == '$')
+			{
+				fprintf(stderr, "catch expand\n");
+				replace_by_expand(glo, &glo->struct_id[j].split_command[word_idx][i + 1], j, word_idx);
+				fprintf(stderr, ">> %s\n",  &glo->struct_id[j].split_command[word_idx][i + 1]);
+				break ;
+			}
+			i++;
+		}
+		word_idx++;
+	}
+	// fprintf(stderr, ">> %s\n",  &glo->struct_id[j].split_command[word_idx][i + 1]);
 	return (0);
 }
 
@@ -127,6 +148,7 @@ int	forking(t_global *glo, int i)
 {
 	builtins	built_ptr;
 
+	// catch_expand(glo, i);
 	built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
 	if (glo->nb == 1 && built_ptr)
 		return (built_ptr(glo, i), glo->nb--, 0);
@@ -141,11 +163,8 @@ int	forking(t_global *glo, int i)
 		close(glo->link[1]);
 		if (built_ptr)
 			built_ptr(glo, i);
-		// openfiles(glo, i);
-		// fprintf(stderr, "---> %s\n", glo->struct_id[i].split_command[0]);
 		if (!glo->struct_id[i].split_command[0])
 			exit(0);
-		// ca depend du open file voir pedant les redirections 
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
 					glo->struct_id[i].split_command,
