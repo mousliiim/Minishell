@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 23:06:27 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 00:04:27 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	go_exec(t_global *global)
 {
-	size_t		i;
-	size_t		count_nb_bultin;
+	size_t	i;
+	size_t	count_nb_bultin;
 
 	i = 0;
 	count_nb_bultin = 0;
@@ -81,7 +81,7 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[10] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &echo, &echo};
+	static const builtins	func[10]  = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &echo, &echo};
 	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/echo", "echo"};
 	int						i;
 
@@ -105,11 +105,13 @@ int	replace_by_expand(t_global *glo, char *str, int idx_command, int idx_word)
 		return (0);
 	while (glo->personal_env.array[i])
 	{
-		stuff = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
+		stuff = ft_strchr((char *)glo->personal_env.array[i], '=')
+			- (char *)glo->personal_env.array[i];
 		if (!ft_strncmp(str, (char *)glo->personal_env.array[i], stuff))
 		{
 			fprintf(stderr, "replace command\n");
-			glo->struct_id[idx_command].split_command[idx_word] = ft_substr((char *)glo->personal_env.array[i], stuff + 1, 56);
+			glo->struct_id[idx_command].split_command[idx_word] = ft_substr((char *)glo->personal_env.array[i],
+					stuff + 1, 56);
 			fprintf(stderr, ">> %s\n", str);
 			break ;
 		}
@@ -132,15 +134,17 @@ int	catch_expand(t_global *glo, int j)
 			if (glo->struct_id[j].split_command[word_idx][i] == '$')
 			{
 				fprintf(stderr, "catch expand\n");
-				replace_by_expand(glo, &glo->struct_id[j].split_command[word_idx][i + 1], j, word_idx);
-				fprintf(stderr, ">> %s\n",  &glo->struct_id[j].split_command[word_idx][i + 1]);
+				replace_by_expand(glo,
+						&glo->struct_id[j].split_command[word_idx][i + 1], j,
+						word_idx);
+				fprintf(stderr, ">> %s\n",
+						&glo->struct_id[j].split_command[word_idx][i + 1]);
 				break ;
 			}
 			i++;
 		}
 		word_idx++;
 	}
-	// fprintf(stderr, ">> %s\n",  &glo->struct_id[j].split_command[word_idx][i + 1]);
 	return (0);
 }
 
@@ -170,7 +174,8 @@ int	forking(t_global *glo, int i)
 					glo->struct_id[i].split_command,
 					(char **)glo->personal_env.array);
 		if (errno == 2)
-			fprintf(stderr, "miniboosted: command not found : %s\n", glo->struct_id[i].split_command[0]);
+			fprintf(stderr, "miniboosted: command not found : %s\n",
+					glo->struct_id[i].split_command[0]);
 		else
 			perror("miniboosted");
 		exit(127);
@@ -184,4 +189,3 @@ int	forking(t_global *glo, int i)
 	}
 	return (0);
 }
-
