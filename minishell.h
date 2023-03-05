@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 00:41:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 01:22:17 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,11 @@ void			ft_lstcleare(t_list_mini **lst, void (*del)(void*));
 int				go_exec(t_global *global);
 int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
-void			waiting(t_global *global, int size_wait);
+builtins	find_ptr_builtin(char *ptr);
+void	waiting(t_global *global, int size_wait);
 // void			waiting(int *forkstates, int size_wait);
 /***************************************************/
-
+int	echo(t_global *glo, int j);
 /*********************** UTILS ***********************/
 void			print_tab(char **str);
 void			display_split(t_tab_struct *tab_struct, t_global *info);

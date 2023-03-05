@@ -6,9 +6,10 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 05:33:41 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/05 01:21:35 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "minishell.h"
 
@@ -83,10 +84,8 @@ int	export(t_global *global, int j)
 			{
 				if (!ft_strncmp(global->struct_id[j].split_command[idx_args], (char *)global->personal_env.array[i], stuff))
 				{
-					pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[idx_args]);
-					pa_add(&global->personal_env,
-							ft_strdup(global->struct_id[j].split_command[idx_args]));
-					continue ;
+					pa_pop(&global->personal_env, i);
+					break ;
 				}
 				i++;
 			}
@@ -130,11 +129,7 @@ int	cd(t_global *global, int i)
 	int	status;
 	char *env;
 
-	if (global->nb > 1)
-		exit(0);
 	status = 0;
-	if (status != 0)
-		perror("Error changing directory");
 	if (!global->struct_id[i].split_command[1])
 	{
 		env = getenv("HOME");
@@ -142,6 +137,14 @@ int	cd(t_global *global, int i)
 		return (status);
 	}
 	status = chdir(global->struct_id[i].split_command[1]);
+	if (status != 0)
+	{
+		ft_putstr_fd("miniboosted: cd : ", 2);
+		ft_putstr_fd(global->struct_id[i].split_command[1], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+	}
+	if (global->nb > 1)
+		exit(0);
 	return (status);
 }
 
@@ -217,6 +220,63 @@ char	**create_tab_color(char **cmd)
 	}
 	new[j] = 0;
 	return (new);
+}
+
+int	echo(t_global *glo, int j)
+{
+	int	i;
+	int	idx_args;
+	int	option;
+	size_t	len_expand;
+	
+	idx_args = 1;
+	option = 0;
+	if (glo->struct_id[j].split_command[idx_args] && !ft_strcmp(glo->struct_id[j].split_command[idx_args], "-n"))
+	{
+		idx_args++;
+		option = 1;
+	}
+	while (glo->struct_id[j].split_command[idx_args])
+	{
+		if (glo->struct_id[j].split_command[idx_args][0] == '$')
+		{
+			if (!glo->struct_id[j].split_command[idx_args][1])
+			{
+				printf("$");
+				if (option == 0)
+					printf("\n");
+			}
+			else
+			{
+				i = 0;
+				len_expand = ft_strlen(&glo->struct_id[j].split_command[idx_args][1]);
+				while (glo->personal_env.array[i])
+				{
+					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
+					{
+						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+							break ;
+						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						break ;
+					}
+					i++;
+				}
+				if (option == 0)
+					printf("\n");
+			}
+		}
+		else
+		{
+			if (glo->struct_id[j].split_command[idx_args])
+				printf("%s", glo->struct_id[j].split_command[idx_args]);
+			if (option == 0)
+				printf("\n");
+		}
+		idx_args++;
+	}
+	if (glo->nb > 1)
+		exit(0);
+	return (0);
 }
 
 int	ls_color(t_global *glo, int j)

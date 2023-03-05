@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/03 04:01:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/04 00:17:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,8 @@ int	find_path_for_each_command(t_global *global)
 
 	i = 0;
 	struc = global->struct_id;
+	if (find_ptr_builtin(struc[i].split_command[0]))
+		return (0);
 	if (!global->path)
 		return (0);
 	while (i < global->nb)
@@ -79,12 +81,12 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[9] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &ls_color};
-	static const char		*str[9] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/ls"};
+	static const builtins	func[10] = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &echo, &echo};
+	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/echo", "echo"};
 	int						i;
 
 	i = 0;
-	while (i < 9)
+	while (i < 10)
 	{
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
@@ -97,15 +99,13 @@ int	openfiles(t_global *glo, int j)
 {
 	int			i;
 	int			fd;
-	t_list_mini	list;
 
 	i = 0;
 	while (glo->struct_id[j].split_command[i])
 	{
 		if (!ft_strcmp(glo->struct_id[j].split_command[i], ">"))
 		{
-			list.redirect = 1;
-			fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
+				fd = open(glo->struct_id[j].split_command[i + 1], O_TRUNC | O_CREAT | O_WRONLY, 0666);
 			if (fd == -1)
 				return (exit(0), 0);
 			dup2(fd, STDOUT_FILENO);
