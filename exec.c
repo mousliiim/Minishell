@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:04:27 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 01:48:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,12 +81,12 @@ void	dupnclose(int fd1, int fd2)
 
 builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[10]  = {&export, &unset, &cd, &builtin_exit, &print_env, &print_env, &pwd, &pwd, &echo, &echo};
-	static const char		*str[10] = {"export", "unset", "cd", "exit", "/usr/bin/env", "env", "/usr/bin/pwd", "pwd", "/usr/bin/echo", "echo"};
+	static const builtins	func[7]  = {&export, &unset, &cd, &builtin_exit, &print_env, &pwd, &echo};
+	static const char		*str[7] = {"export", "unset", "cd", "exit", "env", "pwd", "echo"};
 	int						i;
 
 	i = 0;
-	while (i < 10)
+	while (i < 7)
 	{
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
@@ -152,10 +152,11 @@ int	forking(t_global *glo, int i)
 {
 	builtins	built_ptr;
 
-	// catch_expand(glo, i);
+	catch_expand(glo, i);
 	built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
 	if (glo->nb == 1 && built_ptr)
 		return (built_ptr(glo, i), glo->nb--, 0);
+	ft_lst_display(glo->head);
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
@@ -167,6 +168,8 @@ int	forking(t_global *glo, int i)
 		close(glo->link[1]);
 		if (built_ptr)
 			built_ptr(glo, i);
+		// if (glo->head)
+		// fprintf(stderr, "glo head >> %p\n", glo->head);
 		if (!glo->struct_id[i].split_command[0])
 			exit(0);
 		if (!access(glo->struct_id[i].split_command[0], X_OK))

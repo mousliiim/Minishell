@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:20:53 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 02:11:04 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,11 +306,12 @@ int	main(int ac, char **av, char **env)
 			free_splitted_line(&splitted_line);
 			continue ;
 		}
-		tab_struct = malloc(sizeof(t_tab_struct) * splitted_line.strings.size);
+		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 		if (!tab_struct)
 			return (0);
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
+		size_t global_tmp_nb = splitted_line.strings.size;
 		i = splitted_line.strings.size;
 		j = 0;
 		while (j < i)
@@ -330,11 +331,10 @@ int	main(int ac, char **av, char **env)
 				*/
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
 				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-				printf("Value check first char = %s\n", tab_struct[j].split_command[0]);
+				// printf("Value check first char = %s\n", tab_struct[j].split_command[0]);
 				if (tab_struct[j].split_command && check_first_char(tab_struct[j].commands[0]))
 				{
 					printf("1\n");
-					// dans mon split_command j'ai la commande
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
@@ -344,12 +344,8 @@ int	main(int ac, char **av, char **env)
 					{
 						file_name = return_file_name(tab_struct[j].commands[k + 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
-						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
 					}
-					// Print la liste chainee remplis
-					ft_lst_display(global.head);
-					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
-					ft_lstcleare(&global.head, free);
 				}
 				else if (tab_struct[j].split_command && !check_first_char(tab_struct[j].commands[0]))
 				{
@@ -361,18 +357,12 @@ int	main(int ac, char **av, char **env)
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
 					}
-					// for (int k = 0; tab_struct[j].commands[k]; k++)
-					// 	ft_printf("Split au Chevron : %s\n", tab_struct[j].commands[k]);
 					for (int k = 1; tab_struct[j].commands[k]; k += 2)
 					{
 						file_name = return_file_name(tab_struct[j].commands[k + 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
-						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
 					}
-					// Print la liste chainee remplis
-					ft_lst_display(global.head);
-					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
-					ft_lstcleare(&global.head, free);
 				}
 				/*
 				* Ci dessous c'est dans le cas dans le ft_have_two_word renvoi NULL donc il n'y a pas de commande
@@ -389,12 +379,8 @@ int	main(int ac, char **av, char **env)
 					{
 						file_name = return_file_name(tab_struct[j].split_command[k + 1]);
 						type = return_redir_enum(tab_struct[j].split_command[k]);
-						ft_lstadde_back(&global.head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
 					}
-					// Print la liste chainee remplis
-					ft_lst_display(global.head);
-					// Free la liste chainee ( A DEPLACER PAR LA SUITE DANS LE CODE )
-					ft_lstcleare(&global.head, free);
 				}
 			}
 			/*
@@ -411,6 +397,13 @@ int	main(int ac, char **av, char **env)
 		}
 		global.path = set_path(&global);
 		go_exec(&global);
+		int k = 0;
+		while (k < global_tmp_nb)
+		{
+			ft_lst_display(tab_struct[k].head);
+			ft_lstcleare(&tab_struct[k].head, free);
+			k++;
+		}
 		free_splitted_line(&splitted_line);
 		for (int k = 0; k < i; k++)
 			free_double_str(tab_struct[k].split_command);

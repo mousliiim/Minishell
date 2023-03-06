@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:21:42 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 01:50:30 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_tab_struct
 	char			**commands;
 	char			**split_command;
 	int				type;
+	t_list_mini		*head;
 }	t_tab_struct;
 
 typedef struct s_global
@@ -72,7 +73,6 @@ typedef struct s_global
 	char			**path;
 	int				*forkstates;
 	int				status;
-	t_list_mini		*head;
 	int				link[2];
 	int				prev;
 	size_t			nb;
