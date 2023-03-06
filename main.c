@@ -312,6 +312,7 @@ int	main(int ac, char **av, char **env)
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
 		size_t global_tmp_nb = splitted_line.strings.size;
+		(void) global_tmp_nb;
 		i = splitted_line.strings.size;
 		j = 0;
 		while (j < i)
@@ -400,7 +401,7 @@ int	main(int ac, char **av, char **env)
 		int k = 0;
 		while (k < global_tmp_nb)
 		{
-			ft_lst_display(tab_struct[k].head);
+			// display(tab_struct[k].head);
 			ft_lstcleare(&tab_struct[k].head, free);
 			k++;
 		}

@@ -101,7 +101,7 @@ int	unset(t_global *glo, int j)
 {
 	int		i;
 	int		idx_args;
-	size_t	len;
+	// size_t	len;
 	int		stuff;
 
 	if (glo->nb > 1)
@@ -109,7 +109,7 @@ int	unset(t_global *glo, int j)
 	idx_args = 1;
 	while (glo->struct_id[j].split_command[idx_args])
 	{
-		len = ft_strlen(glo->struct_id[j].split_command[idx_args]);
+		// len = ft_strlen(glo->struct_id[j].split_command[idx_args]);
 		i = 0;
 		while (glo->personal_env.array[i])
 		{
@@ -228,9 +228,8 @@ int	echo(t_global *glo, int j)
 				{
 					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
 					{
-						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
-							break ;
-						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						char *ok = (char *)&glo->personal_env.array[i] + len_expand;
+						printf("%s", ok);
 						break ;
 					}
 					i++;

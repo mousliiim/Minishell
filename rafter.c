@@ -87,7 +87,7 @@ void	ft_lstadde_back(t_list_mini **lst, t_list_mini *new)
 	}
 }
 
-void ft_lst_display(t_list_mini *head)
+void display(t_list_mini *head)
 {
 	char		*display;
 	t_list_mini	*temp;
