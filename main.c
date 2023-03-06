@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 02:11:04 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 20:25:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -283,7 +283,10 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (!*input)
 			continue ;
+		// catch expand 
 		add_history(input);
+		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
+		// par la suite dans le syntax checker etc ...
 		if (!syntax_checker(input))
 		{
 			free(input);
@@ -306,6 +309,7 @@ int	main(int ac, char **av, char **env)
 			free_splitted_line(&splitted_line);
 			continue ;
 		}
+		// expand
 		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 		if (!tab_struct)
 			return (0);

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 01:48:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 20:23:31 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,6 +162,10 @@ int	catch_expand(t_global *glo, int j)
 // 		if ()
 // 	}
 // }
+// finir redirections 
+// quotes
+// signaux ctrlc
+// expand
 
 int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 {
