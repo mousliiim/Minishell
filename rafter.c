@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rafter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/06 01:57:27 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 22:14:43 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_type	return_redir_enum(char *line)
 	t_type	type;
 
 	i = 0;
+	// line_negatif(line);
 	while (line[i] == ' ')
 		i++;
 	if (line[i] == '>' && line[i + 1] != '>')

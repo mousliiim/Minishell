@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/05 22:59:54 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 00:03:31 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	line_negatif(char *line)
 		if (line[i] == '"' || line[i] == '\'')
 		{
 			j = i + 1;
+			if (j)
 			while (line[j] && (line[j] != '"' || line[j] == '\''))
 			{
 				if (line[j] == '"' || line[j] == '\'')
@@ -69,6 +70,7 @@ void	line_negatif(char *line)
 					line[j] = line[j] * -1;
 				j++;
 			}
+			i = j;
 		}
 		i++;
 	}
@@ -83,18 +85,8 @@ void	line_positif(char *line)
 	j = 0;
 	while (line[i])
 	{
-		if (line[i] == '"' || line[i] == '\'')
-		{
-			j = i + 1;
-			while (line[j] && (line[j] != '"' || line[j] == '\''))
-			{
-				if (line[j] == '"' || line[j] == '\'')
-					break ;
-				if (ft_isspace(line[j]) || is_operator(line, j))
-					line[j] = line[j] * -1;
-				j++;
-			}
-		}
+		if (line[i] && line[i] < 0)
+			line[i] = line[i] * -1;
 		i++;
 	}
 }
@@ -163,6 +155,10 @@ int	pipe_checker(char *line)
 	int	i;
 
 	i = 0;
+	while(ft_isspace(line[i]))
+		i++;
+	if (line[i] == '|')
+		return (0);
 	while (line[i])
 	{
 		if (i == 0 && line[i] == '|')

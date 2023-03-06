@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 20:25:34 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 22:39:54 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,40 @@ char *ft_no_take_first_word(char *line)
 	return (res);
 }
 
+void ft_clean_quotes(char **line)
+{
+	int i;
+	int j;
+	int k;
+	char *tmp;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	tmp = ft_strdup(*line);
+	while (tmp[i])
+	{
+		if (tmp[i] == '\'' || tmp[i] == '\"')
+		{
+			i++;
+			while (tmp[i] != '\'' && tmp[i] != '\"')
+			{
+				(*line)[j] = tmp[i];
+				i++;
+				j++;
+			}
+		}
+		else
+		{
+			(*line)[j] = tmp[i];
+			j++;
+		}
+		i++;
+	}
+	(*line)[j] = '\0';
+	free(tmp);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -309,6 +343,8 @@ int	main(int ac, char **av, char **env)
 			free_splitted_line(&splitted_line);
 			continue ;
 		}
+		printf("Before : %s\n", (char *)splitted_line.strings.array[0]);
+		ft_clean_quotes((char **)splitted_line.strings.array);
 		// expand
 		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 		if (!tab_struct)
@@ -397,6 +433,20 @@ int	main(int ac, char **av, char **env)
 				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');
 				for (int k = 0; tab_struct[j].split_command[k]; k++)
 					ft_printf("4 : %s\n", tab_struct[j].split_command[k]);
+			}
+			if (tab_struct[j].split_command)
+			{
+				for (int k = 0; tab_struct[j].split_command[k]; k++)
+				{
+					line_positif(tab_struct[j].split_command[k]);
+				}
+			}
+			if (tab_struct[j].commands)
+			{
+				for (int k = 0; tab_struct[j].commands[k]; k++)
+				{
+					line_positif(tab_struct[j].commands[k]);
+				}
 			}
 			j++;
 		}
