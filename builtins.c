@@ -3,52 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 00:22:09 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/06 20:40:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "minishell.h"
-
-// int	export(t_global *global, int j)
-// {
-// 	int	stuff;
-// 	int	i;
-
-// 	if (global->nb > 1)
-// 		exit(0);
-// 	if (!global->struct_id[j].split_command[1])
-// 		return (0);
-// 	if (ft_isdigit(global->struct_id[j].split_command[1][0]) == 1
-// 		|| global->struct_id[j].split_command[1][0] == '=')
-// 	{
-// 		ft_printf("bash: export : '%s': not a valid identfier\n",
-// 					global->struct_id[j].split_command[1]);
-// 		return (0);
-// 	}
-// 	stuff = ft_strchr(global->struct_id[j].split_command[1], '=') - global->struct_id[j].split_command[1];
-// 	i = 0;
-// 	if (stuff > 0)
-// 	{
-// 		while (global->personal_env.array[i])
-// 		{
-// 			if (!ft_strncmp(global->struct_id[j].split_command[1], (char *)global->personal_env.array[i], stuff))
-// 			{
-// 				pa_pop_replace(&global->personal_env, i, global->struct_id[j].split_command[1]);
-// 				pa_add(&global->personal_env,
-// 						ft_strdup(global->struct_id[j].split_command[1]));
-// 				return (0);
-// 			}
-// 			i++;
-// 		}
-// 		pa_add(&global->personal_env,
-// 				ft_strdup(global->struct_id[j].split_command[1]));
-// 	}
-// 	return (0);
-// }
 
 int	export(t_global *global, int j)
 {
