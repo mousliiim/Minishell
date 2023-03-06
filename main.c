@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 20:25:34 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 00:27:25 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,6 +258,58 @@ char *ft_no_take_first_word(char *line)
 	return (res);
 }
 
+int	start_heredoc(t_global *glo, int j, t_list_mini *head)
+{
+	char	*str;
+	int		link_heredoc[2];
+	char	*limit;
+
+	limit = ft_strjoin(head->file_name, "\n");
+	pipe(link_heredoc);
+	while (1)
+	{
+		str = readline("here_doc:");
+		if (!str)
+			break ;
+		str = ft_strjoin(str, "\n");
+		if (!ft_strcmp(str, limit))
+		{
+			break;
+		}
+		ft_putstr_fd(str, link_heredoc[1]);
+	}
+	close(link_heredoc[1]);
+	glo->struct_id[j].prev_heredocs = link_heredoc[0];
+	return (0);
+}
+
+void	catch_heredocs(t_global *glo, size_t nb_command)
+{
+	t_list_mini *head;
+	int			i;
+
+	i = 0;
+	while (i < nb_command)
+	{
+		glo->struct_id[i].prev_heredocs = -1;
+		head = glo->struct_id[i].head;
+		while (head)
+		{
+			if (head->redirect == HERE_DOC)
+			{
+				start_heredoc(glo, i, head);
+			}
+			head = head->next;
+			if (head)
+			{
+				if (head->redirect == HERE_DOC)
+					close(glo->struct_id[i].prev_heredocs);
+			}
+		}
+		i++;
+	}
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -323,20 +375,10 @@ int	main(int ac, char **av, char **env)
 		{
 			char *file_name;
 			t_type type;
-			/*
-			* Ci dessous c'est dans le cas ou sa commence simplement par un chevron ou double chevron
-			* exemple : > file ou >> file ou < file ou << file
-			*/
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
-				/*
-				* Ont va direct faire un ft_have_two_word pour que sa nous renvoi un tableau de string dans 
-				* le cas ou il y'a un espace avec une commande comme : > file ls ou sa marche aussi par exemple 
-				* pour cat < file -e
-				*/
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
 				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-				// printf("Value check first char = %s\n", tab_struct[j].split_command[0]);
 				if (tab_struct[j].split_command && check_first_char(tab_struct[j].commands[0]))
 				{
 					printf("1\n");
@@ -369,29 +411,17 @@ int	main(int ac, char **av, char **env)
 						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
 					}
 				}
-				/*
-				* Ci dessous c'est dans le cas dans le ft_have_two_word renvoi NULL donc il n'y a pas de commande
-				* a replacer il y'a pas de : > file ls par exemple
-				*/
 				else if (tab_struct[j].split_command == NULL)
 				{
-					printf("3\n");
-					printf("PAS DE COMMANDE AVANT CHEVRON ET APRES\n");
-					tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
-					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("Split au Chevron : %s\n", tab_struct[j].split_command[k]);
-					for (int k = 0; tab_struct[j].split_command[k]; k += 2)
+					// tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
+					for (int k = 0; tab_struct[j].commands[k]; k += 2)
 					{
-						file_name = return_file_name(tab_struct[j].split_command[k + 1]);
-						type = return_redir_enum(tab_struct[j].split_command[k]);
+						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						type = return_redir_enum(tab_struct[j].commands[k]);
 						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
 					}
 				}
 			}
-			/*
-			* Ici c'est dans le cas ou il y'a pas de chevron dans l'entree utilisateur dans le minishell
-			* juste un commande simple comme : ls -l ou cat file par exemple donc ont split juste au espace
-			*/
 			else
 			{
 				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');
@@ -401,6 +431,7 @@ int	main(int ac, char **av, char **env)
 			j++;
 		}
 		global.path = set_path(&global);
+		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
 		int k = 0;
 		while (k < global_tmp_nb)
@@ -410,8 +441,8 @@ int	main(int ac, char **av, char **env)
 			k++;
 		}
 		free_splitted_line(&splitted_line);
-		for (int k = 0; k < i; k++)
-			free_double_str(tab_struct[k].split_command);
+		// for (int k = 0; k < i; k++)
+		// 	free_double_str(tab_struct[k].split_command);
 		free(tab_struct);
 	}
 }

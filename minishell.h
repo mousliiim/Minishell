@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 01:50:30 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 00:29:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_tab_struct
 	char			**commands;
 	char			**split_command;
 	int				type;
+	int				prev_heredocs;
 	t_list_mini		*head;
 }	t_tab_struct;
 
@@ -134,6 +135,7 @@ int				go_exec(t_global *global);
 int				find_path_for_each_command(t_global *global);
 int				forking(t_global *global, int i);
 builtins	find_ptr_builtin(char *ptr);
+int	openfiles(t_global *glo, int j);
 void	waiting(t_global *global, int size_wait);
 // void			waiting(int *forkstates, int size_wait);
 /***************************************************/

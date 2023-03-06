@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 20:23:31 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 00:44:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ int	find_path_for_each_command(t_global *global)
 	struc = global->struct_id;
 	if (!global->path)
 		return (0);
+	if (struc[i].split_command == NULL)
+		return (0);
 	while (i < global->nb)
 	{
 		j = 0;
@@ -85,6 +87,8 @@ builtins	find_ptr_builtin(char *ptr)
 	static const char		*str[7] = {"export", "unset", "cd", "exit", "env", "pwd", "echo"};
 	int						i;
 
+	if (!ptr)
+		return (0);
 	i = 0;
 	while (i < 7)
 	{
@@ -167,11 +171,29 @@ int	catch_expand(t_global *glo, int j)
 // signaux ctrlc
 // expand
 
-int	start_heredoc(t_global *glo, int j, t_list_mini *head)
-{
-	fprintf(stderr, "hello from heredocs\n");
-	return (0);
-}
+// int	start_heredoc(t_global *glo, int j, t_list_mini *head)
+// {
+// 	char	*str;
+// 	int		link_heredoc[2];
+// 	char	*limit;
+
+// 	limit = ft_strjoin(head->file_name, "\n");
+// 	pipe(link_heredoc);
+// 	// fprintf
+// 	while (1)
+// 	{
+// 		fprintf(stderr, "start heredoc\n");
+// 		// printf("here_doc:");
+// 		str = readline("here_doc:");
+// 		if (!ft_strcmp(str, limit))
+// 		{
+// 			break;
+// 		}
+// 		ft_putstr_fd(str, glo->link[1]);
+// 		free(str);
+// 	}
+// 	return (0);
+// }
 
 int	openfiles(t_global *glo, int j)
 {
@@ -208,12 +230,19 @@ int	openfiles(t_global *glo, int j)
 		}
 		if (list->redirect == APPEND)
 		{
-			fprintf(stderr, "not done yet\n");
+			fd = open(list->file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
+			if (fd == -1)
+			{
+				perror("miniboosted");
+				return (-1);
+			}
+			dup2(fd, STDOUT_FILENO);
+			close(fd);
 		}
 		if (list->redirect == HERE_DOC)
 		{
-			start_heredoc(glo, j, list);
-			fprintf(stderr, "not done yet\n");
+			dup2(glo->struct_id[j].prev_heredocs, STDIN_FILENO);
+			close(glo->struct_id[j].prev_heredocs);
 		}
 		list = list->next;
 	}
@@ -229,10 +258,12 @@ int	forking(t_global *glo, int i)
 {
 	builtins	built_ptr;
 
-	catch_expand(glo, i);
-	built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
-	if (glo->nb == 1 && built_ptr)
-		return (built_ptr(glo, i), glo->nb--, 0);
+	if (glo->struct_id->split_command)
+	{
+		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
+		if (glo->nb == 1 && built_ptr)
+			return (built_ptr(glo, i), glo->nb--, 0);
+	}
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
@@ -242,12 +273,12 @@ int	forking(t_global *glo, int i)
 			dup2(glo->link[1], STDOUT_FILENO);
 		close(glo->link[0]);
 		close(glo->link[1]);
-		if (!glo->struct_id[i].split_command[0])
-			exit(0);
 		if (openfiles(glo, i) == -1)
 			exit(1);
-		if (built_ptr)
+		if (glo->struct_id->split_command && built_ptr)
 			built_ptr(glo, i);
+		if (!glo->struct_id->split_command || !glo->struct_id[i].split_command[0])
+			exit(0);
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
 					glo->struct_id[i].split_command,
@@ -265,6 +296,8 @@ int	forking(t_global *glo, int i)
 		if (glo->prev != -1)
 			close(glo->prev);
 		glo->prev = glo->link[0];
+		if (glo->struct_id[i].prev_heredocs != -1)
+			close(glo->struct_id[i].prev_heredocs);
 	}
 	return (0);
 }
