@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 03:12:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 22:20:01 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,10 @@ void	waiting(t_global *global, int size_wait)
 	int	i;
 	int	exit_code;
 	int	status;
-	int	signal_code;
 
 	i = 0;
 	status = 0;
 	exit_code = 0;
-	signal_code = 0;
 	while (i < size_wait)
 	{
 		waitpid(global->forkstates[i], &status, 0);
@@ -114,20 +112,9 @@ void	waiting(t_global *global, int size_wait)
 		{
 			exit_code = WEXITSTATUS(status);
 		}
-		// }
-		// else if (WIFSIGNALED(status))
-		// {
-		// 	if (WTERMSIG(status) != 0)
-		// 		signal_code = WTERMSIG(status);
-		// }
 		i++;
 	}
-	// if (exit_code != 0)
 	global->status = exit_code;
-	// else
-	// 	global->status = signal_code;
-	(void)signal_code;
-	(void)exit_code;
 }
 
 int	syntax_checker(char *line)
@@ -499,10 +486,11 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
+		fprintf(stderr, "global->status >> %d\n", global.status);
 		k = 0;
 		while (k < global_tmp_nb)
 		{
-			display(tab_struct[k].head);
+			// display(tab_struct[k].head);
 			ft_lstcleare(&tab_struct[k].head, free);
 			k++;
 		}
