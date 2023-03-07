@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 02:54:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:59:42 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,20 +263,19 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 	int		link_heredoc[2];
 	char	*limit;
 
-	limit = ft_strjoin(head->file_name, "\n");
+	limit = head->file_name;
 	pipe(link_heredoc);
+	fprintf(stderr, "head->file_name %s\n", limit);
 	while (1)
 	{
 		str = readline("here_doc:");
 		if (!str)
 			break ;
-		str = ft_strjoin(str, "\n");
-		printf("delim = %s\n", limit);
 		if (!ft_strcmp(str, limit))
 		{
 			break;
 		}
-		ft_putstr_fd(str, link_heredoc[1]);
+		ft_putendl_fd(str, link_heredoc[1]);
 	}
 	close(link_heredoc[1]);
 	glo->struct_id[j].prev_heredocs = link_heredoc[0];
@@ -489,7 +488,7 @@ int	main(int ac, char **av, char **env)
 		int k = 0;
 		while (k < global_tmp_nb)
 		{
-			// display(tab_struct[k].head);
+			display(tab_struct[k].head);
 			ft_lstcleare(&tab_struct[k].head, free);
 			k++;
 		}
