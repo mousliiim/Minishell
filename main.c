@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 02:13:12 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:31:23 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,12 +376,12 @@ int	main(int ac, char **av, char **env)
 		add_history(input);
 		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
 		// par la suite dans le syntax checker etc ...
+		line_negatif(input);
 		if (!syntax_checker(input))
 		{
 			free(input);
 			continue ;
 		}
-		line_negatif(input);
 		splitted_line = split_line(input);
 		i = splitted_line.strings.size;
 		j = 0;
@@ -399,9 +399,8 @@ int	main(int ac, char **av, char **env)
 			free_splitted_line(&splitted_line);
 			continue ;
 		}
-		printf("Before : %s\n", (char *)splitted_line.strings.array[0]);
-		ft_clean_quotes((char **)splitted_line.strings.array);
 		// expand
+		ft_clean_quotes((char **)splitted_line.strings.array);
 		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 		if (!tab_struct)
 			return (0);
@@ -435,7 +434,6 @@ int	main(int ac, char **av, char **env)
 				}
 				else if (tab_struct[j].split_command && !check_first_char(tab_struct[j].commands[0]))
 				{
-					printf("2\n");
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]); // a voir ici
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
