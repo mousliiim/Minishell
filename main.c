@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 02:31:23 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:54:42 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,7 +310,7 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 	}
 }
 
-void ft_clean_quotes(char **line)
+int	ft_clean_quotes(char **line)
 {
 	int i;
 	int j;
@@ -321,6 +321,8 @@ void ft_clean_quotes(char **line)
 	i = 0;
 	j = 0;
 	k = 0;
+	if (line == NULL || *line == NULL)
+		return (0);
 	tmp = ft_strdup(*line);
 	while (tmp[i])
 	{
@@ -344,6 +346,7 @@ void ft_clean_quotes(char **line)
 	}
 	(*line)[j] = '\0';
 	free(tmp);
+	return (1);
 }
 
 
@@ -399,7 +402,11 @@ int	main(int ac, char **av, char **env)
 			free_splitted_line(&splitted_line);
 			continue ;
 		}
-		// expand
+		if (splitted_line.strings.size == 0)
+		{
+			free_splitted_line(&splitted_line);
+			continue ;
+		}
 		ft_clean_quotes((char **)splitted_line.strings.array);
 		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 		if (!tab_struct)
@@ -450,7 +457,6 @@ int	main(int ac, char **av, char **env)
 				}
 				else if (tab_struct[j].split_command == NULL)
 				{
-					// tab_struct[j].split_command = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].commands[k]; k += 2)
 					{
 						file_name = return_file_name(tab_struct[j].commands[k + 1]);
@@ -473,9 +479,7 @@ int	main(int ac, char **av, char **env)
 			if (tab_struct[j].commands)
 			{
 				for (int k = 0; tab_struct[j].commands[k]; k++)
-				{
 					line_positif(tab_struct[j].commands[k]);
-				}
 			}
 			j++;
 		}
