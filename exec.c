@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 22:55:18 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 23:30:08 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,14 +47,16 @@ int	find_path_for_each_command(t_global *global)
 	struc = global->struct_id;
 	if (!global->path)
 		return (0);
-	if (struc[i].split_command == NULL)
-		return (0);
-	if (struc[i].split_command[0])
-		return (0);
 	while (i < global->nb)
 	{
 		j = 0;
-		if (find_ptr_builtin(struc[i].split_command[0]))
+		fprintf(stderr, ">> %p\n", struc[i].split_command);
+		if (!struc[i].split_command)
+		{
+			i++;
+			continue ;
+		}
+		if (find_ptr_builtin(struc[i].split_command[0]) && struc[i].split_command)
 		{
 			i++;
 			continue ;
@@ -242,7 +244,7 @@ int	forking(t_global *glo, int i)
 {
 	builtins	built_ptr;
 
-	if (glo->struct_id->split_command  && glo->struct_id[i].split_command[0])
+	if (glo->struct_id[i].split_command && glo->struct_id[i].split_command[0])
 	{
 		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
 		if (glo->nb == 1 && built_ptr)
@@ -259,9 +261,9 @@ int	forking(t_global *glo, int i)
 		close(glo->link[1]);
 		if (openfiles(glo, i) == -1)
 			exit(1);
-		if (glo->struct_id->split_command && built_ptr)
+		if (glo->struct_id[i].split_command && built_ptr)
 			built_ptr(glo, i);
-		if (!glo->struct_id->split_command || !glo->struct_id[i].split_command[0])
+		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 			exit(0);
 		if (!access(glo->struct_id[i].split_command[0], X_OK))
 			execve(glo->struct_id[i].split_command[0],
