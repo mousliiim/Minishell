@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 00:53:46 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:13:12 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,6 @@ int	syntax_checker(char *line)
 		ft_printf("bash: syntax error near unexpected token `|'\n");
 		return (0);
 	}
-	line_negatif(line);
 	return (1);
 }
 
@@ -272,6 +271,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 		if (!str)
 			break ;
 		str = ft_strjoin(str, "\n");
+		printf("delim = %s\n", limit);
 		if (!ft_strcmp(str, limit))
 		{
 			break;
@@ -315,6 +315,7 @@ void ft_clean_quotes(char **line)
 	int i;
 	int j;
 	int k;
+	int delim;
 	char *tmp;
 
 	i = 0;
@@ -325,8 +326,9 @@ void ft_clean_quotes(char **line)
 	{
 		if (tmp[i] == '\'' || tmp[i] == '\"')
 		{
+			delim = i;
 			i++;
-			while (tmp[i] != '\'' && tmp[i] != '\"')
+			while (tmp[i] != tmp[delim])
 			{
 				(*line)[j] = tmp[i];
 				i++;
@@ -343,6 +345,7 @@ void ft_clean_quotes(char **line)
 	(*line)[j] = '\0';
 	free(tmp);
 }
+
 
 int	main(int ac, char **av, char **env)
 {
@@ -378,6 +381,7 @@ int	main(int ac, char **av, char **env)
 			free(input);
 			continue ;
 		}
+		line_negatif(input);
 		splitted_line = split_line(input);
 		i = splitted_line.strings.size;
 		j = 0;
@@ -417,7 +421,6 @@ int	main(int ac, char **av, char **env)
 				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 				if (tab_struct[j].split_command && check_first_char(tab_struct[j].commands[0]))
 				{
-					printf("1\n");
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
@@ -461,8 +464,6 @@ int	main(int ac, char **av, char **env)
 			else
 			{
 				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');
-				for (int k = 0; tab_struct[j].split_command[k]; k++)
-					ft_printf("4 : %s\n", tab_struct[j].split_command[k]);
 			}
 			if (tab_struct[j].split_command)
 			{

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 00:03:31 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 02:08:20 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,19 +53,19 @@ void	line_negatif(char *line)
 {
 	int	i;
 	int	j;
+	int delim;
 
+	delim = 0;
 	i = 0;
 	j = 0;
 	while (line[i])
 	{
 		if (line[i] == '"' || line[i] == '\'')
 		{
+			delim = i;
 			j = i + 1;
-			if (j)
-			while (line[j] && (line[j] != '"' || line[j] == '\''))
+			while (line[j] && line[j] != line[delim])
 			{
-				if (line[j] == '"' || line[j] == '\'')
-					break ;
 				if (ft_isspace(line[j]) || is_operator(line, j))
 					line[j] = line[j] * -1;
 				j++;
