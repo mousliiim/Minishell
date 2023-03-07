@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 00:59:53 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 03:05:54 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	find_path_for_each_command(t_global *global)
 		}
 		while (global->path[j])
 		{
+			if (!struc[i].split_command[0])
+				break ;
 			command_w_path = ft_sup_strjoin(global->path[j], '/',
 					struc[i].split_command[0]);
 			if (access(command_w_path, F_OK | X_OK) != -1)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 02:59:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 03:12:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,7 @@ void	ctrlc(int sig)
 	fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
 }
 
-int		rafter_line(char *line)
+int	rafter_line(char *line)
 {
 	int	i;
 
@@ -227,7 +227,7 @@ int		rafter_line(char *line)
 
 int	check_first_char(char *line)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (line[i] == ' ')
@@ -243,7 +243,7 @@ int	check_first_char(char *line)
 	return (0);
 }
 
-char *ft_no_take_first_word(char *line)
+char	*ft_no_take_first_word(char *line)
 {
 	int		i;
 	char	*res;
@@ -265,15 +265,16 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 
 	limit = head->file_name;
 	pipe(link_heredoc);
-	fprintf(stderr, "head->file_name %s\n", limit);
 	while (1)
 	{
 		str = readline("here_doc:");
 		if (!str)
 			break ;
+		fprintf(stderr, "head->file_name/limit -%s-\n", limit);
+		fprintf(stderr, "head->file_name/limit -%s-\n", str);
 		if (!ft_strcmp(str, limit))
 		{
-			break;
+			break ;
 		}
 		ft_putendl_fd(str, link_heredoc[1]);
 	}
@@ -284,7 +285,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 
 void	catch_heredocs(t_global *glo, size_t nb_command)
 {
-	t_list_mini *head;
+	t_list_mini	*head;
 	int			i;
 
 	i = 0;
@@ -296,14 +297,15 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 		{
 			if (head->redirect == HERE_DOC)
 			{
+				fprintf(stderr, "x\n");
 				start_heredoc(glo, i, head);
 			}
 			head = head->next;
-			if (head)
-			{
-				if (head->redirect == HERE_DOC)
-					close(glo->struct_id[i].prev_heredocs);
-			}
+			// if (head)
+			// {
+			// 	if (head->redirect == HERE_DOC)
+			// 		close(glo->struct_id[i].prev_heredocs);
+			// }
 		}
 		i++;
 	}
@@ -311,11 +313,11 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 
 int	ft_clean_quotes(char **line)
 {
-	int i;
-	int j;
-	int k;
-	int delim;
-	char *tmp;
+	int		i;
+	int		j;
+	int		k;
+	int		delim;
+	char	*tmp;
 
 	i = 0;
 	j = 0;
@@ -348,7 +350,6 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
-
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -357,11 +358,15 @@ int	main(int ac, char **av, char **env)
 	t_split_line		splitted_line;
 	int					i;
 	int					j;
+	size_t				global_tmp_nb;
+			char *file_name;
+			t_type type;
+	int					k;
 
 	if (ac != 1)
 		return (0);
 	global.status = 0;
-	signal(SIGINT, & ctrlc);
+	signal(SIGINT, &ctrlc);
 	global.personal_env = build_personal_env(env);
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
@@ -374,7 +379,7 @@ int	main(int ac, char **av, char **env)
 			break ;
 		if (!*input)
 			continue ;
-		// catch expand 
+		// catch expand
 		add_history(input);
 		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
 		// par la suite dans le syntax checker etc ...
@@ -407,24 +412,24 @@ int	main(int ac, char **av, char **env)
 			continue ;
 		}
 		ft_clean_quotes((char **)splitted_line.strings.array);
-		tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
+		tab_struct = ft_calloc(sizeof(t_tab_struct),
+				splitted_line.strings.size);
 		if (!tab_struct)
 			return (0);
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
-		size_t global_tmp_nb = splitted_line.strings.size;
-		(void) global_tmp_nb;
+		global_tmp_nb = splitted_line.strings.size;
+		(void)global_tmp_nb;
 		i = splitted_line.strings.size;
 		j = 0;
 		while (j < i)
 		{
-			char *file_name;
-			t_type type;
 			if (rafter_line(splitted_line.strings.array[j]))
 			{
 				tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
 				tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-				if (tab_struct[j].split_command && check_first_char(tab_struct[j].commands[0]))
+				if (tab_struct[j].split_command
+					&& check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
@@ -433,14 +438,18 @@ int	main(int ac, char **av, char **env)
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
 					for (int k = 0; tab_struct[j].commands[k]; k += 2)
 					{
-						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						file_name = return_file_name(tab_struct[j].commands[k
+								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
-						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head,
+								ft_lstnewe(file_name, type));
 					}
 				}
-				else if (tab_struct[j].split_command && !check_first_char(tab_struct[j].commands[0]))
+				else if (tab_struct[j].split_command
+						&& !check_first_char(tab_struct[j].commands[0]))
 				{
-					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]); // a voir ici
+					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
+						// a voir ici
 					for (int k = 0; tab_struct[j].split_command[k]; k++)
 						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
@@ -449,24 +458,29 @@ int	main(int ac, char **av, char **env)
 					}
 					for (int k = 1; tab_struct[j].commands[k]; k += 2)
 					{
-						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						file_name = return_file_name(tab_struct[j].commands[k
+								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
-						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head,
+								ft_lstnewe(file_name, type));
 					}
 				}
 				else if (tab_struct[j].split_command == NULL)
 				{
 					for (int k = 0; tab_struct[j].commands[k]; k += 2)
 					{
-						file_name = return_file_name(tab_struct[j].commands[k + 1]);
+						file_name = return_file_name(tab_struct[j].commands[k
+								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
-						ft_lstadde_back(&tab_struct[j].head, ft_lstnewe(file_name, type));
+						ft_lstadde_back(&tab_struct[j].head,
+								ft_lstnewe(file_name, type));
 					}
 				}
 			}
 			else
 			{
-				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j], ' ');
+				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j],
+						' ');
 			}
 			if (tab_struct[j].split_command)
 			{
@@ -485,7 +499,7 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
-		int k = 0;
+		k = 0;
 		while (k < global_tmp_nb)
 		{
 			display(tab_struct[k].head);

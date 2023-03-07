@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 20:40:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 04:27:28 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,8 +191,9 @@ int	echo(t_global *glo, int j)
 				{
 					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
 					{
-						char *ok = (char *)&glo->personal_env.array[i] + len_expand;
-						printf("%s", ok);
+						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+							break ;
+						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
 						break ;
 					}
 					i++;
@@ -202,7 +203,10 @@ int	echo(t_global *glo, int j)
 		else
 		{
 			if (glo->struct_id[j].split_command[idx_args])
+			{
+				printf("POPO\n");
 				printf("%s", glo->struct_id[j].split_command[idx_args]);
+			}
 		}
 		if (option == 0)
 			printf("\n");

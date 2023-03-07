@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rafter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/06 22:14:43 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/07 04:06:05 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*return_file_name(char *line)
 	while (ft_isspace(line[i]))
 		i++;
 	file_name = malloc(sizeof(char) * (ft_strlen(line) - i + 1));
-	while (line[i] != '\0')
+	while (line[i] != '\0' && line[i] != ' ')
 	{
 		file_name[j] = line[i];
 		i++;
@@ -88,7 +88,7 @@ void	ft_lstadde_back(t_list_mini **lst, t_list_mini *new)
 	}
 }
 
-void display(t_list_mini *head)
+void	display(t_list_mini *head)
 {
 	char		*display;
 	t_list_mini	*temp;
@@ -114,9 +114,9 @@ void display(t_list_mini *head)
 	}
 }
 
-void	ft_lstcleare(t_list_mini **lst, void (*del)(void*))
+void	ft_lstcleare(t_list_mini **lst, void (*del)(void *))
 {
-	t_list_mini	*tmp;
+	t_list_mini *tmp;
 
 	if (!lst || !del)
 		return ;
