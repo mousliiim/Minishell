@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 03:12:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 22:49:24 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -383,12 +383,12 @@ int	main(int ac, char **av, char **env)
 		add_history(input);
 		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
 		// par la suite dans le syntax checker etc ...
-		line_negatif(input);
 		if (!syntax_checker(input))
 		{
 			free(input);
 			continue ;
 		}
+		line_negatif(input);
 		splitted_line = split_line(input);
 		i = splitted_line.strings.size;
 		j = 0;
