@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 22:20:01 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/07 23:54:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,14 +251,12 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 	char	*limit;
 
 	limit = head->file_name;
-	pipe(link_heredoc);
+	pipe(link_heredoc);//check return value
 	while (1)
 	{
 		str = readline("here_doc:");
 		if (!str)
 			break ;
-		fprintf(stderr, "head->file_name/limit -%s-\n", limit);
-		fprintf(stderr, "head->file_name/limit -%s-\n", str);
 		if (!ft_strcmp(str, limit))
 		{
 			break ;
@@ -284,7 +282,6 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 		{
 			if (head->redirect == HERE_DOC)
 			{
-				fprintf(stderr, "x\n");
 				start_heredoc(glo, i, head);
 			}
 			head = head->next;

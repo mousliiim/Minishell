@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 04:27:28 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/08 05:14:14 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ int	builtin_exit(t_global *global, int j)
 {
 	int	i;
 
+	close(global->fd_solo_redirection);
+	close(global->link[0]);
 	if (global->nb > 1)
 		exit(0);
 	if (!global->struct_id[j].split_command[1])
@@ -130,6 +132,7 @@ int	builtin_exit(t_global *global, int j)
 			ft_putstr_fd("bash: exit: ", 2);
 			ft_putstr_fd(global->struct_id[j].split_command[1], 2);
 			ft_putstr_fd(": numeric argument required", 2);
+
 			exit(0);
 		}
 		i++;
@@ -204,7 +207,6 @@ int	echo(t_global *glo, int j)
 		{
 			if (glo->struct_id[j].split_command[idx_args])
 			{
-				printf("POPO\n");
 				printf("%s", glo->struct_id[j].split_command[idx_args]);
 			}
 		}
