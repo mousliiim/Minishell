@@ -306,6 +306,7 @@ int	ft_clean_quotes(char **line)
 	i = 0;
 	j = 0;
 	k = 0;
+	(void) k;
 	if (line == NULL || *line == NULL)
 		return (0);
 	tmp = ft_strdup(*line);
@@ -341,6 +342,7 @@ char	*get_git_branch(t_global *global)
 {
 	int	forkstate;
 	int prev;
+	char *res;
 	static const char	*command1[3] = {"/usr/bin/git", "branch", 0};
 	static const char	*command2[3] = {"/usr/bin/grep", "*", 0};
 	int	link[2];
@@ -351,6 +353,7 @@ char	*get_git_branch(t_global *global)
 	{
 		close(link[0]);
 		dup2(link[1], STDOUT_FILENO);
+		dup2(link[1], STDERR_FILENO);
 		close(link[1]);
 		execve(command1[0], (char **)command1, (char **)global->personal_env.array);
 		exit(0);
@@ -373,9 +376,77 @@ char	*get_git_branch(t_global *global)
 	}
 	close(link[1]);
 	close(prev);
-	printf("%s", get_next_line(link[0]));
+	res = get_next_line(link[0]);
 	close(link[0]);
-	return (0);
+	return (res);
+}
+
+char *get_input(t_global *glo)
+{
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, "$MiniBoosted ", "git("};
+	char				*branch;
+	char 				*correct_arrow;
+	char 				*res;
+	int					i;
+	int					j;
+	size_t				size_branch;
+
+	size_branch = 0;
+	if (glo->status == 0)
+		correct_arrow = (char *)arrows[0];
+	else
+		correct_arrow = (char *)arrows[1];
+	branch = get_git_branch(glo);
+	i = 0;
+	if (!branch)
+		return (ft_strjoin(correct_arrow, arrows[2]));
+	while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
+		i++;
+	while(branch[i])
+	{
+		i++;
+		size_branch++;
+	}
+	i = 0;
+	res = malloc(sizeof(char) * (41 + size_branch));
+	while (i < (41 + size_branch))
+	{
+		j = 0;
+		while(correct_arrow[i])
+		{
+			res[i] = correct_arrow[j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(arrows[2][j])
+		{
+			res[i] = (char)arrows[2][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while (arrows[3][j])
+		{
+			res[i] = (char)arrows[3][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(branch[j] && (branch[j] == '*' || branch[j] == ' '))
+			j++;
+		while(branch[j])
+		{
+			res[i] = branch[j];
+			j++;
+			i++;
+		}
+		break ;
+	}
+	res[i - 1] = ')';
+	res[i++] = ' ';
+	res[i] = 0;
+	return (res);
 }
 
 int	main(int ac, char **av, char **env)
@@ -390,7 +461,7 @@ int	main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	int					k;
-	char				*branch;
+	char *output;
 
 	if (ac != 1)
 		return (0);
@@ -400,11 +471,12 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		branch = get_git_branch(&global); // need to create function get output for readline
+		output = get_input(&global);
+		(void) output;
 		if (global.status == 0)
-			input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+			input = readline(output);
 		else
-			input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+			input = readline(output);
 		if (!input)
 			break ;
 		if (!*input)
