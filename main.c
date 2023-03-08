@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/08 06:33:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/08 06:59:13 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -335,13 +335,14 @@ int	ft_clean_quotes(char **line)
 }
 
 // git branch 2> /dev/null
+// sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 
 char	*get_git_branch(t_global *global)
 {
 	int	forkstate;
-	int	i = 0;
-	char *res;
+	int prev;
 	static const char	*command1[3] = {"/usr/bin/git", "branch", 0};
+	static const char	*command2[3] = {"/usr/bin/grep", "*", 0};
 	int	link[2];
 
 	pipe(link);
@@ -350,7 +351,6 @@ char	*get_git_branch(t_global *global)
 	{
 		close(link[0]);
 		dup2(link[1], STDOUT_FILENO);
-		dup2(link[1], STDERR_FILENO);
 		close(link[1]);
 		execve(command1[0], (char **)command1, (char **)global->personal_env.array);
 		exit(0);
@@ -358,20 +358,22 @@ char	*get_git_branch(t_global *global)
 	else
 	{
 		wait(0);
+		prev = link[0];
 		close(link[1]);
 	}
-	res = get_next_line(link[0]);
-	if (!ft_strcmp(res, "fatal: not a git repository (or any parent up to mount point /mnt)\n"))
-		printf(NULL);
-	else
+	pipe(link);
+	forkstate = fork();
+	if (forkstate == 0)
 	{
-		res = get_next_line(link[0]);
+		dup2(prev, STDIN_FILENO);
+		dup2(link[1], STDOUT_FILENO);
+		close(link[1]);
 		close(link[0]);
-		while (res[i])
-			i++;
-		res[--i] =0;
-		return (res);
+		execve(command2[0], (char **)command2, (char **)global->personal_env.array);
 	}
+	close(link[1]);
+	close(prev);
+	printf("%s", get_next_line(link[0]));
 	close(link[0]);
 	return (0);
 }
@@ -389,7 +391,6 @@ int	main(int ac, char **av, char **env)
 	t_type type;
 	int					k;
 	char				*branch;
-	char				*output;
 
 	if (ac != 1)
 		return (0);
@@ -399,27 +400,11 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		branch = get_git_branch(&global);
-		if (branch)
-		{
-			if (global.status == 0)
-			{
-				output = ft_strjoin(GB "→  " EB RB "$MiniBoosted " EB BRB "x " EB, branch);
-				input = readline(output);
-			}
-			else
-			{
-				output = ft_strjoin(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB, branch);
-				input = readline(output);
-			}
-		}
+		branch = get_git_branch(&global); // need to create function get output for readline
+		if (global.status == 0)
+			input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
 		else
-		{
-			if (global.status == 0)
-				input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
-			else
-				input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
-		}
+			input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
 		if (!input)
 			break ;
 		if (!*input)
