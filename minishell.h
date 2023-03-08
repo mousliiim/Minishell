@@ -106,6 +106,8 @@ void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
+char	*get_git_branch(void);
+int get_input2(void);
 
 /*********************** PARSING ***********************/
 int				quote_checker(char *line);

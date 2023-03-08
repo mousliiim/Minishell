@@ -189,7 +189,12 @@ void	print_tab(char **str)
 
 void	ctrlc(int sig)
 {
-	fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
+	get_input2();
+	ft_putchar('\n');
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	// fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
 }
 
 int	rafter_line(char *line)
@@ -335,16 +340,14 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
-// git branch 2> /dev/null
-// sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
-
-char	*get_git_branch(t_global *global)
+char	*get_git_branch(void)
 {
 	int	forkstate;
 	int prev;
 	char *res;
 	static const char	*command1[3] = {"/usr/bin/git", "branch", 0};
 	static const char	*command2[3] = {"/usr/bin/grep", "*", 0};
+	static const char	*env[1] = {0};
 	int	link[2];
 
 	pipe(link);
@@ -355,7 +358,7 @@ char	*get_git_branch(t_global *global)
 		dup2(link[1], STDOUT_FILENO);
 		dup2(link[1], STDERR_FILENO);
 		close(link[1]);
-		execve(command1[0], (char **)command1, (char **)global->personal_env.array);
+		execve(command1[0], (char **)command1, (char **)env);
 		exit(0);
 	}
 	else
@@ -372,7 +375,7 @@ char	*get_git_branch(t_global *global)
 		dup2(link[1], STDOUT_FILENO);
 		close(link[1]);
 		close(link[0]);
-		execve(command2[0], (char **)command2, (char **)global->personal_env.array);
+		execve(command2[0], (char **)command2, (char **)env);
 	}
 	close(link[1]);
 	close(prev);
@@ -381,18 +384,15 @@ char	*get_git_branch(t_global *global)
 	return (res);
 }
 
-int get_input(t_global *glo)
+int get_input2(void)
 {
 	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git(" EB};
 	char				*branch;
 	int					i;
 	
-	if (glo->status == 0)
-		printf("%s", arrows[0]);
-	else
-		printf("%s", arrows[1]);
+	printf("%s", arrows[0]);
 	printf("%s", arrows[2]);
-	branch = get_git_branch(glo);
+	branch = get_git_branch();
 	i = 0;
 	if (branch)
 	{
@@ -411,9 +411,73 @@ int get_input(t_global *glo)
 		}
 		printf(EB BB ")" EB);
 	}
-	else
-		return (1);
+	free(branch);
 	return (1);
+}
+
+char *get_input(void)
+{
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, " git("};
+	char				*branch;
+	char 				*correct_arrow;
+	char 				*res;
+	int					i;
+	int					j;
+	size_t				size_branch;
+
+	size_branch = 0;
+	correct_arrow = (char *)arrows[0];
+	branch = get_git_branch();
+	i = 0;
+	if (!branch)
+		return (ft_strjoin(correct_arrow, arrows[2]));
+	while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
+		i++;
+	while(branch[i])
+	{
+		i++;
+		size_branch++;
+	}
+	i = 0;
+	res = malloc(sizeof(char) * (41 + size_branch));
+	while (i < (41 + size_branch))
+	{
+		j = 0;
+		while(correct_arrow[i])
+		{
+			res[i] = correct_arrow[j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(arrows[2][j])
+		{
+			res[i] = (char)arrows[2][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while (arrows[3][j])
+		{
+			res[i] = (char)arrows[3][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(branch[j] && (branch[j] == '*' || branch[j] == ' '))
+			j++;
+		while(branch[j])
+		{
+			res[i] = branch[j];
+			j++;
+			i++;
+		}
+		break ;
+	}
+	res[i - 1] = ')';
+	res[i++] = ' ';
+	res[i] = 0;
+	return (res);
 }
 
 int	main(int ac, char **av, char **env)
@@ -428,21 +492,24 @@ int	main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	int					k;
-	// char *output;
+	char				*output;
 
 	if (ac != 1)
 		return (0);
+	(void) output;
 	global.status = 0;
 	signal(SIGINT, &ctrlc);
 	global.personal_env = build_personal_env(env);
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		get_input(&global);
+		// output = get_input(&global);
+		get_input2();
 		if (global.status == 0)
 			input = readline(" ");
 		else
 			input = readline(" ");
+		// input = readline(" ");
 		if (!input)
 			break ;
 		if (!*input)
@@ -500,8 +567,8 @@ int	main(int ac, char **av, char **env)
 					&& check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					// for (int k = 0; tab_struct[j].split_command[k]; k++)
+					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
 					for (int k = 0; tab_struct[j].commands[k]; k += 2)
@@ -518,8 +585,8 @@ int	main(int ac, char **av, char **env)
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 						// a voir ici
-					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					// for (int k = 0; tab_struct[j].split_command[k]; k++)
+					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
