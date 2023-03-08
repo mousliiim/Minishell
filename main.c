@@ -381,72 +381,39 @@ char	*get_git_branch(t_global *global)
 	return (res);
 }
 
-char *get_input(t_global *glo)
+int get_input(t_global *glo)
 {
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, "$MiniBoosted ", "git("};
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git(" EB};
 	char				*branch;
-	char 				*correct_arrow;
-	char 				*res;
 	int					i;
-	int					j;
-	size_t				size_branch;
-
-	size_branch = 0;
+	
 	if (glo->status == 0)
-		correct_arrow = (char *)arrows[0];
+		printf("%s", arrows[0]);
 	else
-		correct_arrow = (char *)arrows[1];
+		printf("%s", arrows[1]);
+	printf("%s", arrows[2]);
 	branch = get_git_branch(glo);
 	i = 0;
-	if (!branch)
-		return (ft_strjoin(correct_arrow, arrows[2]));
-	while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
-		i++;
-	while(branch[i])
+	if (branch)
 	{
-		i++;
-		size_branch++;
+		printf("%s", arrows[3]);
+		while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
+			i++;
+		while(branch[i])
+		{
+			if (branch[i] == '\n')
+			{
+				i++;
+				continue ;
+			}
+			printf(RB "%c", branch[i]);
+			i++;
+		}
+		printf(EB BB ")" EB);
 	}
-	i = 0;
-	res = malloc(sizeof(char) * (41 + size_branch));
-	while (i < (41 + size_branch))
-	{
-		j = 0;
-		while(correct_arrow[i])
-		{
-			res[i] = correct_arrow[j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while(arrows[2][j])
-		{
-			res[i] = (char)arrows[2][j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while (arrows[3][j])
-		{
-			res[i] = (char)arrows[3][j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while(branch[j] && (branch[j] == '*' || branch[j] == ' '))
-			j++;
-		while(branch[j])
-		{
-			res[i] = branch[j];
-			j++;
-			i++;
-		}
-		break ;
-	}
-	res[i - 1] = ')';
-	res[i++] = ' ';
-	res[i] = 0;
-	return (res);
+	else
+		return (1);
+	return (1);
 }
 
 int	main(int ac, char **av, char **env)
@@ -461,7 +428,7 @@ int	main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	int					k;
-	char *output;
+	// char *output;
 
 	if (ac != 1)
 		return (0);
@@ -471,12 +438,11 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		output = get_input(&global);
-		(void) output;
+		get_input(&global);
 		if (global.status == 0)
-			input = readline(output);
+			input = readline(" ");
 		else
-			input = readline(output);
+			input = readline(" ");
 		if (!input)
 			break ;
 		if (!*input)
@@ -601,7 +567,7 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
-		fprintf(stderr, "global->status >> %d\n", global.status);
+		// fprintf(stderr, "global->status >> %d\n", global.status);
 		k = 0;
 		while (k < global_tmp_nb)
 		{
