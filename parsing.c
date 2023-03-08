@@ -83,6 +83,7 @@ void	line_positif(char *line)
 
 	i = 0;
 	j = 0;
+	(void) j;
 	while (line[i])
 	{
 		if (line[i] && line[i] < 0)

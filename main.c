@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 22:49:24 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/08 23:48:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,10 @@ void	waiting(t_global *global, int size_wait)
 	int	i;
 	int	exit_code;
 	int	status;
-	int	signal_code;
 
 	i = 0;
 	status = 0;
 	exit_code = 0;
-	signal_code = 0;
 	while (i < size_wait)
 	{
 		waitpid(global->forkstates[i], &status, 0);
@@ -114,20 +112,9 @@ void	waiting(t_global *global, int size_wait)
 		{
 			exit_code = WEXITSTATUS(status);
 		}
-		// }
-		// else if (WIFSIGNALED(status))
-		// {
-		// 	if (WTERMSIG(status) != 0)
-		// 		signal_code = WTERMSIG(status);
-		// }
 		i++;
 	}
-	// if (exit_code != 0)
 	global->status = exit_code;
-	// else
-	// 	global->status = signal_code;
-	(void)signal_code;
-	(void)exit_code;
 }
 
 int	syntax_checker(char *line)
@@ -202,7 +189,12 @@ void	print_tab(char **str)
 
 void	ctrlc(int sig)
 {
-	fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
+	get_input2();
+	ft_putchar('\n');
+	rl_on_new_line();
+	rl_replace_line("", 0);
+	rl_redisplay();
+	// fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
 }
 
 int	rafter_line(char *line)
@@ -264,14 +256,12 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 	char	*limit;
 
 	limit = head->file_name;
-	pipe(link_heredoc);
+	pipe(link_heredoc);//check return value
 	while (1)
 	{
 		str = readline("here_doc:");
 		if (!str)
 			break ;
-		fprintf(stderr, "head->file_name/limit -%s-\n", limit);
-		fprintf(stderr, "head->file_name/limit -%s-\n", str);
 		if (!ft_strcmp(str, limit))
 		{
 			break ;
@@ -297,7 +287,6 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 		{
 			if (head->redirect == HERE_DOC)
 			{
-				fprintf(stderr, "x\n");
 				start_heredoc(glo, i, head);
 			}
 			head = head->next;
@@ -322,6 +311,7 @@ int	ft_clean_quotes(char **line)
 	i = 0;
 	j = 0;
 	k = 0;
+	(void) k;
 	if (line == NULL || *line == NULL)
 		return (0);
 	tmp = ft_strdup(*line);
@@ -350,6 +340,146 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
+char	*get_git_branch(void)
+{
+	int	forkstate;
+	int prev;
+	char *res;
+	static const char	*command1[3] = {"/usr/bin/git", "branch", 0};
+	static const char	*command2[3] = {"/usr/bin/grep", "*", 0};
+	static const char	*env[1] = {0};
+	int	link[2];
+
+	pipe(link);
+	forkstate = fork();
+	if (forkstate == 0)
+	{
+		close(link[0]);
+		dup2(link[1], STDOUT_FILENO);
+		dup2(link[1], STDERR_FILENO);
+		close(link[1]);
+		execve(command1[0], (char **)command1, (char **)env);
+		exit(0);
+	}
+	else
+	{
+		wait(0);
+		prev = link[0];
+		close(link[1]);
+	}
+	pipe(link);
+	forkstate = fork();
+	if (forkstate == 0)
+	{
+		dup2(prev, STDIN_FILENO);
+		dup2(link[1], STDOUT_FILENO);
+		close(link[1]);
+		close(link[0]);
+		execve(command2[0], (char **)command2, (char **)env);
+	}
+	close(link[1]);
+	close(prev);
+	res = get_next_line(link[0]);
+	close(link[0]);
+	return (res);
+}
+
+int get_input2(void)
+{
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git(" EB};
+	char				*branch;
+	int					i;
+	
+	printf("%s", arrows[0]);
+	printf("%s", arrows[2]);
+	branch = get_git_branch();
+	i = 0;
+	if (branch)
+	{
+		printf("%s", arrows[3]);
+		while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
+			i++;
+		while(branch[i])
+		{
+			if (branch[i] == '\n')
+			{
+				i++;
+				continue ;
+			}
+			printf(RB "%c", branch[i]);
+			i++;
+		}
+		printf(EB BB ")" EB);
+	}
+	free(branch);
+	return (1);
+}
+
+char *get_input(void)
+{
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, " git("};
+	char				*branch;
+	char 				*correct_arrow;
+	char 				*res;
+	int					i;
+	int					j;
+	size_t				size_branch;
+
+	size_branch = 0;
+	correct_arrow = (char *)arrows[0];
+	branch = get_git_branch();
+	i = 0;
+	if (!branch)
+		return (ft_strjoin(correct_arrow, arrows[2]));
+	while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
+		i++;
+	while(branch[i])
+	{
+		i++;
+		size_branch++;
+	}
+	i = 0;
+	res = malloc(sizeof(char) * (41 + size_branch));
+	while (i < (41 + size_branch))
+	{
+		j = 0;
+		while(correct_arrow[i])
+		{
+			res[i] = correct_arrow[j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(arrows[2][j])
+		{
+			res[i] = (char)arrows[2][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while (arrows[3][j])
+		{
+			res[i] = (char)arrows[3][j];
+			i++;
+			j++;
+		}
+		j = 0;
+		while(branch[j] && (branch[j] == '*' || branch[j] == ' '))
+			j++;
+		while(branch[j])
+		{
+			res[i] = branch[j];
+			j++;
+			i++;
+		}
+		break ;
+	}
+	res[i - 1] = ')';
+	res[i++] = ' ';
+	res[i] = 0;
+	return (res);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -359,22 +489,27 @@ int	main(int ac, char **av, char **env)
 	int					i;
 	int					j;
 	size_t				global_tmp_nb;
-			char *file_name;
-			t_type type;
+	char *file_name;
+	t_type type;
 	int					k;
+	char				*output;
 
 	if (ac != 1)
 		return (0);
+	(void) output;
 	global.status = 0;
 	signal(SIGINT, &ctrlc);
 	global.personal_env = build_personal_env(env);
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
+		// output = get_input(&global);
+		get_input2();
 		if (global.status == 0)
-			input = readline(GB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+			input = readline(" ");
 		else
-			input = readline(RB "→  " EB RB "$MiniBoosted " EB BRB "✗ " EB);
+			input = readline(" ");
+		// input = readline(" ");
 		if (!input)
 			break ;
 		if (!*input)
@@ -432,8 +567,8 @@ int	main(int ac, char **av, char **env)
 					&& check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					// for (int k = 0; tab_struct[j].split_command[k]; k++)
+					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
 					for (int k = 0; tab_struct[j].commands[k]; k += 2)
@@ -450,8 +585,8 @@ int	main(int ac, char **av, char **env)
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 						// a voir ici
-					for (int k = 0; tab_struct[j].split_command[k]; k++)
-						ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
+					// for (int k = 0; tab_struct[j].split_command[k]; k++)
+					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
 					for (int k = 0; tab_struct[j].commands[k]; k++)
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
@@ -499,10 +634,11 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
+		// fprintf(stderr, "global->status >> %d\n", global.status);
 		k = 0;
 		while (k < global_tmp_nb)
 		{
-			display(tab_struct[k].head);
+			// display(tab_struct[k].head);
 			ft_lstcleare(&tab_struct[k].head, free);
 			k++;
 		}

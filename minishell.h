@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 01:33:08 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/08 04:34:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ typedef struct s_global
 	int				status;
 	int				link[2];
 	int				prev;
+	int				fd_solo_redirection;
 	size_t			nb;
 }	t_global;
 
@@ -105,6 +106,8 @@ void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
+char	*get_git_branch(void);
+int get_input2(void);
 
 /*********************** PARSING ***********************/
 int				quote_checker(char *line);
