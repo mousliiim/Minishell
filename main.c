@@ -6,20 +6,13 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 02:49:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 05:53:54 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int g_status;
-
-int	ft_isspace(char c)
-{
-	if ((c >= '\t' && c <= '\r') || c == ' ')
-		return (1);
-	return (0);
-}
+int	g_status;
 
 t_split_line	split_line(const char *line)
 {
@@ -41,61 +34,12 @@ t_split_line	split_line(const char *line)
 		{
 			tmp = ft_substr(line, start, i - start);
 			pa_add(&res.strings, tmp);
-			// free(tmp);
 		}
 		if (!line[i])
 			break ;
 		i++;
 	}
 	return (res);
-}
-
-char	**set_path(t_global *global)
-{
-	int		i;
-	char	**path;
-
-	i = 0;
-	if (global->personal_env.size == 0)
-		return (0);
-	else
-	{
-		while (i < global->personal_env.size) //(global->env[i])
-		{
-			if (ft_strnstr((char *)global->personal_env.array[i], "PATH=", 5))
-			{
-				path = ft_split((char *)global->personal_env.array[i] + 5, ':');
-				if (!path || !*path)
-					return (0);
-				return (path);
-			}
-			i++;
-		}
-	}
-	return (0);
-}
-
-void	display_split(t_tab_struct *tab_struct, t_global *info)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < info->nb)
-	{
-		j = 0;
-		while (tab_struct[i].split_command[j])
-		{
-			if (j == 0 || tab_struct[i].split_command[j][0] == '<'
-				|| tab_struct[i].split_command[j][0] == '>')
-				ft_printf("CMD = %s\n", tab_struct[i].split_command[j]);
-			else
-				ft_printf("ARGS = %s\n", tab_struct[i].split_command[j]);
-			j++;
-		}
-		write(1, "\n", 1);
-		i++;
-	}
 }
 
 void	waiting(t_global *global, int size_wait)
@@ -164,42 +108,10 @@ void	free_splitted_line(t_split_line *del)
 	pa_delete(&del->strings);
 }
 
-t_ptr_array	build_personal_env(char **env)
-{
-	int			i;
-	t_ptr_array	res;
-
-	i = 0;
-	res = pa_new();
-	while (env[i])
-	{
-		pa_add(&res, ft_strdup(env[i]));
-		i++;
-	}
-	return (res);
-}
-
-void	print_tab(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i])
-		ft_printf("%s\n", str[i++]);
-}
-#include <signal.h>
-
-t_global	starton(void)
-{
-	static t_global	global;
-
-	return (global);
-}
-
 void	ctrlc(int sig)
 {
 	g_status = 130;
-	get_input2();
+	// build_prompt();
 	ft_putchar('\n');
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -258,57 +170,6 @@ char	*ft_no_take_first_word(char *line)
 	return (res);
 }
 
-int	start_heredoc(t_global *glo, int j, t_list_mini *head)
-{
-	char	*str;
-	int		link_heredoc[2];
-	char	*limit;
-
-	limit = head->file_name;
-	pipe(link_heredoc);//check return value
-	while (1)
-	{
-		str = readline("here_doc:");
-		if (!str)
-			break ;
-		if (!ft_strcmp(str, limit))
-		{
-			break ;
-		}
-		ft_putendl_fd(str, link_heredoc[1]);
-	}
-	close(link_heredoc[1]);
-	glo->struct_id[j].prev_heredocs = link_heredoc[0];
-	return (0);
-}
-
-void	catch_heredocs(t_global *glo, size_t nb_command)
-{
-	t_list_mini	*head;
-	int			i;
-
-	i = 0;
-	while (i < nb_command)
-	{
-		glo->struct_id[i].prev_heredocs = -1;
-		head = glo->struct_id[i].head;
-		while (head)
-		{
-			if (head->redirect == HERE_DOC)
-			{
-				start_heredoc(glo, i, head);
-			}
-			head = head->next;
-			// if (head)
-			// {
-			// 	if (head->redirect == HERE_DOC)
-			// 		close(glo->struct_id[i].prev_heredocs);
-			// }
-		}
-		i++;
-	}
-}
-
 int	ft_clean_quotes(char **line)
 {
 	int		i;
@@ -349,83 +210,7 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
-char	*get_git_branch(void)
-{
-	int	forkstate;
-	int prev;
-	char *res;
-	static const char	*command1[3] = {"/usr/bin/git", "branch", 0};
-	static const char	*command2[3] = {"/usr/bin/grep", "*", 0};
-	static const char	*env[1] = {0};
-	int	link[2];
 
-	pipe(link);
-	forkstate = fork();
-	if (forkstate == 0)
-	{
-		close(link[0]);
-		dup2(link[1], STDOUT_FILENO);
-		dup2(link[1], STDERR_FILENO);
-		close(link[1]);
-		execve(command1[0], (char **)command1, (char **)env);
-		exit(0);
-	}
-	else
-	{
-		wait(0);
-		prev = link[0];
-		close(link[1]);
-	}
-	pipe(link);
-	forkstate = fork();
-	if (forkstate == 0)
-	{
-		dup2(prev, STDIN_FILENO);
-		dup2(link[1], STDOUT_FILENO);
-		close(link[1]);
-		close(link[0]);
-		execve(command2[0], (char **)command2, (char **)env);
-	}
-	close(link[1]);
-	close(prev);
-	res = get_next_line(link[0]);
-	close(link[0]);
-	return (res);
-}
-
-int get_input2(void)
-{
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, CB "$MiniBoosted" EB, BB " git:(" EB};
-	char				*branch;
-	int					i;
-	
-	if (g_status == 0)
-		printf("%s", arrows[0]);
-	else
-		printf("%s", arrows[1]);
-	printf("%s", arrows[2]);
-	branch = get_git_branch();
-	i = 0;
-	if (branch)
-	{
-		printf("%s", arrows[3]);
-		while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
-			i++;
-		while(branch[i])
-		{
-			if (branch[i] == '\n')
-			{
-				i++;
-				continue ;
-			}
-			printf(RB "%c", branch[i]);
-			i++;
-		}
-		printf(EB BB ")" EB BRB" ✗"EB);
-	}
-	free(branch);
-	return (1);
-}
 
 int	main(int ac, char **av, char **env)
 {
@@ -439,11 +224,9 @@ int	main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	int					k;
-	char				*output;
 
 	if (ac != 1)
 		return (0);
-	(void) output;
 	global.status = 0;
 	g_status = 0;
 	signal(SIGINT, &ctrlc);
@@ -451,23 +234,19 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		get_input2();
-		input = readline(" ");
+		input = readline(build_prompt());
 		if (!input)
 			break ;
 		if (!*input)
 			continue ;
-		// catch expand
 		add_history(input);
-		// catch_expand();
-		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
-		// par la suite dans le syntax checker etc ...
+		// catch_expand(input);
+		line_negatif(input);
 		if (!syntax_checker(input))
 		{
 			free(input);
 			continue ;
 		}
-		line_negatif(input);
 		splitted_line = split_line(input);
 		i = splitted_line.strings.size;
 		j = 0;
@@ -595,7 +374,6 @@ int	main(int ac, char **av, char **env)
 		k = 0;
 		while (k < global_tmp_nb)
 		{
-			// display(tab_struct[k].head);
 			ft_lstcleare(&tab_struct[k].head, free);
 			k++;
 		}

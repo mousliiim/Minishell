@@ -6,11 +6,13 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/08 05:51:23 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 04:39:01 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 int	go_exec(t_global *global)
 {
@@ -36,46 +38,58 @@ int	go_exec(t_global *global)
 	return (0);
 }
 
-int	find_path_for_each_command(t_global *global)
+int	forking(t_global *glo, int i)
 {
-	int				i;
-	int				j;
-	t_tab_struct	*struc;
-	char			*command_w_path;
+	t_builtins	built_ptr;
 
-	i = 0;
-	struc = global->struct_id;
-	if (!global->path)
-		return (0);
-	while (i < global->nb)
+	built_ptr = 0;
+	if (glo->struct_id[i].split_command && glo->struct_id[i].split_command[0])
 	{
-		j = 0;
-		if (!struc[i].split_command)
+		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
+		if (glo->nb == 1 && built_ptr)
 		{
-			i++;
-			continue ;
+			glo->fd_solo_redirection = dup(STDOUT_FILENO);
+			if (openfiles_bt(glo, i) != -1)
+				built_ptr(glo, i);
+			dup2(glo->fd_solo_redirection, STDOUT_FILENO);
+			close(glo->fd_solo_redirection);
+			return (glo->nb--, 0);
 		}
-		if (find_ptr_builtin(struc[i].split_command[0]) && struc[i].split_command)
-		{
-			i++;
-			continue ;
-		}
-		while (global->path[j])
-		{
-			if (!struc[i].split_command[0])
-				break ;
-			command_w_path = ft_sup_strjoin(global->path[j], '/',
-					struc[i].split_command[0]);
-			if (access(command_w_path, F_OK | X_OK) != -1)
-			{
-				free(struc[i].split_command[0]);
-				struc[i].split_command[0] = command_w_path;
-				break ;
-			}
-			free(command_w_path);
-			j++;
-		}
-		i++;
+	}
+	glo->forkstates[i] = fork();
+	if (glo->forkstates[i] == 0)
+	{
+		if (i != 0)
+			dupnclose(glo->prev, STDIN_FILENO);
+		if (i != (glo->nb - 1))
+			dup2(glo->link[1], STDOUT_FILENO);
+		close(glo->link[0]);
+		close(glo->link[1]);
+		if (openfiles(glo, i) == -1)
+			exit(1);
+		if (glo->struct_id[i].split_command && built_ptr)
+			built_ptr(glo, i);
+		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
+			exit(0);
+		if (!access(glo->struct_id[i].split_command[0], X_OK))
+			execve(glo->struct_id[i].split_command[0],
+					glo->struct_id[i].split_command,
+					(char **)glo->personal_env.array);
+		if (errno == 2)
+			fprintf(stderr, "miniboosted: command not found : %s\n",
+					glo->struct_id[i].split_command[0]);
+		else
+			perror("miniboosted");
+		exit(127);
+	}
+	else if (glo->forkstates[i] > 0)
+	{
+		close(glo->link[1]);
+		if (glo->prev != -1)
+			close(glo->prev);
+		glo->prev = glo->link[0];
+		if (glo->struct_id[i].prev_heredocs != -1)
+			close(glo->struct_id[i].prev_heredocs);
 	}
 	return (0);
 }
@@ -86,9 +100,9 @@ void	dupnclose(int fd1, int fd2)
 	close(fd1);
 }
 
-builtins	find_ptr_builtin(char *ptr)
+t_builtins	find_ptr_builtin(char *ptr)
 {
-	static const builtins	func[7]  = {&export, &unset, &cd, &builtin_exit, &print_env, &pwd, &echo};
+	static const t_builtins	func[7]  = {&export, &unset, &cd, &builtin_exit, &print_env, &pwd, &echo};
 	static const char		*str[7] = {"export", "unset", "cd", "exit", "env", "pwd", "echo"};
 	int						i;
 
@@ -100,57 +114,6 @@ builtins	find_ptr_builtin(char *ptr)
 		if (!ft_strcmp(str[i], ptr))
 			return (func[i]);
 		i++;
-	}
-	return (0);
-}
-
-int	replace_by_expand(t_global *glo, char *str, int idx_command, int idx_word)
-{
-	int	i;
-	int	stuff;
-
-	i = 0;
-	if (!str)
-		return (0);
-	while (glo->personal_env.array[i])
-	{
-		stuff = ft_strchr((char *)glo->personal_env.array[i], '=')
-			- (char *)glo->personal_env.array[i];
-		if (!ft_strncmp(str, (char *)glo->personal_env.array[i], stuff))
-		{
-			glo->struct_id[idx_command].split_command[idx_word] = ft_substr((char *)glo->personal_env.array[i],
-					stuff + 1, 56);
-			break ;
-		}
-		i++;
-	}
-	return (0);
-}
-
-int	catch_expand(t_global *glo, int j)
-{
-	int	i;
-	int	word_idx;
-
-	word_idx = 0;
-	while (glo->struct_id[j].split_command[word_idx])
-	{
-		i = 0;
-		while (glo->struct_id[j].split_command[word_idx][i])
-		{
-			if (glo->struct_id[j].split_command[word_idx][i] == '$')
-			{
-				fprintf(stderr, "catch expand\n");
-				replace_by_expand(glo,
-						&glo->struct_id[j].split_command[word_idx][i + 1], j,
-						word_idx);
-				fprintf(stderr, ">> %s\n",
-						&glo->struct_id[j].split_command[word_idx][i + 1]);
-				break ;
-			}
-			i++;
-		}
-		word_idx++;
 	}
 	return (0);
 }
@@ -248,58 +211,4 @@ int	openfiles_bt(t_global *glo, int j)
 	return (0);
 }
 
-int	forking(t_global *glo, int i)
-{
-	builtins	built_ptr;
 
-	built_ptr = 0;
-	if (glo->struct_id[i].split_command && glo->struct_id[i].split_command[0])
-	{
-		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
-		if (glo->nb == 1 && built_ptr)
-		{
-			glo->fd_solo_redirection = dup(STDOUT_FILENO);
-			if (openfiles_bt(glo, i) != -1)
-				built_ptr(glo, i);
-			dup2(glo->fd_solo_redirection, STDOUT_FILENO);
-			close(glo->fd_solo_redirection);
-			return (glo->nb--, 0);
-		}
-	}
-	glo->forkstates[i] = fork();
-	if (glo->forkstates[i] == 0)
-	{
-		if (i != 0)
-			dupnclose(glo->prev, STDIN_FILENO);
-		if (i != (glo->nb - 1))
-			dup2(glo->link[1], STDOUT_FILENO);
-		close(glo->link[0]);
-		close(glo->link[1]);
-		if (openfiles(glo, i) == -1)
-			exit(1);
-		if (glo->struct_id[i].split_command && built_ptr)
-			built_ptr(glo, i);
-		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
-			exit(0);
-		if (!access(glo->struct_id[i].split_command[0], X_OK))
-			execve(glo->struct_id[i].split_command[0],
-					glo->struct_id[i].split_command,
-					(char **)glo->personal_env.array);
-		if (errno == 2)
-			fprintf(stderr, "miniboosted: command not found : %s\n",
-					glo->struct_id[i].split_command[0]);
-		else
-			perror("miniboosted");
-		exit(127);
-	}
-	else if (glo->forkstates[i] > 0)
-	{
-		close(glo->link[1]);
-		if (glo->prev != -1)
-			close(glo->prev);
-		glo->prev = glo->link[0];
-		if (glo->struct_id[i].prev_heredocs != -1)
-			close(glo->struct_id[i].prev_heredocs);
-	}
-	return (0);
-}

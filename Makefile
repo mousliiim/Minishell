@@ -3,14 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
+#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/30 22:36:18 by mparisse          #+#    #+#              #
-#    Updated: 2023/03/07 22:47:06 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/03/09 04:04:42 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS = main.c pa_utils.c utils.c exec.c parsing.c builtins.c rafter.c
+SRCS = main.c pa_utils.c utils.c exec.c parsing.c builtins.c rafter.c \
+		path_utils.c here_docs.c prompt.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -20,7 +21,7 @@ LIBS = libft.a -lreadline
 
 CFLAGS = -Wall -Werror -Wextra -lreadline
 
-CC = cc -g3
+CC = cc -g
 
 all : ${NAME}
 

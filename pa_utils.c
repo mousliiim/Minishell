@@ -1,43 +1,43 @@
-	/* ************************************************************************** */
-	/*                                                                            */
-	/*                                                        :::      ::::::::   */
-	/*   pa_utils.c                                         :+:      :+:    :+:   */
-	/*                                                    +:+ +:+         +:+     */
-	/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
-	/*                                                +#+#+#+#+#+   +#+           */
-	/*   Created: 2023/02/23 06:24:02 by mparisse          #+#    #+#             */
-	/*   Updated: 2023/03/02 04:57:46 by mparisse         ###   ########.fr       */
-	/*                                                                            */
-	/* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pa_utils.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
+/*   Updated: 2023/03/09 04:33:08 by mparisse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-	#include "minishell.h"
-	#include "stdlib.h"
+#include "minishell.h"
+#include "stdlib.h"
 
-	void	*ft_realloc(void **old, size_t old_capacity, size_t	new_capacity)
+extern int	g_status;
+
+void	*ft_realloc(void **old, size_t old_capacity, size_t new_capacity)
+{
+	void	**new;
+	size_t	i;
+
+	i = 0;
+	new = ft_calloc(sizeof(void *), new_capacity);
+	while (i < old_capacity)
 	{
-		void	**new;
-		size_t		i;
-
-		i = 0;
-		new = ft_calloc(sizeof(void *), new_capacity);
-		while (i < old_capacity)
-		{
-			new[i] = old[i];
-			i++;
+		new[i] = old[i];
+		i++;
 	}
-	// ft_memset(new[i], 0, new_capacity);
 	return (new);
 }
 
-void	pa_pop_replace(t_ptr_array	*array, size_t index, void *new)
+void	pa_pop_replace(t_ptr_array *array, size_t index, void *new)
 {
 	free(array->array[index]);
 	array->array[index] = new;
-	// print_tab((char **)array->array);
 	array->size--;
 }
 
-void	pa_pop(t_ptr_array	*array, size_t index)
+void	pa_pop(t_ptr_array *array, size_t index)
 {
 	free(array->array[index]);
 	array->array[index] = 0;
@@ -61,7 +61,6 @@ t_ptr_array	pa_new(void)
 
 void	pa_delete(t_ptr_array *pa)
 {
-	// ft_printf("--> %p\n", pa -> array);
 	free(pa->array);
 	pa->array = NULL;
 }
@@ -71,8 +70,8 @@ void	pa_add(t_ptr_array *pa, void *new_str)
 	if (pa->size == pa->capacity)
 	{
 		pa->capacity *= 2;
-		pa->array = ft_realloc(pa->array, pa->size,pa->capacity * sizeof(void *));
-		// pa->array = realloc(pa->array, pa->capacity * sizeof(void *));
+		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
+				* sizeof(void *));
 	}
 	pa->array[pa->size++] = new_str;
 }

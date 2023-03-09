@@ -6,11 +6,13 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/07 04:06:05 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 04:01:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 t_type	return_redir_enum(char *line)
 {

@@ -6,12 +6,13 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/02 05:02:48 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/08 05:14:14 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 06:20:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "minishell.h"
+
+extern int	g_status;
 
 int	export(t_global *global, int j)
 {
@@ -64,7 +65,6 @@ int	unset(t_global *glo, int j)
 {
 	int		i;
 	int		idx_args;
-	// size_t	len;
 	int		stuff;
 
 	if (glo->nb > 1)
@@ -72,7 +72,6 @@ int	unset(t_global *glo, int j)
 	idx_args = 1;
 	while (glo->struct_id[j].split_command[idx_args])
 	{
-		// len = ft_strlen(glo->struct_id[j].split_command[idx_args]);
 		i = 0;
 		while (glo->personal_env.array[i])
 		{
@@ -157,9 +156,10 @@ int	pwd(t_global *glo, int j)
 {
 	char	pwdd[PATH_MAX] = {0};
 
-	(void) j;
-	getcwd(pwdd, PATH_MAX);
-	printf("%s\n", pwdd);
+	if(!getcwd(pwdd, PATH_MAX))
+		ft_printf("pwd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory\n");
+	else
+		printf("%s\n", pwdd);
 	if (glo->nb > 1)
 		exit(0);
 	return (0);
@@ -194,9 +194,9 @@ int	echo(t_global *glo, int j)
 				{
 					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
 					{
-						// if (!(char *)&glo->personal_env.array[i][len_expand + 1])
-							// break ;
-						// printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+							break ;
+						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
 						break ;
 					}
 					i++;

@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/02/24 05:38:56 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/09 04:01:42 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern int	g_status;
 
 int	ft_atoi(const char *nptr)
 {

@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/07 02:08:20 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/09 04:36:48 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// HEREDOC DOIT SEXECUTER MEME SI IL Y SUIT UNE PIPE QUI A UNE SYNTAXE ERROR
-
 #include "minishell.h"
+
+extern int	g_status;
 
 int	quote_checker(char *line)
 {
@@ -53,11 +53,9 @@ void	line_negatif(char *line)
 {
 	int	i;
 	int	j;
-	int delim;
+	int	delim;
 
-	delim = 0;
 	i = 0;
-	j = 0;
 	while (line[i])
 	{
 		if (line[i] == '"' || line[i] == '\'')
@@ -259,8 +257,9 @@ void	ft_strjoin2(char **line, const char *s1)
 
 char	**ft_have_two_word(char **tab)
 {
-	char 	*tmp;
-	char 	*arg;
+	char	*tmp;
+	char	*arg;
+	char	**split;
 	int		i;
 	int		j;
 
@@ -300,7 +299,8 @@ char	**ft_have_two_word(char **tab)
 	}
 	if (arg == NULL)
 		return (NULL);
-	return (ft_split(arg, ' '));
+	split = ft_split(arg, ' ');
+	return (split);
 }
 
 char **ft_split_rafter(char *line)

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/03 16:19:22 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/06 20:48:48 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 02:57:15 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	ft_lstadd_front(t_list **lst, t_list *nouveau);
 void	ft_lstadd_back(t_list **lst, t_list *nouveau);
 void	ft_lstdelone(t_list *lst, void (*del)(void *));
 void	ft_lstclear(t_list **list, void (*del)(void *));
+int		ft_isspace(char c);
 void	ft_lstiter(t_list *lst, void (*f)(void *));
 
 t_list	*ft_lstnew(void *content);

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 01:28:16 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 05:02:48 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+# include <signal.h>
 # include <limits.h>
 # include "libft/libft.h"
 # include <readline/history.h>
@@ -87,8 +88,7 @@ typedef struct s_split_line
 	size_t		error_position;
 }	t_split_line;
 
-
-typedef int	(*builtins)(t_global *, int);
+typedef int	(*t_builtins)(t_global *, int);
 
 t_ptr_array		pa_new(void);
 void			pa_pop(t_ptr_array	*array, size_t index);
@@ -100,8 +100,18 @@ void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
-char	*get_git_branch(void);
-int get_input2(void);
+char			*get_git_branch(void);
+
+/******************* PATH_UTILS ************************/
+char			**set_path(t_global *global);
+t_ptr_array		build_personal_env(char **env);
+int				find_path_for_each_command(t_global *global);
+/******************************************************/
+
+/******************* HERE_DOCS ************************/
+int				start_heredoc(t_global *glo, int j, t_list_mini *head);
+void			catch_heredocs(t_global *glo, size_t nb_command);
+/******************************************************/
 
 /*********************** PARSING ***********************/
 int				quote_checker(char *line);
@@ -129,21 +139,25 @@ void			ft_lstcleare(t_list_mini **lst, void (*del)(void*));
 
 /*********************** EXEC ***********************/
 int				go_exec(t_global *global);
-int				find_path_for_each_command(t_global *global);
+void			dupnclose(int fd1, int fd2);
 int				forking(t_global *global, int i);
-builtins	find_ptr_builtin(char *ptr);
-int	openfiles(t_global *glo, int j);
-void	waiting(t_global *global, int size_wait);
-// void			waiting(int *forkstates, int size_wait);
+t_builtins		find_ptr_builtin(char *ptr);
+int				openfiles_bt(t_global *glo, int j);
+int				openfiles(t_global *glo, int j);
+void			waiting(t_global *global, int size_wait);
 /***************************************************/
-int	echo(t_global *glo, int j);
+
 /*********************** UTILS ***********************/
 void			print_tab(char **str);
 void			display_split(t_tab_struct *tab_struct, t_global *info);
 /*****************************************************/
 
+/********************* PROMPT ************************/
+char			*get_git_branch(void);
+char			*build_prompt(void);
+/*****************************************************/
 
-/*********************** UTILS ***********************/
+/********************* BUILTIN ***********************/
 int				cd(t_global *global, int i);
 int				unset(t_global *glo, int j);
 int				export(t_global *global, int j);
@@ -151,6 +165,11 @@ int				print_env(t_global *glo, int j);
 int				pwd(t_global *glo, int j);
 int				ls_color(t_global *glo, int j);
 int				builtin_exit(t_global *global, int j);
+int				echo(t_global *glo, int j);
 /*****************************************************/
+
+/****************** TMP_UTILS ************************/
+void			display_split(t_tab_struct *tab_struct, t_global *info);
+void			print_tab(char **str);
 
 #endif
