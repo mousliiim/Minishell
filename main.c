@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 00:14:16 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/09 02:49:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int g_status;
 
 int	ft_isspace(char c)
 {
@@ -187,8 +189,16 @@ void	print_tab(char **str)
 }
 #include <signal.h>
 
+t_global	starton(void)
+{
+	static t_global	global;
+
+	return (global);
+}
+
 void	ctrlc(int sig)
 {
+	g_status = 130;
 	get_input2();
 	ft_putchar('\n');
 	rl_on_new_line();
@@ -385,11 +395,14 @@ char	*get_git_branch(void)
 
 int get_input2(void)
 {
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git:(" EB};
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, CB "$MiniBoosted" EB, BB " git:(" EB};
 	char				*branch;
 	int					i;
 	
-	printf("%s", arrows[0]);
+	if (g_status == 0)
+		printf("%s", arrows[0]);
+	else
+		printf("%s", arrows[1]);
 	printf("%s", arrows[2]);
 	branch = get_git_branch();
 	i = 0;
@@ -414,71 +427,6 @@ int get_input2(void)
 	return (1);
 }
 
-char *get_input(void)
-{
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, " git:(" BRB"✗"EB};
-	char				*branch;
-	char 				*correct_arrow;
-	char 				*res;
-	int					i;
-	int					j;
-	size_t				size_branch;
-
-	size_branch = 0;
-	correct_arrow = (char *)arrows[0];
-	branch = get_git_branch();
-	i = 0;
-	if (!branch)
-		return (ft_strjoin(correct_arrow, arrows[2]));
-	while(branch[i] && (branch[i] == '*' || branch[i] == ' '))
-		i++;
-	while(branch[i])
-	{
-		i++;
-		size_branch++;
-	}
-	i = 0;
-	res = malloc(sizeof(char) * (41 + size_branch));
-	while (i < (41 + size_branch))
-	{
-		j = 0;
-		while(correct_arrow[i])
-		{
-			res[i] = correct_arrow[j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while(arrows[2][j])
-		{
-			res[i] = (char)arrows[2][j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while (arrows[3][j])
-		{
-			res[i] = (char)arrows[3][j];
-			i++;
-			j++;
-		}
-		j = 0;
-		while(branch[j] && (branch[j] == '*' || branch[j] == ' '))
-			j++;
-		while(branch[j])
-		{
-			res[i] = branch[j];
-			j++;
-			i++;
-		}
-		break ;
-	}
-	res[i - 1] = ')';
-	res[i++] = ' ';
-	res[i] = 0;
-	return (res);
-}
-
 int	main(int ac, char **av, char **env)
 {
 	char				*input;
@@ -497,24 +445,21 @@ int	main(int ac, char **av, char **env)
 		return (0);
 	(void) output;
 	global.status = 0;
+	g_status = 0;
 	signal(SIGINT, &ctrlc);
 	global.personal_env = build_personal_env(env);
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		// output = get_input(&global);
 		get_input2();
-		if (global.status == 0)
-			input = readline(" ");
-		else
-			input = readline(" ");
-		// input = readline(" ");
+		input = readline(" ");
 		if (!input)
 			break ;
 		if (!*input)
 			continue ;
 		// catch expand
 		add_history(input);
+		// catch_expand();
 		// Faire ici une fonction qui va retirer du *char avant les quote et double quote pour passer
 		// par la suite dans le syntax checker etc ...
 		if (!syntax_checker(input))
@@ -646,7 +591,7 @@ int	main(int ac, char **av, char **env)
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
 		go_exec(&global);
-		// fprintf(stderr, "global->status >> %d\n", global.status);
+		g_status = global.status;
 		k = 0;
 		while (k < global_tmp_nb)
 		{

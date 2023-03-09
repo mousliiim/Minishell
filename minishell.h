@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/08 04:34:46 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/09 01:28:16 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,12 +87,6 @@ typedef struct s_split_line
 	size_t		error_position;
 }	t_split_line;
 
-// pas encore utiliser 
-typedef struct s_command_status
-{
-	bool	exit_shell;
-	int		errnum;
-}	t_command_status;
 
 typedef int	(*builtins)(t_global *, int);
 
