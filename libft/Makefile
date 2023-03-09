@@ -21,7 +21,7 @@ ft_memmove.c ft_strtrim.c  ft_abs.c\
 ft_striteri.c ft_strmapi.c ft_calloc.c \
 ft_strlcpy.c ft_split.c ft_itoa.c ft_utils.c ft_printf.c ft_swap.c \
 ft_strndup.c ft_sup_strjoin.c get_next_line.c get_next_line_utils.c \
-ft_isspace.c
+ft_isspace.c ft_strcpy.c ft_strcat.c
 
 BONUS = ft_lstnew.c ft_lstadd_front.c ft_lstsize.c ft_lstlast.c \
 ft_lstadd_back.c ft_lstdelone.c ft_lstclear.c ft_lstiter.c ft_lstmap.c

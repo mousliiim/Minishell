@@ -194,10 +194,10 @@ int	echo(t_global *glo, int j)
 				{
 					if (!ft_strncmp(&glo->struct_id[j].split_command[idx_args][1], (char *)glo->personal_env.array[i], len_expand))
 					{
-						if (!(char *)&glo->personal_env.array[i][len_expand + 1])
-							break ;
-						printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
-						break ;
+						// if (!(char *)&glo->personal_env.array[i][len_expand + 1])
+						// 	break ;
+						// printf("%s", (char *)&glo->personal_env.array[i][len_expand + 1]);
+						// break ;
 					}
 					i++;
 				}

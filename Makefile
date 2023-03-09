@@ -21,7 +21,7 @@ LIBS = libft.a -lreadline
 
 CFLAGS = -Wall -Werror -Wextra -lreadline
 
-CC = cc -g
+CC = cc -g3
 
 all : ${NAME}
 

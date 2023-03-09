@@ -221,9 +221,10 @@ int	main(int ac, char **av, char **env)
 	int					i;
 	int					j;
 	size_t				global_tmp_nb;
-	char *file_name;
-	t_type type;
+	char				*file_name;
+	t_type				type;
 	int					k;
+	char				prompt[170];
 
 	if (ac != 1)
 		return (0);
@@ -234,7 +235,7 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		input = readline(build_prompt());
+		input = readline(build_prompt(prompt));
 		if (!input)
 			break ;
 		if (!*input)

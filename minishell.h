@@ -100,7 +100,7 @@ void			*pa_get(t_ptr_array *pa, size_t index);
 t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
-char			*get_git_branch(void);
+int				get_git_branch(void);
 
 /******************* PATH_UTILS ************************/
 char			**set_path(t_global *global);
@@ -153,8 +153,8 @@ void			display_split(t_tab_struct *tab_struct, t_global *info);
 /*****************************************************/
 
 /********************* PROMPT ************************/
-char			*get_git_branch(void);
-char			*build_prompt(void);
+int				get_git_branch(void);
+char			*build_prompt(char *prompt);
 /*****************************************************/
 
 /********************* BUILTIN ***********************/
