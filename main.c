@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/08 23:48:47 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/09 00:14:16 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,6 @@ void	ctrlc(int sig)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	// fprintf(stderr, "Hhey maxou, un tout peu maximuuum\n");
 }
 
 int	rafter_line(char *line)
@@ -386,7 +385,7 @@ char	*get_git_branch(void)
 
 int get_input2(void)
 {
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git(" EB};
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, BB " git:(" EB};
 	char				*branch;
 	int					i;
 	
@@ -409,7 +408,7 @@ int get_input2(void)
 			printf(RB "%c", branch[i]);
 			i++;
 		}
-		printf(EB BB ")" EB);
+		printf(EB BB ")" EB BRB" ✗"EB);
 	}
 	free(branch);
 	return (1);
@@ -417,7 +416,7 @@ int get_input2(void)
 
 char *get_input(void)
 {
-	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, " git("};
+	static const char *arrows[4] = {GB "→  " EB, RB "→  " EB, RB "$MiniBoosted" EB, " git:(" BRB"✗"EB};
 	char				*branch;
 	char 				*correct_arrow;
 	char 				*res;
@@ -567,48 +566,55 @@ int	main(int ac, char **av, char **env)
 					&& check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-					// for (int k = 0; tab_struct[j].split_command[k]; k++)
-					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
-					for (int k = 0; tab_struct[j].commands[k]; k++)
+					int k = 0;
+					while (tab_struct[j].commands[k])
+					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
-					for (int k = 0; tab_struct[j].commands[k]; k += 2)
+						k++;
+					}
+					k = 0;
+					while (tab_struct[j].commands[k])
 					{
 						file_name = return_file_name(tab_struct[j].commands[k
 								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
 						ft_lstadde_back(&tab_struct[j].head,
 								ft_lstnewe(file_name, type));
+						k += 2;
 					}
 				}
 				else if (tab_struct[j].split_command
 						&& !check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-						// a voir ici
-					// for (int k = 0; tab_struct[j].split_command[k]; k++)
-					// 	ft_printf("Cmd : %s\n", tab_struct[j].split_command[k]);
-					for (int k = 0; tab_struct[j].commands[k]; k++)
+					int k = 0;
+					while (tab_struct[j].commands[k])
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
+						k++;
 					}
-					for (int k = 1; tab_struct[j].commands[k]; k += 2)
+					k = 1;
+					while (tab_struct[j].commands[k])
 					{
 						file_name = return_file_name(tab_struct[j].commands[k
 								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
 						ft_lstadde_back(&tab_struct[j].head,
 								ft_lstnewe(file_name, type));
+						k += 2;
 					}
 				}
 				else if (tab_struct[j].split_command == NULL)
 				{
-					for (int k = 0; tab_struct[j].commands[k]; k += 2)
+					int k = 0;
+					while (tab_struct[j].commands[k])
 					{
 						file_name = return_file_name(tab_struct[j].commands[k
 								+ 1]);
 						type = return_redir_enum(tab_struct[j].commands[k]);
 						ft_lstadde_back(&tab_struct[j].head,
 								ft_lstnewe(file_name, type));
+						k += 2;
 					}
 				}
 			}
@@ -619,15 +625,21 @@ int	main(int ac, char **av, char **env)
 			}
 			if (tab_struct[j].split_command)
 			{
-				for (int k = 0; tab_struct[j].split_command[k]; k++)
+				int k = 0;
+				while (tab_struct[j].split_command[k])
 				{
 					line_positif(tab_struct[j].split_command[k]);
+					k++;
 				}
 			}
 			if (tab_struct[j].commands)
 			{
-				for (int k = 0; tab_struct[j].commands[k]; k++)
+				int k = 0;
+				while (tab_struct[j].commands[k])
+				{
 					line_positif(tab_struct[j].commands[k]);
+					k++;
+				}
 			}
 			j++;
 		}
