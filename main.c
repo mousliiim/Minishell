@@ -111,7 +111,6 @@ void	free_splitted_line(t_split_line *del)
 void	ctrlc(int sig)
 {
 	g_status = 130;
-	// build_prompt();
 	ft_putchar('\n');
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -210,7 +209,10 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
+// int	catch_expand(t_global *glo, char *input)
+// {
 
+// }
 
 int	main(int ac, char **av, char **env)
 {
@@ -235,13 +237,14 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		input = readline(build_prompt(prompt));
+		build_prompt(prompt);
+		input = readline(prompt);
 		if (!input)
 			break ;
 		if (!*input)
 			continue ;
 		add_history(input);
-		// catch_expand(input);
+		// catch_e/pnd(input);
 		line_negatif(input);
 		if (!syntax_checker(input))
 		{
