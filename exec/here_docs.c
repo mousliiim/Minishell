@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   here_docs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 04:01:02 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 04:59:46 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 extern int	g_status;
 
@@ -28,9 +28,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 		if (!str)
 			break ;
 		if (!ft_strcmp(str, limit))
-		{
 			break ;
-		}
 		ft_putendl_fd(str, link_heredoc[1]);
 	}
 	close(link_heredoc[1]);
@@ -41,7 +39,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 void	catch_heredocs(t_global *glo, size_t nb_command)
 {
 	t_list_mini	*head;
-	int			i;
+	size_t		i;
 
 	i = 0;
 	while (i < nb_command)
@@ -51,9 +49,7 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 		while (head)
 		{
 			if (head->redirect == HERE_DOC)
-			{
 				start_heredoc(glo, i, head);
-			}
 			head = head->next;
 		}
 		i++;

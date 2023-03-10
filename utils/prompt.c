@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 05:29:44 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 06:41:22 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <stdlib.h>
-#include <string.h>
+#include "../include/minishell.h"
 
 extern int	g_status;
 
