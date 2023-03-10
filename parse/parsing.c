@@ -3,16 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 04:36:48 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 06:33:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 extern int	g_status;
+
+int	ft_clean_quotes(char **line)
+{
+	int		i;
+	int		j;
+	int		k;
+	int		delim;
+	char	*tmp;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	(void) k;
+	if (line == NULL || *line == NULL)
+		return (0);
+	tmp = ft_strdup(*line);
+	while (tmp[i])
+	{
+		if (tmp[i] == '\'' || tmp[i] == '\"')
+		{
+			delim = i;
+			i++;
+			while (tmp[i] != tmp[delim])
+			{
+				(*line)[j] = tmp[i];
+				i++;
+				j++;
+			}
+		}
+		else
+		{
+			(*line)[j] = tmp[i];
+			j++;
+		}
+		i++;
+	}
+	(*line)[j] = '\0';
+	free(tmp);
+	return (1);
+}
 
 int	quote_checker(char *line)
 {
@@ -154,7 +194,7 @@ int	pipe_checker(char *line)
 	int	i;
 
 	i = 0;
-	while(ft_isspace(line[i]))
+	while (ft_isspace(line[i]))
 		i++;
 	if (line[i] == '|')
 		return (0);

@@ -6,11 +6,11 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 05:53:54 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 11:28:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "include/minishell.h"
 
 int	g_status;
 
@@ -42,27 +42,6 @@ t_split_line	split_line(const char *line)
 	return (res);
 }
 
-void	waiting(t_global *global, int size_wait)
-{
-	int	i;
-	int	exit_code;
-	int	status;
-
-	i = 0;
-	status = 0;
-	exit_code = 0;
-	while (i < size_wait)
-	{
-		waitpid(global->forkstates[i], &status, 0);
-		if (WIFEXITED(status))
-		{
-			exit_code = WEXITSTATUS(status);
-		}
-		i++;
-	}
-	global->status = exit_code;
-}
-
 int	syntax_checker(char *line)
 {
 	if (!quote_checker(line))
@@ -83,138 +62,102 @@ int	syntax_checker(char *line)
 	return (1);
 }
 
-void	free_double_str(char **str)
+char	*getter(char *env_var)
 {
-	int	i;
+	int	stop;
 
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	free(str);
+	stop = ft_strchr(env_var, '=') - env_var;
+	return (&env_var[stop + 1]);
 }
 
-void	free_splitted_line(t_split_line *del)
+char	*find_expand(t_global *glo, char *find, int start, int end)
 {
-	size_t	size;
 	int		i;
+	int		stop;
 
 	i = 0;
-	size = pa_size(&del->strings);
-	while (i < size)
+	while (glo->personal_env.array[i])
 	{
-		free(pa_get(&del->strings, i));
-		i++;
-	}
-	pa_delete(&del->strings);
-}
-
-void	ctrlc(int sig)
-{
-	g_status = 130;
-	ft_putchar('\n');
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-int	rafter_line(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '>' && line[i + 1] == '>')
-			return (1);
-		else if (line[i] == '>' && line[i + 1] != '>')
-			return (1);
-		else if (line[i] == '<' && line[i + 1] == '<')
-			return (1);
-		else if (line[i] == '<' && line[i + 1] != '<')
-			return (1);
+		if (!ft_strncmp((char *)glo->personal_env.array[i], find, end - start))
+		{
+			// fprintf(stderr, "the corresponding env variable is %s\n", (char *)glo->personal_env.array[i]);
+			stop = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
+			return ((char *)&glo->personal_env.array[i][stop + 1]);
+		}
 		i++;
 	}
 	return (0);
 }
 
-int	check_first_char(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i] == ' ')
-		i++;
-	if (line[i] == '>' && line[i + 1] != '>')
-		return (1);
-	else if (line[i] == '<' && line[i + 1] != '<')
-		return (2);
-	else if (line[i] == '<' && line[i + 1] == '<')
-		return (3);
-	else if (line[i] == '>' && line[i + 1] == '>')
-		return (4);
-	return (0);
-}
-
-char	*ft_no_take_first_word(char *line)
-{
-	int		i;
-	char	*res;
-
-	if (!line)
-		return (NULL);
-	i = 0;
-	while (line[i] && !ft_isspace(line[i]))
-		i++;
-	res = ft_substr(line, 0, i);
-	return (res);
-}
-
-int	ft_clean_quotes(char **line)
+char	*catch_expand(t_global *glo, char *input)
 {
 	int		i;
 	int		j;
-	int		k;
-	int		delim;
-	char	*tmp;
-
+	int		start;
+	size_t	len_to_malloc;
+	char	*to_replace_by;
+	char	*new_input;
+	
 	i = 0;
-	j = 0;
-	k = 0;
-	(void) k;
-	if (line == NULL || *line == NULL)
-		return (0);
-	tmp = ft_strdup(*line);
-	while (tmp[i])
+	to_replace_by = 0;
+	start = 0;
+	len_to_malloc = ft_strlen(input);
+	while (input[i])
 	{
-		if (tmp[i] == '\'' || tmp[i] == '\"')
+		// fprintf(stderr)
+		if (input[i] == '$')
 		{
-			delim = i;
 			i++;
-			while (tmp[i] != tmp[delim])
+			start = i;
+			while (input[i] && input[i] != ' ' && input[i] != '$')
 			{
-				(*line)[j] = tmp[i];
+				
+				fprintf(stderr, "ci\n");
 				i++;
-				j++;
 			}
-		}
-		else
-		{
-			(*line)[j] = tmp[i];
-			j++;
+			to_replace_by = find_expand(glo, &input[start], start, i);
+			if (!to_replace_by)
+				continue ;
+			len_to_malloc += ft_strlen(to_replace_by);
+			len_to_malloc -= i - start;
+			continue ;
 		}
 		i++;
 	}
-	(*line)[j] = '\0';
-	free(tmp);
-	return (1);
+	if (!start)
+		return (input);
+	new_input = ft_calloc(sizeof(char), len_to_malloc);
+	j = 0;
+	i = 0;
+	while (input[i])
+	{
+		if (input[i] == '$')
+		{
+			i++;
+			start = i;
+			while (input[i] && input[i] != ' ' && input[i] != '$')
+			{
+				i++;
+			}
+			to_replace_by = find_expand(glo, &input[start], start, i);
+			if (!to_replace_by)
+				continue ;
+			fprintf(stderr, "to repl by >> %s\n", to_replace_by);
+			fprintf(stderr, "new_input >> %s\n", new_input);
+			ft_strcat(new_input, to_replace_by);
+			j += ft_strlen(to_replace_by);
+			// i += i - start;
+			continue ;
+		}
+		new_input[j] = input[i];
+		j++;
+		i++;
+	}
+	fprintf(stderr, "here >> %s\n", new_input);
+	return (new_input);
 }
 
-// int	catch_expand(t_global *glo, char *input)
-// {
-
-// }
-
-int	main(int ac, char **av, char **env)
+int		main(int ac, char **av, char **env)
 {
 	char				*input;
 	static t_tab_struct	*tab_struct;
@@ -223,12 +166,12 @@ int	main(int ac, char **av, char **env)
 	int					i;
 	int					j;
 	size_t				global_tmp_nb;
-	char				*file_name;
-	t_type				type;
-	int					k;
-	char				prompt[170];
+	char *file_name;
+	t_type type;
+	size_t				k;
+	// char				prompt[170];	
 
-	if (ac != 1)
+	if (ac != 1 || av[1])
 		return (0);
 	global.status = 0;
 	g_status = 0;
@@ -237,14 +180,17 @@ int	main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		build_prompt(prompt);
-		input = readline(prompt);
+		input = readline(build_prompt());
+		// fprintf(stderr, "(from main) status >> %d\n", g_status);
 		if (!input)
+		{
+			ft_printf("exit\n");
 			break ;
+		}
 		if (!*input)
 			continue ;
 		add_history(input);
-		// catch_e/pnd(input);
+		input = catch_expand(&global, input);
 		line_negatif(input);
 		if (!syntax_checker(input))
 		{
@@ -281,7 +227,6 @@ int	main(int ac, char **av, char **env)
 		global.struct_id = tab_struct;
 		global.nb = splitted_line.strings.size;
 		global_tmp_nb = splitted_line.strings.size;
-		(void)global_tmp_nb;
 		i = splitted_line.strings.size;
 		j = 0;
 		while (j < i)
@@ -294,7 +239,7 @@ int	main(int ac, char **av, char **env)
 					&& check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-					int k = 0;
+					k = 0;
 					while (tab_struct[j].commands[k])
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
@@ -315,7 +260,7 @@ int	main(int ac, char **av, char **env)
 						&& !check_first_char(tab_struct[j].commands[0]))
 				{
 					tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-					int k = 0;
+					k = 0;
 					while (tab_struct[j].commands[k])
 					{
 						tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
@@ -334,7 +279,7 @@ int	main(int ac, char **av, char **env)
 				}
 				else if (tab_struct[j].split_command == NULL)
 				{
-					int k = 0;
+					k = 0;
 					while (tab_struct[j].commands[k])
 					{
 						file_name = return_file_name(tab_struct[j].commands[k
@@ -347,13 +292,11 @@ int	main(int ac, char **av, char **env)
 				}
 			}
 			else
-			{
 				tab_struct[j].split_command = ft_split(splitted_line.strings.array[j],
 						' ');
-			}
 			if (tab_struct[j].split_command)
 			{
-				int k = 0;
+				k = 0;
 				while (tab_struct[j].split_command[k])
 				{
 					line_positif(tab_struct[j].split_command[k]);
@@ -362,7 +305,7 @@ int	main(int ac, char **av, char **env)
 			}
 			if (tab_struct[j].commands)
 			{
-				int k = 0;
+				k = 0;
 				while (tab_struct[j].commands[k])
 				{
 					line_positif(tab_struct[j].commands[k]);
@@ -373,8 +316,8 @@ int	main(int ac, char **av, char **env)
 		}
 		global.path = set_path(&global);
 		catch_heredocs(&global, global_tmp_nb);
+		global.status = g_status;
 		go_exec(&global);
-		g_status = global.status;
 		k = 0;
 		while (k < global_tmp_nb)
 		{

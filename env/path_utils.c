@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 04:01:29 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 02:24:06 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 extern int	g_status;
 
@@ -31,7 +31,7 @@ t_ptr_array	build_personal_env(char **env)
 
 char	**set_path(t_global *global)
 {
-	int		i;
+	size_t	i;
 	char	**path;
 
 	i = 0;
@@ -56,8 +56,8 @@ char	**set_path(t_global *global)
 
 int	find_path_for_each_command(t_global *global)
 {
-	int				i;
-	int				j;
+	size_t			i;
+	size_t			j;
 	t_tab_struct	*struc;
 	char			*command_w_path;
 

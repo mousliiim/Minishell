@@ -6,13 +6,35 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 04:39:01 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 09:50:14 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
 extern int	g_status;
+
+void	waiting(t_global *global, int size_wait)
+{
+	int	i;
+	int	exit_code;
+	int	status;
+
+	i = 0;
+	status = 0;
+	exit_code = 0;
+	while (i < size_wait)
+	{
+		waitpid(global->forkstates[i], &status, 0);
+		if (WIFEXITED(status))
+		{
+			exit_code = WEXITSTATUS(status);
+		}
+		i++;
+	}
+	g_status = exit_code;
+	global->status = exit_code;
+}
 
 int	go_exec(t_global *global)
 {
@@ -38,7 +60,7 @@ int	go_exec(t_global *global)
 	return (0);
 }
 
-int	forking(t_global *glo, int i)
+int	forking(t_global *glo, unsigned long i)
 {
 	t_builtins	built_ptr;
 
@@ -71,15 +93,16 @@ int	forking(t_global *glo, int i)
 			built_ptr(glo, i);
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 			exit(0);
-		if (!access(glo->struct_id[i].split_command[0], X_OK))
-			execve(glo->struct_id[i].split_command[0],
-					glo->struct_id[i].split_command,
-					(char **)glo->personal_env.array);
-		if (errno == 2)
+		if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
+			if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
+				execve(glo->struct_id[i].split_command[0],
+						glo->struct_id[i].split_command,
+						(char **)glo->personal_env.array);
+		if (errno == 13)
+			perror("miniboosted");
+		else
 			fprintf(stderr, "miniboosted: command not found : %s\n",
 					glo->struct_id[i].split_command[0]);
-		else
-			perror("miniboosted");
 		exit(127);
 	}
 	else if (glo->forkstates[i] > 0)
@@ -210,5 +233,3 @@ int	openfiles_bt(t_global *glo, int j)
 	close(glo->link[1]);
 	return (0);
 }
-
-
