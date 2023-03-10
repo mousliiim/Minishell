@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 22:08:41 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 23:54:22 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,17 +97,16 @@ char	*catch_expand(t_global *glo, char *input)
 	int		i;
 	int		j;
 	int		start;
-	size_t	len_to_malloc;
 	char	*to_replace_by;
+	size_t	len_to_malloc;
 	char	*new_input;
-	
+
 	i = 0;
 	to_replace_by = 0;
 	start = 0;
 	len_to_malloc = ft_strlen(input);
 	while (input[i])
 	{
-		// fprintf(stderr)
 		if (input[i] == '$')
 		{
 			i++;
@@ -125,7 +124,7 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	if (!start)
 		return (input);
-	new_input = ft_calloc(sizeof(char), len_to_malloc);
+	new_input = malloc(sizeof(char) * len_to_malloc);
 	j = 0;
 	i = 0;
 	while (input[i])
@@ -141,11 +140,8 @@ char	*catch_expand(t_global *glo, char *input)
 			to_replace_by = find_expand(glo, &input[start], start, i);
 			if (!to_replace_by)
 				continue ;
-			// fprintf(stderr, "to repl by >> %s\n", to_replace_by);
-			// fprintf(stderr, "new_input >> %s\n", new_input);
 			ft_strcat(new_input, to_replace_by);
 			j += ft_strlen(to_replace_by);
-			// i += i - start;
 			continue ;
 		}
 		new_input[j] = input[i];
@@ -154,6 +150,22 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	// fprintf(stderr, "here >> %s\n", new_input);
 	return (new_input);
+}
+
+int	have_expand(char *str)
+{
+	int		expand;
+	size_t	i;
+
+	expand = 0;
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 int		main(int ac, char **av, char **env)
@@ -180,17 +192,18 @@ int		main(int ac, char **av, char **env)
 	while (42)
 	{
 		input = readline(build_prompt());
-		// fprintf(stderr, "(from main) status >> %d\n", g_status);
 		if (!input)
 		{
 			ft_printf("exit\n");
+			input = NULL;
 			break ;
 		}
 		if (!*input)
 			continue ;
 		add_history(input);
-		input = catch_expand(&global, input);
 		line_negatif(input);
+		if (have_expand(input))
+			input = catch_expand(&global, input);
 		if (!syntax_checker(input))
 		{
 			free(input);
