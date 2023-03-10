@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 11:28:46 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 12:41:05 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,7 @@ char	*catch_expand(t_global *glo, char *input)
 			i++;
 			start = i;
 			while (input[i] && input[i] != ' ' && input[i] != '$')
-			{
-				
-				fprintf(stderr, "ci\n");
 				i++;
-			}
 			to_replace_by = find_expand(glo, &input[start], start, i);
 			if (!to_replace_by)
 				continue ;
@@ -142,8 +138,8 @@ char	*catch_expand(t_global *glo, char *input)
 			to_replace_by = find_expand(glo, &input[start], start, i);
 			if (!to_replace_by)
 				continue ;
-			fprintf(stderr, "to repl by >> %s\n", to_replace_by);
-			fprintf(stderr, "new_input >> %s\n", new_input);
+			// fprintf(stderr, "to repl by >> %s\n", to_replace_by);
+			// fprintf(stderr, "new_input >> %s\n", new_input);
 			ft_strcat(new_input, to_replace_by);
 			j += ft_strlen(to_replace_by);
 			// i += i - start;
@@ -153,7 +149,7 @@ char	*catch_expand(t_global *glo, char *input)
 		j++;
 		i++;
 	}
-	fprintf(stderr, "here >> %s\n", new_input);
+	// fprintf(stderr, "here >> %s\n", new_input);
 	return (new_input);
 }
 
