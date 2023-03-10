@@ -43,6 +43,8 @@ int		ft_lstsize(t_list *lst);
 size_t	ft_strlen(const char *str);
 size_t	ft_strlcat(char *dst, const char *src, size_t size);
 size_t	ft_strlcpy(char *ds, const char *src, size_t size);
+char	*ft_strcat(const char *dest, const char *src);
+char	*ft_strcpy_maxou(char *dest, char *src);
 char	*ft_itoa(int nb);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_sup_strjoin(char const *s1, char c, char const *s2);

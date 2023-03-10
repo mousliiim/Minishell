@@ -74,6 +74,7 @@ int		main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	size_t				k;
+	char				prompt[170];
 
 	if (ac != 1 || av[1])
 		return (0);
@@ -84,7 +85,7 @@ int		main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		input = readline(build_prompt());
+		input = readline(build_prompt(prompt));
 		if (!input)
 		{
 			ft_printf("exit\n");

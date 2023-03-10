@@ -188,8 +188,8 @@ void			free_double_str(char **str);
 /*****************************************************/
 
 /********************* PROMPT ************************/
-char			*get_git_branch(void);
-char			*build_prompt(void);
+int				get_git_branch(void);
+char			*build_prompt(char *prompt);
 /*****************************************************/
 
 /****************** TMP_UTILS ************************/
