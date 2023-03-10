@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 09:34:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 22:15:19 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ typedef struct s_split_line
 }	t_split_line;
 
 typedef int	(*t_builtins)(t_global *, int);
+
+char	*catch_expand(t_global *glo, char *input);
 
 /********************* PTR_A_UTILS **********************/
 t_ptr_array		pa_new(void);

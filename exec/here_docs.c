@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_docs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 04:59:46 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 22:24:51 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 		str = readline("here_doc:");
 		if (!str)
 			break ;
+		str = catch_expand(glo, str);
 		if (!ft_strcmp(str, limit))
 			break ;
 		ft_putendl_fd(str, link_heredoc[1]);

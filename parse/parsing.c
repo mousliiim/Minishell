@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:33:14 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 22:18:05 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,8 @@ void	line_negatif(char *line)
 			}
 			i = j;
 		}
+		if (!line[i])
+			break ;
 		i++;
 	}
 }

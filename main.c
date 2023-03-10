@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 12:41:05 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/10 22:08:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,14 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 	int		stop;
 
 	i = 0;
+	if (end - start == 0)
+		return("$");
+	if (!ft_strcmp(find ,"?"))
+		return (ft_itoa(g_status));
 	while (glo->personal_env.array[i])
 	{
 		if (!ft_strncmp((char *)glo->personal_env.array[i], find, end - start))
 		{
-			// fprintf(stderr, "the corresponding env variable is %s\n", (char *)glo->personal_env.array[i]);
 			stop = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
 			return ((char *)&glo->personal_env.array[i][stop + 1]);
 		}
@@ -314,6 +317,7 @@ int		main(int ac, char **av, char **env)
 		catch_heredocs(&global, global_tmp_nb);
 		global.status = g_status;
 		go_exec(&global);
+		free(input);
 		k = 0;
 		while (k < global_tmp_nb)
 		{
