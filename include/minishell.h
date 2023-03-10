@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:41:47 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 08:59:53 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,7 +189,7 @@ void			free_double_str(char **str);
 
 /********************* PROMPT ************************/
 int				get_git_branch(void);
-char			*build_prompt(char *prompt);
+char			*build_prompt(void);
 /*****************************************************/
 
 /****************** TMP_UTILS ************************/

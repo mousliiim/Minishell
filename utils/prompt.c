@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:41:22 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 09:07:02 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,18 @@ extern int	g_status;
 #define MAX_READ_SIZE 10
 
 
-char	*build_prompt(char *prompt)
+char	*build_prompt(void)
 {
 	static const char	*arrows[3] = {GB "→  " EB CB "$MiniBoosted " EB, RB "→  " EB CB "$MiniBoosted " EB, BB "git:(" EB};
 	char				buffer[MAX_READ_SIZE + 1];
 	int					fd;
 	size_t					red;
 	int					i;
-	
+	static char				prompt[170];
+
 	(void) arrows[2];
 	(void) i;
+	// fprintf(stderr, "status >> %d\n", g_status);
 	if (g_status == 0)
 		ft_strcpy_maxou(prompt, GB "→  " EB RB "$MiniBoosted " EB);
 	else

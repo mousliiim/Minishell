@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:42:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 09:06:47 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int		main(int ac, char **av, char **env)
 	char *file_name;
 	t_type type;
 	size_t				k;
-	char				prompt[170];
+	// char				prompt[170];	
 
 	if (ac != 1 || av[1])
 		return (0);
@@ -85,7 +85,8 @@ int		main(int ac, char **av, char **env)
 	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		input = readline(build_prompt(prompt));
+		input = readline(build_prompt());
+		// fprintf(stderr, "(from main) status >> %d\n", g_status);
 		if (!input)
 		{
 			ft_printf("exit\n");

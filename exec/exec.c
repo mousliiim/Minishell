@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 04:59:18 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/10 08:51:20 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	waiting(t_global *global, int size_wait)
 		}
 		i++;
 	}
+	g_status = exit_code;
 	global->status = exit_code;
 }
 
@@ -92,15 +93,17 @@ int	forking(t_global *glo, unsigned long i)
 			built_ptr(glo, i);
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 			exit(0);
-		if (!access(glo->struct_id[i].split_command[0], X_OK))
-			execve(glo->struct_id[i].split_command[0],
-					glo->struct_id[i].split_command,
-					(char **)glo->personal_env.array);
-		if (errno == 2)
+		if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
+			if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
+				execve(glo->struct_id[i].split_command[0],
+						glo->struct_id[i].split_command,
+						(char **)glo->personal_env.array);
+		if (errno == 13)
+			perror("miniboosted");
+		else
 			fprintf(stderr, "miniboosted: command not found : %s\n",
 					glo->struct_id[i].split_command[0]);
-		else
-			perror("miniboosted");
+		fprintf(stderr, "errno value >> %d\n", errno);
 		exit(127);
 	}
 	else if (glo->forkstates[i] > 0)
