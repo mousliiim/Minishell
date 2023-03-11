@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 22:15:19 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/11 21:30:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
 int				check_first_char(char *line);
 int				ft_clean_quotes(char **line);
+void			rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j);
 /******************************************************/
 
 /*********************** ENV **************************/
