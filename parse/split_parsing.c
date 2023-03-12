@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   split_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/12 05:15:26 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 20:43:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-extern int	g_status;
+extern int		g_status;
 
 t_split_line	split_line(const char *line)
 {
@@ -43,9 +43,9 @@ t_split_line	split_line(const char *line)
 	return (res);
 }
 
-static void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
+void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 {
-	int		k;
+	int	k;
 
 	k = 0;
 	if (tab_struct[j].split_command)
@@ -74,7 +74,7 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 	while (i < splitted_line.strings.size)
 	{
 		if (rafter_line(splitted_line.strings.array[i]))
-			rafter_cut(&tab_struct[i], splitted_line, i);
+			rafter_cut(tab_struct, splitted_line, i);
 		else
 		{
 			tab_struct[i].split_command = ft_split \
@@ -84,3 +84,4 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 		i++;
 	}
 }
+

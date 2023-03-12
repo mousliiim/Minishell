@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 05:21:38 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 21:09:54 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ static int	loop_shell(t_global *global, char *input)
 		free(input);
 		return (-42);
 	}
+	input = catch_expand(global, input);
 	splitted_line = split_line(input);
 	tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 	if (!tab_struct)
@@ -70,6 +71,7 @@ static int	loop_shell(t_global *global, char *input)
 	clear_lst(tab_struct, splitted_line.strings.size);
 	free_splitted_line(&splitted_line);
 	free(tab_struct);
+	// display(global->struct_idhead);
 	return (1);
 }
 
@@ -92,3 +94,8 @@ int	main(int ac, char **av, char **env)
 			continue ;
 	}
 }
+
+// $'$USER'p$LESS ls
+// miniboosted: command not found : mparisse-R
+// bash: $USERp-R: command not found
+

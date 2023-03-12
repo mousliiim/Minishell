@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 09:50:14 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/12 17:00:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int	openfiles(t_global *glo, int j)
 		return (0);
 	while (list)
 	{
+		fprintf(stderr, ">> my redirect >> %d\n >> my file name >> %s\n", list->redirect, list->file_name);
 		if (list->redirect == OUT)
 		{
 			fd = open(list->file_name, O_TRUNC | O_CREAT | O_WRONLY, 0666);
@@ -163,7 +164,7 @@ int	openfiles(t_global *glo, int j)
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
-		if (list->redirect == IN)
+		else if (list->redirect == IN)
 		{
 			fd = open(list->file_name, O_RDONLY);
 			if (fd == -1)
@@ -174,7 +175,7 @@ int	openfiles(t_global *glo, int j)
 			dup2(fd, STDIN_FILENO);
 			close(fd);			
 		}
-		if (list->redirect == APPEND)
+		else if (list->redirect == APPEND)
 		{
 			fd = open(list->file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 			if (fd == -1)
@@ -185,7 +186,7 @@ int	openfiles(t_global *glo, int j)
 			dup2(fd, STDOUT_FILENO);
 			close(fd);
 		}
-		if (list->redirect == HERE_DOC)
+		else if (list->redirect == HERE_DOC)
 		{
 			dup2(glo->struct_id[j].prev_heredocs, STDIN_FILENO);
 			close(glo->struct_id[j].prev_heredocs);

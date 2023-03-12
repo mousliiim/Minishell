@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 05:22:23 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 20:41:30 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,7 @@ char			*getter(char *env_var);
 /******************* SPLIT_PARSING ********************/
 void			split_input(t_split_line splitted_line, t_tab_struct *tab_struct);
 t_split_line	split_line(const char *line);
+void	before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /******************************************************/
 
 /*********************** ENV **************************/

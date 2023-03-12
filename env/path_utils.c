@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 05:21:49 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 12:22:51 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_ptr_array	build_personal_env(char **env)
 	}
 	return (res);
 }
+// incremente shlvl
 
 char	**set_path(t_global *global)
 {

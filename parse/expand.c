@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/12 05:14:52 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 21:39:30 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 		return (ft_itoa(g_status));
 	while (glo->personal_env.array[i])
 	{
-		if (!ft_strncmp((char *)glo->personal_env.array[i], find, end - start))
+		stop = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
+		if (!ft_strncmp((char *)glo->personal_env.array[i], find, stop))
 		{
-			stop = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
 			return ((char *)&glo->personal_env.array[i][stop + 1]);
 		}
 		i++;
@@ -41,6 +41,7 @@ char	*catch_expand(t_global *glo, char *input)
 	int		i;
 	int		j;
 	int		start;
+	int		skip;
 	char	*to_replace_by;
 	size_t	len_to_malloc;
 	char	*new_input;
@@ -48,45 +49,79 @@ char	*catch_expand(t_global *glo, char *input)
 	i = 0;
 	to_replace_by = 0;
 	start = 0;
+	skip = 1;
 	len_to_malloc = ft_strlen(input);
 	while (input[i])
 	{
+		if (input[i] == '\'')
+		{
+			skip *= -1;
+		}
 		if (input[i] == '$')
 		{
 			i++;
-			start = i;
-			while (input[i] && input[i] != ' ' && input[i] != '$')
-				i++;
-			to_replace_by = find_expand(glo, &input[start], start, i);
-			if (!to_replace_by)
+			if (input[i] == '\'')
+			{
+				skip *= -1;
+			}
+			if (skip > 0)
+			{
+				start = i;
+				if (ft_isdigit(input[i]))
+				{
+					i++;
+					continue ;
+				}
+				// while (input[i] && input[i] != ' ' && input[i] != '$' && input[i] != '"' && input[i] != '|' && input[i] != '-')
+				while (ft_isalpha(input[i]) && input[i] != '_')
+					i++;
+				to_replace_by = find_expand(glo, &input[start], start, i);
+				if (!to_replace_by)
+					continue ;
+				len_to_malloc += ft_strlen(to_replace_by);
+				len_to_malloc -= i - start;
 				continue ;
-			len_to_malloc += ft_strlen(to_replace_by);
-			len_to_malloc -= i - start;
-			continue ;
+			}
 		}
 		i++;
 	}
 	if (!start)
 		return (input);
-	new_input = malloc(sizeof(char) * len_to_malloc);
+	new_input = ft_calloc(sizeof(char), len_to_malloc);
 	j = 0;
 	i = 0;
+	skip = 1;
 	while (input[i])
 	{
+		if (input[i] == '\'')
+			skip *= -1;
 		if (input[i] == '$')
 		{
 			i++;
-			start = i;
-			while (input[i] && input[i] != ' ' && input[i] != '$')
+			if (input[i] == '\'')
 			{
-				i++;
+				skip *= -1;
 			}
-			to_replace_by = find_expand(glo, &input[start], start, i);
-			if (!to_replace_by)
+			if (skip > 0)
+			{
+				start = i;
+				if (ft_isdigit(input[i]))
+				{
+					i++;
+					continue ;
+				}
+				// while (input[i] && input[i] != ' ' && input[i] != '$' && input[i] != '"' && input[i] != '|' && input[i] != '-')
+				while (ft_isalpha(input[i]) && input[i] != '_')
+				{
+					i++;
+				}
+				to_replace_by = find_expand(glo, &input[start], start, i);
+				if (!to_replace_by)
+					continue ;
+				ft_strcat(new_input, to_replace_by);
+				j += ft_strlen(to_replace_by);
 				continue ;
-			ft_strcat(new_input, to_replace_by);
-			j += ft_strlen(to_replace_by);
-			continue ;
+			}
 		}
 		new_input[j] = input[i];
 		j++;
@@ -94,6 +129,9 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	return (new_input);
 }
+
+// $$ pid de mon programme
+// if (input[i] == )
 
 int	have_expand(char *str)
 {
@@ -110,3 +148,5 @@ int	have_expand(char *str)
 	}
 	return (0);
 }
+// charactere a expand lettre underscore et le chiffre en premier
+
