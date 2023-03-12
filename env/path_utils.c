@@ -6,13 +6,21 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 02:24:06 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 05:21:49 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
+
+char	*getter(char *env_var)
+{
+	int	stop;
+
+	stop = ft_strchr(env_var, '=') - env_var;
+	return (&env_var[stop + 1]);
+}
 
 t_ptr_array	build_personal_env(char **env)
 {

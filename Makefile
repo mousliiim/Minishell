@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
+#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/10 09:32:43 by mparisse         ###   ########.fr        #
+#    Updated: 2023/03/12 05:18:13 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,7 +44,8 @@ ENV_DIR		= env
 FREE_DIR	= free
 
 SRC_FILES	=	$(addprefix parse/, \
-				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c) \
+				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c		split_parsing.c \
+				expand.c) \
 				\
 				$(addprefix exec/, \
 				exec.c		here_docs.c) \
