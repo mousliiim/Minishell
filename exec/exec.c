@@ -32,6 +32,7 @@ void	waiting(t_global *global, int size_wait)
 		}
 		i++;
 	}
+	signal(SIGINT, &ctrl_c);
 	g_status = exit_code;
 	global->status = exit_code;
 }
@@ -49,6 +50,7 @@ int	go_exec(t_global *global)
 	global->link[0] = -1;
 	while (i < global->nb)
 	{
+		signal(SIGINT, SIG_IGN);
 		pipe(global->link);
 		forking(global, i);
 		i++;
@@ -81,6 +83,7 @@ int	forking(t_global *glo, unsigned long i)
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		if (i != 0)
 			dupnclose(glo->prev, STDIN_FILENO);
 		if (i != (glo->nb - 1))

@@ -22,6 +22,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 
 	limit = head->file_name;
 	pipe(link_heredoc);
+	signal(SIGINT, SIG_DFL);
 	while (1)
 	{
 		str = readline("here_doc:");

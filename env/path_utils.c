@@ -22,6 +22,27 @@ char	*getter(char *env_var)
 	return (&env_var[stop + 1]);
 }
 
+// t_ptr_array	pa_new(_envvoid)
+// {
+// 	t_ptr_array	new;
+
+// 	new.size = 0;
+// 	new.capacity = 8;
+// 	new.array = ft_calloc(sizeof(void *), 8);
+// 	return (new);
+// }
+
+void	pa_add_env(t_ptr_array *pa, char *new_str)
+{
+	if (pa->size == pa->capacity)
+	{
+		pa->capacity *= 2;
+		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
+				* sizeof(char *));
+	}
+	pa->array[pa->size++] = new_str;
+}
+
 t_ptr_array	build_personal_env(char **env)
 {
 	int			i;
@@ -31,7 +52,7 @@ t_ptr_array	build_personal_env(char **env)
 	res = pa_new();
 	while (env[i])
 	{
-		pa_add(&res, ft_strdup(env[i]));
+		pa_add_env(&res, ft_strdup(env[i]));
 		i++;
 	}
 	return (res);

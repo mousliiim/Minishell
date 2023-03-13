@@ -75,6 +75,7 @@ typedef struct s_global
 	t_tab_struct	*struct_id;
 	t_ptr_array		personal_env;
 	char			**path;
+	char			str_status[3];
 	int				*forkstates;
 	int				status;
 	int				link[2];
@@ -92,7 +93,7 @@ typedef struct s_split_line
 
 typedef int	(*t_builtins)(t_global *, int);
 
-char	*catch_expand(t_global *glo, char *input);
+char			*catch_expand(t_global *glo, char *input);
 
 /********************* PTR_A_UTILS **********************/
 t_ptr_array		pa_new(void);
