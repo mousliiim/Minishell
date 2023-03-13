@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/12 21:39:30 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/12 22:29:33 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 	while (glo->personal_env.array[i])
 	{
 		stop = ft_strchr((char *)glo->personal_env.array[i], '=') - (char *)glo->personal_env.array[i];
-		if (!ft_strncmp((char *)glo->personal_env.array[i], find, stop))
+		if (!ft_strncmp((char *)glo->personal_env.array[i], find, end - start))
 		{
 			return ((char *)&glo->personal_env.array[i][stop + 1]);
 		}

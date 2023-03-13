@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 12:22:51 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/12 22:37:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,8 @@ int	find_path_for_each_command(t_global *global)
 		while (global->path[j])
 		{
 			if (!struc[i].split_command[0])
+				break ;
+			if (ft_strchr(struc[i].split_command[0], '/'))
 				break ;
 			command_w_path = ft_sup_strjoin(global->path[j], '/',
 					struc[i].split_command[0]);
