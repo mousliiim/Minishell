@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 22:18:05 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/13 06:26:48 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -313,7 +313,11 @@ char	**ft_have_two_word(char **tab)
 		if (i == 0 && !check_first_char(tab[0]))
 		{
 			tmp = ft_substr(tab[i], 0, ft_strlen(tab[i]));
+			if (!tmp)
+				return (NULL);
 			ft_strjoin2(&arg, tmp);
+			if (!arg)
+				return (NULL);
 		}
 		while (ft_isspace(tab[i][j]))
 			j++;
@@ -328,8 +332,12 @@ char	**ft_have_two_word(char **tab)
 					if (i == 0)
 						break ;
 					tmp = ft_strndup(tab[i] + j, ft_strlen(tab[i]) - j);
+					if (!tmp)
+						return (NULL);
 					ft_strjoin2(&arg, tmp);
 					free(tmp);
+					if (!arg)
+						return (NULL);
 					break ;
 				}
 			}
@@ -339,10 +347,38 @@ char	**ft_have_two_word(char **tab)
 		}
 		i++;
 	}
-	if (arg == NULL)
-		return (NULL);
 	split = ft_split(arg, ' ');
+	free(arg);
 	return (split);
+}
+
+static int cut_raft(char **res, char *line, int *array[5])
+{
+	int		*i;
+	int		*j;
+	int		*k;
+	int 	**flag;
+
+	i = array[0];
+	j = array[1];
+	k = array[2];
+	flag = (int*[2]){array[3], array[4]};
+	while (line[*i + *flag[1]] == '>' || line[*i + *flag[1]] == '<')
+		(*flag[1]) += 1;
+	if (!*flag[0])
+	{
+		res[(*j)++] = ft_substr(line, *k, *i - *k);
+		if (!res[*j - 1])
+			return (0);
+	}
+	else
+		*flag[0] = 0;
+	res[(*j)++] = ft_substr(line, *i, *flag[1]);
+	if (!res[*j - 1])
+		return (0);
+	*i += *flag[1] == 2;
+	*k = *i + 1;
+	return (1);
 }
 
 char **ft_split_rafter(char *line)
@@ -351,98 +387,24 @@ char **ft_split_rafter(char *line)
 	int		i;
 	int		j;
 	int		k;
-	int		flag;
+	int		flag[2];
 
-	if (check_first_char(line))
-		flag = 1;
-	else
-		flag = 0;
-	i = 0;
+	i = -1;
 	j = 0;
 	k = 0;
+	flag[0] = check_first_char(line) > 0;
 	res = malloc(sizeof(char *) * (ft_strlen(line) + 1));
-	while (line[i])
+	if (!res)
+		return (NULL);
+	while (line[++i])
 	{
-		if (line[i] == '>' && line[i + 1] == '>')
-		{
-			if (flag == 0)
-			{
-				res[j] = ft_substr(line, k, i - k);
-				j++;
-				res[j] = ft_substr(line, i, 2);
-				j++;
-				i += 1;
-				k = i + 1;
-			}
-			else
-			{
-				res[j] = ft_substr(line, i, 2);
-				j++;
-				i++;
-				k = i + 1;
-				flag = 0;
-			}
-		}
-		else if (line[i] == '>' && line[i + 1] != '>')
-		{
-			if (flag == 0)
-			{
-				res[j] = ft_substr(line, k, i - k);
-				j++;
-				res[j] = ft_substr(line, i, 1);
-				j++;
-				k = i + 1;
-			}
-			else
-			{
-				res[j] = ft_substr(line, i, 1);
-				j++;
-				k = i + 1;
-				flag = 0;
-			}
-		}
-		else if (line[i] == '<' && line[i + 1] == '<')
-		{
-			if (flag == 0)
-			{
-				res[j] = ft_substr(line, k, i - k);
-				j++;
-				res[j] = ft_substr(line, i, 2);
-				j++;
-				i += 1;
-				k = i + 1;
-			}
-			else
-			{
-				res[j] = ft_substr(line, i, 2);
-				j++;
-				i++;
-				k = i + 1;
-				flag = 0;
-			}
-		}
-		else if (line[i] == '<' && line[i + 1] != '<')
-		{
-			if (flag == 0)
-			{
-				res[j] = ft_substr(line, k, i - k);
-				j++;
-				res[j] = ft_substr(line, i, 1);
-				j++;
-				k = i + 1;
-			}
-			else
-			{
-				res[j] = ft_substr(line, i, 1);
-				j++;
-				k = i + 1;
-				flag = 0;
-			}
-		}
-		i++;
+		flag[1] = 0;
+		if (line[i] == '>' || line[i] == '<')
+			cut_raft(res, line, (int *[5]){&i, &j, &k, &flag[0], &flag[1]});
 	}
-	res[j] = ft_substr(line, k, i - k);
-	j++;
+	res[j++] = ft_substr(line, k, i - k);
+	if (!res[j - 1])
+		return (NULL);
 	res[j] = NULL;
 	return (res);
 }
