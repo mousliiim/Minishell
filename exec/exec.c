@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/13 23:21:07 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 06:49:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,24 @@ extern int	g_status;
 void	waiting(t_global *global, int size_wait)
 {
 	int	i;
-	int	exit_code;
+	int	check;
 	int	status;
 
 	i = 0;
 	status = 0;
-	exit_code = 0;
+	check = 0;
 	while (i < size_wait)
 	{
 		waitpid(global->forkstates[i], &status, 0);
 		if (WIFEXITED(status))
-		{
-			exit_code = WEXITSTATUS(status);
-		}
+			status = WEXITSTATUS(status);
+		if (status == 131 && !check++)
+			ft_printf("Quit (core dumped)\n");
 		i++;
 	}
 	signal(SIGINT, &ctrl_c);
-	g_status = exit_code;
-	global->status = exit_code;
+	g_status = status;
+	global->status = status;
 }
 
 int	go_exec(t_global *global)
@@ -47,7 +47,6 @@ int	go_exec(t_global *global)
 	global->nb_free = global->nb;
 	find_path_for_each_command(global);
 	global->forkstates = malloc(sizeof(int) * global->nb);
-	fprintf(stderr, "nbers of command %ld\n", global->nb);
 	global->prev = -1;
 	global->link[0] = -1;
 	while (i < global->nb)
@@ -62,6 +61,14 @@ int	go_exec(t_global *global)
 		close(global->link[0]);
 	free(global->forkstates);
 	return (0);
+}
+
+void	ctrl_antislash(int sig)
+{
+	if (sig == SIGQUIT)
+		exit(131);
+	if (sig == SIGINT)
+		exit(130);
 }
 
 int	forking(t_global *glo, unsigned long i)
@@ -85,7 +92,8 @@ int	forking(t_global *glo, unsigned long i)
 	glo->forkstates[i] = fork();
 	if (glo->forkstates[i] == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, &ctrl_c);
+		signal(SIGQUIT, &ctrl_antislash);
 		if (i != 0)
 			dupnclose(glo->prev, STDIN_FILENO);
 		if (i != (glo->nb - 1))
@@ -119,6 +127,7 @@ int	forking(t_global *glo, unsigned long i)
 		glo->prev = glo->link[0];
 		if (glo->struct_id[i].prev_heredocs != -1)
 			close(glo->struct_id[i].prev_heredocs);
+		signal(SIGQUIT, SIG_IGN);
 	}
 	return (0);
 }
@@ -160,6 +169,11 @@ int	openfiles(t_global *glo, int j)
 	{
 		if (list->redirect == OUT)
 		{
+			if (!*list->file_name)
+			{
+				ft_printf("miniboosted: ambiguous redirect\n");
+				return (-1);
+			}
 			fd = open(list->file_name, O_TRUNC | O_CREAT | O_WRONLY, 0666);
 			if (fd == -1)
 			{
@@ -171,6 +185,11 @@ int	openfiles(t_global *glo, int j)
 		}
 		else if (list->redirect == IN)
 		{
+			if (!*list->file_name)
+			{
+				ft_printf("miniboosted: ambiguous redirect\n");
+				return (-1);
+			}
 			fd = open(list->file_name, O_RDONLY);
 			if (fd == -1)
 			{
@@ -182,6 +201,11 @@ int	openfiles(t_global *glo, int j)
 		}
 		else if (list->redirect == APPEND)
 		{
+			if (!*list->file_name)
+			{
+				ft_printf("miniboosted: ambiguous redirect\n");
+				return (-1);
+			}
 			fd = open(list->file_name, O_CREAT | O_APPEND | O_WRONLY, 0666);
 			if (fd == -1)
 			{
@@ -193,6 +217,11 @@ int	openfiles(t_global *glo, int j)
 		}
 		else if (list->redirect == HERE_DOC)
 		{
+			if (!*list->file_name)
+			{
+				ft_printf("miniboosted: ambiguous redirect\n");
+				return (-1);
+			}
 			dup2(glo->struct_id[j].prev_heredocs, STDIN_FILENO);
 			close(glo->struct_id[j].prev_heredocs);
 		}

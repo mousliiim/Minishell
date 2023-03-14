@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tmp_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:27:00 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:07:00 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/14 04:51:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	display(t_list_mini *head)
 		else if (temp->redirect == APPEND)
 			display = ">>";
 		ft_printf("*******************\n");
-		ft_printf("File_name : %s\n", temp->file_name);
+		ft_printf("File_name : '%s'\n", temp->file_name);
 		ft_printf("Type enum : %d\n", temp->redirect);
 		ft_printf("View enum : %s\n", display);
 		ft_printf("*******************\n");

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 03:35:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 07:08:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,15 +64,17 @@ static int	loop_shell(t_global *global, char *input)
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
 	global->path = set_path(global);
-	catch_heredocs(global, splitted_line.strings.size);
+	catch_heredocs(global, global->nb);
 	global->status = g_status;
+	free_splitted_line(&splitted_line);
 	go_exec(global);
 	free(input);
-	clear_lst(tab_struct, splitted_line.strings.size);
-	free_splitted_line(&splitted_line);
+	clear_lst(tab_struct, global->nb);
+	size_t i = -1;
+	while (++i < global->nb)
+		free_double_str(tab_struct[i].split_command);
 	free(tab_struct);
 	free_double_str(global->path);
-	// display(global->struct_idhead);
 	return (1);
 }
 
