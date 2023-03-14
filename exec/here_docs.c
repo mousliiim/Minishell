@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 23:11:55 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 23:44:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,9 @@ void	quit_hd(int sign)
 {
 	t_global	*glo;
 
-	glo = NULL;
 	(void) sign;
+	write(1, "\n", 1);
+	glo = NULL;
 	glo = endton(glo);
 	glo->nb_free = 0;
 	glo->forkstates = 0;
@@ -59,10 +60,10 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 
 	limit = head->file_name;
 	pipe(glo->link_heredoc);
+	signal(SIGINT, SIG_IGN);
 	forkstate = fork();
 	if (forkstate == 0)
 	{
-		signal(SIGINT, SIG_DFL);
 		signal(SIGINT, &quit_hd);
 		while (1)
 		{
@@ -79,6 +80,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 		exit(0);
 	}
 	waiting_hd(glo, forkstate);
+	signal(SIGINT, &ctrl_c);
 	close(glo->link_heredoc[1]);
 	glo->struct_id[j].prev_heredocs = glo->link_heredoc[0];
 	return (0);
