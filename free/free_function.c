@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:30:47 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/14 07:06:09 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 19:16:39 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ void	free_double_str(char **str)
 	int	i;
 
 	i = 0;
+	if (!str || !*str)
+		return ;
 	while (str[i])
 		free(str[i++]);
 	free(str);

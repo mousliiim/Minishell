@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 07:08:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 22:46:43 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1 || av[1])
 		return (0);
 	init_shell(&global, env);
+	endton(&global);
 	while (TRUE)
 	{
 		input = readline(build_prompt());

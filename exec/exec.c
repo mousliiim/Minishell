@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 06:49:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 22:42:39 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,86 @@ void	ctrl_antislash(int sig)
 		exit(130);
 }
 
+int	activate_wc(t_global *glo, char *cmd, int i)
+{
+	DIR *dir;
+	size_t	len;
+	int	word_count;
+	size_t	len2;
+	int		j;
+	char	**new_args;
+	struct dirent *dent;
+
+	// (void) cmd;
+	word_count = 1;
+	if (cmd[0] == '*')
+	{
+		dir = opendir(".");
+		dent = readdir(dir);
+		while (dent != NULL)
+		{
+			len = ft_strlen(&cmd[1]);
+			len2 = ft_strlen(dent->d_name);
+			if (!ft_strncmp(&cmd[1], &dent->d_name[len2 - len], len))
+			{
+				word_count++;
+			}
+			dent=readdir(dir);
+		}
+		closedir(dir);
+		new_args = malloc(sizeof(char *) * word_count + 1);
+		new_args[0] = ft_strdup(glo->struct_id[i].split_command[0]);
+		dir = opendir(".");
+		dent = readdir(dir);
+		j = 1;
+		while (dent != NULL)
+		{
+			len = ft_strlen(&cmd[1]);
+			len2 = ft_strlen(dent->d_name);
+			if (!ft_strncmp(&cmd[1], &dent->d_name[len2 - len], len))
+			{
+				new_args[j] = ft_strdup(dent->d_name);
+				j++;
+			}
+			dent=readdir(dir);
+		}
+		closedir(dir);
+		new_args[j] = 0;
+		// free_double_str(glo->struct_id[i].split_command);
+		glo->struct_id[i].split_command = new_args;
+	}
+	j = 0;
+	while (glo->struct_id[i].split_command[j])
+	{
+		fprintf(stderr, "cmd[%d] >> %s\n", i, glo->struct_id[i].split_command[j]);
+		j++;
+	}
+	return (0);
+}
+
+int	catch_wildcards(t_global *glo, char **cmd, int idx)
+{
+	int	i;
+	int	j;
+	// (void) glo;
+
+	i = 1;
+	while (cmd[i])
+	{
+		j = 0;
+		while (cmd[i][j])
+		{
+			if (cmd[i][j] == '*')
+			{
+				activate_wc(glo, cmd[i], idx);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	forking(t_global *glo, unsigned long i)
 {
 	t_builtins	built_ptr;
@@ -106,6 +186,7 @@ int	forking(t_global *glo, unsigned long i)
 			built_ptr(glo, i);
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 			exit(0);
+		// catch_wildcards(glo, glo->struct_id[i].split_command, i);
 		if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
 			if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
 				execve(glo->struct_id[i].split_command[0],

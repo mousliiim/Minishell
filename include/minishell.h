@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 04:41:40 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 22:24:13 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <limits.h>
+# include <dirent.h>
 # include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -94,6 +95,7 @@ typedef struct s_split_line
 
 typedef int	(*t_builtins)(t_global *, int);
 
+t_global		*endton(t_global *glo);
 char			*catch_expand(t_global *glo, char *input);
 
 /********************* PTR_A_UTILS **********************/
