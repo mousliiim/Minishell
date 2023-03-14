@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 22:42:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 22:54:45 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	go_exec(t_global *global)
 
 	i = 0;
 	count_nb_bultin = 0;
-	global->nb_free = global->nb;
+	global->nb_free = global->nb - global->nb_hd;
 	find_path_for_each_command(global);
 	global->forkstates = malloc(sizeof(int) * global->nb);
 	global->prev = -1;
@@ -56,7 +56,7 @@ int	go_exec(t_global *global)
 		forking(global, i);
 		i++;
 	}
-	waiting(global, global->nb - count_nb_bultin);
+	waiting(global, global->nb - count_nb_bultin - global->nb_hd);
 	if (global->link[0] != -1)
 		close(global->link[0]);
 	free(global->forkstates);

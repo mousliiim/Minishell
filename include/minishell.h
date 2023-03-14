@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 22:24:13 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 23:10:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ typedef struct s_global
 	int				fd_solo_redirection;
 	size_t			nb;
 	size_t			nb_free;
+	int				nb_hd;
+	int				link_heredoc[2];
 }	t_global;
 
 typedef struct s_split_line

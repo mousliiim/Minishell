@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 22:46:13 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/14 23:11:55 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ void	quit_hd(int sign)
 	glo = NULL;
 	(void) sign;
 	glo = endton(glo);
+	glo->nb_free = 0;
+	glo->forkstates = 0;
+	close(glo->link_heredoc[1]);
+	close(glo->link_heredoc[0]);
 	free_inchild(glo);
 	exit(130);
 }
@@ -49,32 +53,34 @@ void	waiting_hd(t_global *global, int forkstate)
 int	start_heredoc(t_global *glo, int j, t_list_mini *head)
 {
 	char	*str;
-	int		link_heredoc[2];
+	// int		link_heredoc[2];
 	char	*limit;
 	int		forkstate;
 
 	limit = head->file_name;
-	pipe(link_heredoc);
+	pipe(glo->link_heredoc);
 	forkstate = fork();
+	if (forkstate == 0)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, &quit_hd);
 		while (1)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGINT, &quit_hd);
 			str = readline("here_doc:");
 			if (!str)
 				break ;
 			str = catch_expand(glo, str);
 			if (!ft_strcmp(str, limit))
 				break ;
-			ft_putendl_fd(str, link_heredoc[1]);
+			ft_putendl_fd(str, glo->link_heredoc[1]);
 		}
-		close(link_heredoc[1]);
-		close(link_heredoc[0]);
+		close(glo->link_heredoc[1]);
+		close(glo->link_heredoc[0]);
+		exit(0);
 	}
-	close(link_heredoc[1]);
-	glo->struct_id[j].prev_heredocs = link_heredoc[0];
 	waiting_hd(glo, forkstate);
+	close(glo->link_heredoc[1]);
+	glo->struct_id[j].prev_heredocs = glo->link_heredoc[0];
 	return (0);
 }
 
@@ -84,6 +90,7 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 	size_t		i;
 
 	i = 0;
+	glo->nb_hd = 0;
 	while (i < nb_command)
 	{
 		glo->struct_id[i].prev_heredocs = -1;
@@ -91,7 +98,10 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 		while (head)
 		{
 			if (head->redirect == HERE_DOC)
+			{
 				start_heredoc(glo, i, head);
+				glo->nb_hd++;
+			}
 			head = head->next;
 		}
 		i++;
