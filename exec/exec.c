@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/13 05:24:35 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/13 23:21:07 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ int	go_exec(t_global *global)
 
 	i = 0;
 	count_nb_bultin = 0;
+	global->nb_free = global->nb;
 	find_path_for_each_command(global);
 	global->forkstates = malloc(sizeof(int) * global->nb);
+	fprintf(stderr, "nbers of command %ld\n", global->nb);
 	global->prev = -1;
 	global->link[0] = -1;
 	while (i < global->nb)
@@ -106,6 +108,7 @@ int	forking(t_global *glo, unsigned long i)
 		else
 			fprintf(stderr, "miniboosted: command not found : %s\n",
 					glo->struct_id[i].split_command[0]);
+		free_inchild(glo);
 		exit(127);
 	}
 	else if (glo->forkstates[i] > 0)

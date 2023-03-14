@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 20:41:30 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/13 23:20:17 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ typedef struct s_global
 	int				prev;
 	int				fd_solo_redirection;
 	size_t			nb;
+	size_t			nb_free;
 }	t_global;
 
 typedef struct s_split_line
@@ -203,6 +204,7 @@ void			clear_lst(t_tab_struct *tab_struct, size_t size);
 
 /****************** FREE_FUNCTION ********************/
 void			free_splitted_line(t_split_line *del);
+void			free_inchild(t_global *glo);
 void			free_double_str(char **str);
 /*****************************************************/
 

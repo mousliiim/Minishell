@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/13 02:29:15 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/14 03:35:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ static int	loop_shell(t_global *global, char *input)
 	clear_lst(tab_struct, splitted_line.strings.size);
 	free_splitted_line(&splitted_line);
 	free(tab_struct);
+	free_double_str(global->path);
 	// display(global->struct_idhead);
 	return (1);
 }
@@ -93,6 +94,7 @@ int	main(int ac, char **av, char **env)
 		if (loop_shell(&global, input) == -42)
 			continue ;
 	}
+	free_double_str((char **)global.personal_env.array);
 }
 
 // $'$USER'p$LESS ls

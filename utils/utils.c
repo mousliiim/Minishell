@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/10 01:53:52 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/13 22:50:15 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 		new[i] = old[i];
 		i++;
 	}
+	free(old);
 	return (new);
 }
 

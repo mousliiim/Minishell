@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_function.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:30:47 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/10 04:59:59 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/13 23:36:52 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,21 @@ void	free_double_str(char **str)
 	while (str[i])
 		free(str[i++]);
 	free(str);
+}
+
+void	free_inchild(t_global *glo)
+{
+	size_t	i;
+
+	i = 0;
+	// (void) i;
+	while (i < glo->nb_free)
+	{
+		free_double_str(glo->struct_id[i].split_command);
+		i++;
+	}
+	free(glo->struct_id);
+	free(glo->forkstates);
+	free_double_str((char **)glo->personal_env.array);
+	free_double_str(glo->path);
 }
