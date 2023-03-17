@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 09:33:21 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/16 07:16:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ char	*build_prompt(void)
 	red = read(fd, buffer, 2);
 	buffer[3] = 0;
 	if (!red)
+	{
+		close(fd);
 		return (prompt);
+	}
 	red = read(fd, buffer, MAX_READ_SIZE);
 	close(fd);
 	buffer[red - 1] = 0;

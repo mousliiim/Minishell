@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/13 22:50:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/16 10:06:09 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ char	*return_file_name(char *line)
 	while (ft_isspace(line[i]))
 		i++;
 	file_name = malloc(sizeof(char) * (ft_strlen(line) - i + 1));
+	// protege ce malloc ce mouss stp 
 	while (line[i] != '\0' && line[i] != ' ')
 	{
 		file_name[j] = line[i];

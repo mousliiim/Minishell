@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/12 22:37:41 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:22:49 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**set_path(t_global *global)
 			i++;
 		}
 	}
-	return (0);
+	return(0);
 }
 
 int	find_path_for_each_command(t_global *global)

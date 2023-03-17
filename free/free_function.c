@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:30:47 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/14 19:16:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:01:18 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	free_inchild(t_global *glo)
 
 	i = 0;
 	// (void) i;
+	clear_lst(glo->struct_id, glo->nb);
 	while (i < glo->nb_free)
 	{
-		fprintf(stderr, "je rentre et je passe\n");
 		free_double_str(glo->struct_id[i].split_command);
 		i++;
 	}

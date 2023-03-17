@@ -6,13 +6,14 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 23:15:54 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:25:29 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
-
+/*\*/
 int	g_status;
+/**/
 
 static int	syntax_checker(char *line)
 {
@@ -44,10 +45,22 @@ static void	init_shell(t_global *global, char **env)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+void	free_parsing(t_global *global)
+{
+	size_t	i;
+
+	i = -1;
+	while (++i < global->nb)
+	{
+		free_double_str(global->struct_id[i].commands);
+	}
+}
+
 static int	loop_shell(t_global *global, char *input)
 {
 	t_split_line	splitted_line;
 	t_tab_struct	*tab_struct;
+	size_t			i;
 
 	add_history(input);
 	if (!syntax_checker(input))
@@ -63,14 +76,19 @@ static int	loop_shell(t_global *global, char *input)
 	split_input(splitted_line, tab_struct);
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
-	global->path = set_path(global);
-	catch_heredocs(global, global->nb);
-	global->status = g_status;
+	i = -1;
+	// while (++i < global->nb)
+	// 	display(global->struct_id[i].head);
 	free_splitted_line(&splitted_line);
-	go_exec(global);
+	catch_heredocs(global, global->nb);
+	global->path = set_path(global);
+	global->status = g_status;
+	free_parsing(global);
+	if (global->here_doc_failed == 0)
+		go_exec(global);
 	free(input);
 	clear_lst(tab_struct, global->nb);
-	size_t i = -1;
+	i = -1;
 	while (++i < global->nb)
 		free_double_str(tab_struct[i].split_command);
 	free(tab_struct);
@@ -91,13 +109,15 @@ int	main(int ac, char **av, char **env)
 	{
 		input = readline(build_prompt());
 		if (!input)
+		{
+			free_double_str((char **)global.personal_env.array);
 			ctrl_d(g_status);
+		}
 		if (!*input)
 			continue ;
 		if (loop_shell(&global, input) == -42)
 			continue ;
 	}
-	free_double_str((char **)global.personal_env.array);
 }
 
 // $'$USER'p$LESS ls

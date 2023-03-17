@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 23:10:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/17 18:43:20 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ typedef struct s_tab_struct
 	t_list_mini		*head;
 }	t_tab_struct;
 
+typedef struct s_wildcards
+{
+	char	*pattern;
+	int		begin;
+	int		middle;
+	int		end;
+}	t_wildcards;
+
 typedef struct s_global
 {
 	char			**basic_env;
@@ -86,6 +94,7 @@ typedef struct s_global
 	size_t			nb_free;
 	int				nb_hd;
 	int				link_heredoc[2];
+	int				here_doc_failed;
 }	t_global;
 
 typedef struct s_split_line
@@ -123,9 +132,13 @@ int				find_path_for_each_command(t_global *global);
 /******************************************************/
 
 /******************* HERE_DOCS ************************/
-int				start_heredoc(t_global *glo, int j, t_list_mini *head);
+int				start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd);
 void			catch_heredocs(t_global *glo, size_t nb_command);
 /******************************************************/
+
+/********************WILDCARDS****************************/
+int	activate_wc(t_global *glo, int i, int word_count);
+/*********************************************************/
 
 /*********************** PARSING ***********************/
 int				quote_checker(char *line);

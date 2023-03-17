@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
+#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/13 18:33:45 by mparisse         ###   ########.fr        #
+#    Updated: 2023/03/17 09:44:40 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,7 @@ SRC_FILES	=	$(addprefix parse/, \
 				expand.c) \
 				\
 				$(addprefix exec/, \
-				exec.c		here_docs.c) \
+				exec.c		here_docs.c		wildcards.c) \
 				\
 				$(addprefix builtins/, \
 				cd.c		echo.c		exit.c		export.c		ls_color.c		pwd.c		unset.c) \

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 22:54:45 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/17 16:42:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	go_exec(t_global *global)
 		forking(global, i);
 		i++;
 	}
-	waiting(global, global->nb - count_nb_bultin - global->nb_hd);
+	waiting(global, global->nb - count_nb_bultin);
 	if (global->link[0] != -1)
 		close(global->link[0]);
 	free(global->forkstates);
@@ -71,70 +71,15 @@ void	ctrl_antislash(int sig)
 		exit(130);
 }
 
-int	activate_wc(t_global *glo, char *cmd, int i)
-{
-	DIR *dir;
-	size_t	len;
-	int	word_count;
-	size_t	len2;
-	int		j;
-	char	**new_args;
-	struct dirent *dent;
-
-	// (void) cmd;
-	word_count = 1;
-	if (cmd[0] == '*')
-	{
-		dir = opendir(".");
-		dent = readdir(dir);
-		while (dent != NULL)
-		{
-			len = ft_strlen(&cmd[1]);
-			len2 = ft_strlen(dent->d_name);
-			if (!ft_strncmp(&cmd[1], &dent->d_name[len2 - len], len))
-			{
-				word_count++;
-			}
-			dent=readdir(dir);
-		}
-		closedir(dir);
-		new_args = malloc(sizeof(char *) * word_count + 1);
-		new_args[0] = ft_strdup(glo->struct_id[i].split_command[0]);
-		dir = opendir(".");
-		dent = readdir(dir);
-		j = 1;
-		while (dent != NULL)
-		{
-			len = ft_strlen(&cmd[1]);
-			len2 = ft_strlen(dent->d_name);
-			if (!ft_strncmp(&cmd[1], &dent->d_name[len2 - len], len))
-			{
-				new_args[j] = ft_strdup(dent->d_name);
-				j++;
-			}
-			dent=readdir(dir);
-		}
-		closedir(dir);
-		new_args[j] = 0;
-		// free_double_str(glo->struct_id[i].split_command);
-		glo->struct_id[i].split_command = new_args;
-	}
-	j = 0;
-	while (glo->struct_id[i].split_command[j])
-	{
-		fprintf(stderr, "cmd[%d] >> %s\n", i, glo->struct_id[i].split_command[j]);
-		j++;
-	}
-	return (0);
-}
-
 int	catch_wildcards(t_global *glo, char **cmd, int idx)
 {
 	int	i;
 	int	j;
-	// (void) glo;
+	int	word_count;
 
 	i = 1;
+	word_count = 0;
+	fprintf(stderr, "idx >> %d\n", idx);
 	while (cmd[i])
 	{
 		j = 0;
@@ -142,11 +87,15 @@ int	catch_wildcards(t_global *glo, char **cmd, int idx)
 		{
 			if (cmd[i][j] == '*')
 			{
-				activate_wc(glo, cmd[i], idx);
+				word_count++;
 			}
 			j++;
 		}
 		i++;
+	}
+	if (word_count)
+	{
+		activate_wc(glo, idx, word_count);
 	}
 	return (0);
 }
@@ -186,7 +135,7 @@ int	forking(t_global *glo, unsigned long i)
 			built_ptr(glo, i);
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 			exit(0);
-		// catch_wildcards(glo, glo->struct_id[i].split_command, i);
+		catch_wildcards(glo, glo->struct_id[i].split_command, i);
 		if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
 			if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
 				execve(glo->struct_id[i].split_command[0],
