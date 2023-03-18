@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/17 18:43:20 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/18 00:50:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,15 @@ typedef struct s_list_mini
 	struct s_list_mini	*next;
 }	t_list_mini;
 
+typedef struct s_wildcards
+{
+	char		*pattern;
+	int			begin;
+	int			middle;
+	int			end;
+	struct s_wildcards	*next;
+}	t_wildcards;
+
 typedef struct s_tab_struct
 {
 	char			**commands;
@@ -68,15 +77,9 @@ typedef struct s_tab_struct
 	int				type;
 	int				prev_heredocs;
 	t_list_mini		*head;
+	t_wildcards		*wc;
 }	t_tab_struct;
 
-typedef struct s_wildcards
-{
-	char	*pattern;
-	int		begin;
-	int		middle;
-	int		end;
-}	t_wildcards;
 
 typedef struct s_global
 {

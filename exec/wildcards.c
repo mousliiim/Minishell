@@ -6,11 +6,12 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/17 09:42:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/17 19:47:07 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/18 01:03:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+#define STAR '*'
 
 int	size_cmd(t_global *glo, int idx)
 {
@@ -23,61 +24,157 @@ int	size_cmd(t_global *glo, int idx)
 	return (i);
 }
 
+// dans la commande je compte de *
+// buil***.c
+
+void	display_wc(t_wildcards *wc, int len)
+{
+	int			i;
+	t_wildcards	*wc_ptr;
+
+	i = 0;
+	wc_ptr = wc;
+	(void) len;
+	fprintf(stderr, "wc ptr %p\n", wc);
+	while (wc_ptr)
+	{
+		fprintf(stderr, "pattern[%d] >> %s\n",i, wc_ptr->pattern);
+		wc_ptr = wc_ptr->next;
+	}
+}
+
+t_wildcards	*ft_lstlast_wc(t_wildcards *lst)
+{
+	if (!lst)
+		return (0);
+	while (lst->next)
+	{
+		lst = lst->next;
+	}
+	return (lst);
+}
+
+void	ft_lstadd_back_wc(t_wildcards **lst, char *pattern)
+{
+	t_wildcards	*last;
+	t_wildcards	*new;
+
+	new = 0;
+	if (!*lst)
+	{
+		fprintf(stderr, "here\n");
+		new = malloc(sizeof(t_wildcards));
+		new->pattern = pattern;
+		new->next = NULL;
+		*lst = new;
+		return ;
+	}
+	else
+	{
+		last = ft_lstlast_wc(*lst);
+		new = malloc(sizeof(t_wildcards));
+		last->next = new;
+		new->pattern = pattern;
+		new->next = NULL;
+	}
+}
+
+int	fill_wc(t_global *glo, t_wildcards **wc, char *to_split)
+{
+	int			i;
+	char		**arg_star;
+
+	i = 0;
+	(void) glo;
+	// (void) len;
+	arg_star = ft_split(to_split, '*');
+	while (arg_star[i])
+	{
+		ft_lstadd_back_wc(wc, arg_star[i]);
+		i++;
+	}
+	return (0);
+}
 
 int	len_wc(t_global *glo, int idx)
 {
 	int	i;
 	int	j;
 	int	wc;
+	int	len_in_word;
 
 	i = 0;
 	wc = 0;
 	while (glo->struct_id[idx].split_command[i])
 	{
 		j = 0;
+		len_in_word = 0;
 		while (glo->struct_id[idx].split_command[i][j])
 		{
-			if (glo->struct_id[idx].split_command[i][j] == '*')
-				wc++;
+			if (glo->struct_id[idx].split_command[i][j] == STAR)
+			{
+				while (glo->struct_id[idx].split_command[i][j] && glo->struct_id[idx].split_command[i][j] == '*')
+					j++;
+				if (!glo->struct_id[idx].split_command[i][j] && len_in_word)
+					;
+				else
+					len_in_word++;
+				// fprintf(stderr, "len >> %d\n", len_in_word);
+			}
+			if (!glo->struct_id[idx].split_command[i][j])
+				break ;
 			j++;
 		}
+		wc += len_in_word;
 		i++;
 	}
-	if (wc == 1)
-		return (wc);
-	return (wc + 1);
+	return (wc);
 }
-
-int	fill_wc(t_global *glo, t_wildcards *wc, int len, int idx)
-{
-	int	i;
-	int	j;
-	int	idx_wc;
-
-	i = 0;
-	(void) j;
-	(void) glo;
-	idx_wc = 0;
-	(void) wc;
-	(void) len;
-	(void) idx;
-	// while (glo->struct_id[idx].split_command[i][j])
-	return (0);
-}
+// *buil*.c
+// *buil*.c*
+// buil*.c
+// *.c
+// 
 
 int	activate_wc(t_global *glo, int idx, int word_count)
 {
 	t_wildcards	*wc;
 	int			len;
 	int			i;
+	int			j;
+	int			k;
+
 	(void) word_count;
-	
 	len = len_wc(glo, idx);
 	fprintf(stderr, "len wc %d\n", len);
-	wc = malloc(sizeof(t_wildcards) * len);
 	i = 0;
-	while (i < len)
-		fill_wc(glo, wc, len, idx);
+	j = 0;
+	k = 0;
+	wc = NULL;
+	// i need to find the word with an * and split it in fill wc then fill it
+	while (k < len)
+	{
+		while (glo->struct_id[idx].split_command[i])
+		{
+			j = 0;
+			while (glo->struct_id[idx].split_command[i][j])
+			{
+				if (glo->struct_id[idx].split_command[i][j] == '*')
+				{
+					fill_wc(glo, &wc, glo->struct_id[idx].split_command[i]);
+					k++;
+					break ;
+				}
+				// fprintf(stderr, "third boucle\n");
+				j++;
+			}
+			// fprintf(stderr, "second boucle\n");
+			i++;
+		}
+		// fprintf(stderr, "first boucle\n");
+	}
+	glo->struct_id[idx].wc = wc;
+	display_wc(glo->struct_id[idx].wc, len);
 	// fill_wc();
 	// char	**new_args;
 
