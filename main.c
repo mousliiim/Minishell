@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/17 16:25:29 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/19 22:18:55 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,8 +77,6 @@ static int	loop_shell(t_global *global, char *input)
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
 	i = -1;
-	// while (++i < global->nb)
-	// 	display(global->struct_id[i].head);
 	free_splitted_line(&splitted_line);
 	catch_heredocs(global, global->nb);
 	global->path = set_path(global);

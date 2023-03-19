@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rafter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/12 19:49:52 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/19 22:14:46 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,67 +52,48 @@ int	check_first_char(char *line)
 	return (0);
 }
 
-void	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
+static void	rafter_cut_fill(t_tab_struct *tab_struct, int j, int choice, int c)
 {
 	size_t	k;
-	char *file_name;
-	t_type type;
+	char	*file_name;
+	t_type	type;
 
-	tab_struct[j].split_command = ft_have_two_word(ft_split_rafter(splitted_line.strings.array[j]));
+	k = 0;
+	if (c)
+	{
+		while (tab_struct[j].commands[k])
+		{
+			file_name = return_file_name(tab_struct[j].commands[k]);
+			tab_struct[j].commands[k] = ft_no_take_first_word(file_name);
+			free(file_name);
+			k++;
+		}
+	}
+	k = (choice == 1);
+	while (tab_struct[j].commands[k])
+	{
+		file_name = return_file_name(tab_struct[j].commands[k + 1]);
+		type = return_redir_enum(tab_struct[j].commands[k]);
+		ft_lstadde_back(&tab_struct[j].head,
+			ft_lstnewe(file_name, type));
+		k += 2;
+	}
+}
+
+void	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
+{
+	char	**array;
+
+	array = ft_split_rafter(splitted_line.strings.array[j]);
+	tab_struct[j].split_command = ft_have_two_word(array);
 	tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 	if (tab_struct[j].split_command
 		&& check_first_char(tab_struct[j].commands[0]))
-	{
-		tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-		k = 0;
-		while (tab_struct[j].commands[k])
-		{
-			tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
-			k++;
-		}
-		k = 0;
-		while (tab_struct[j].commands[k])
-		{
-			file_name = return_file_name(tab_struct[j].commands[k
-					+ 1]);
-			type = return_redir_enum(tab_struct[j].commands[k]);
-			ft_lstadde_back(&tab_struct[j].head,
-				ft_lstnewe(file_name, type));
-			k += 2;
-		}
-	}
+		rafter_cut_fill(tab_struct, j, 0, 0);
 	else if (tab_struct[j].split_command
 		&& !check_first_char(tab_struct[j].commands[0]))
-	{
-		tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
-		k = 0;
-		while (tab_struct[j].commands[k])
-		{
-			tab_struct[j].commands[k] = ft_no_take_first_word(return_file_name(tab_struct[j].commands[k]));
-			k++;
-		}
-		k = 1;
-		while (tab_struct[j].commands[k])
-		{
-			file_name = return_file_name(tab_struct[j].commands[k
-					+ 1]);
-			type = return_redir_enum(tab_struct[j].commands[k]);
-			ft_lstadde_back(&tab_struct[j].head,
-				ft_lstnewe(file_name, type));
-			k += 2;
-		}
-	}
+		rafter_cut_fill(tab_struct, j, 1, 1);
 	else if (tab_struct[j].split_command == NULL)
-	{
-		k = 0;
-		while (tab_struct[j].commands[k])
-		{
-			file_name = return_file_name(tab_struct[j].commands[k
-					+ 1]);
-			type = return_redir_enum(tab_struct[j].commands[k]);
-			ft_lstadde_back(&tab_struct[j].head,
-				ft_lstnewe(file_name, type));
-			k += 2;
-		}
-	}
+		rafter_cut_fill(tab_struct, j, 0, 0);
+	free_double_str(array);
 }

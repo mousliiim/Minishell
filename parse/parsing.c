@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/13 06:26:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/19 22:01:49 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,7 @@ int	rafter_check(char *str, int i, int *flag, int choice)
 		return (0);
 	while (ft_isspace(str[j]))
 		j++;
-	if (is_operator(str, j))
-		return (0);
-	if (str[j] == '\0')
+	if (is_operator(str, j) || str[j] == '\0')
 		return (0);
 	while (str[j])
 	{
@@ -306,6 +304,7 @@ char	**ft_have_two_word(char **tab)
 	int		j;
 
 	arg = NULL;
+	split = NULL;
 	i = 0;
 	while (tab[i])
 	{
@@ -318,6 +317,7 @@ char	**ft_have_two_word(char **tab)
 			ft_strjoin2(&arg, tmp);
 			if (!arg)
 				return (NULL);
+			free(tmp);
 		}
 		while (ft_isspace(tab[i][j]))
 			j++;
@@ -347,8 +347,11 @@ char	**ft_have_two_word(char **tab)
 		}
 		i++;
 	}
-	split = ft_split(arg, ' ');
-	free(arg);
+	if (arg)
+	{
+		split = ft_split(arg, ' ');
+		free(arg);
+	}
 	return (split);
 }
 
@@ -357,12 +360,12 @@ static int cut_raft(char **res, char *line, int *array[5])
 	int		*i;
 	int		*j;
 	int		*k;
-	int 	**flag;
+	int		**flag;
 
 	i = array[0];
 	j = array[1];
 	k = array[2];
-	flag = (int*[2]){array[3], array[4]};
+	flag = (int *[2]){array[3], array[4]};
 	while (line[*i + *flag[1]] == '>' || line[*i + *flag[1]] == '<')
 		(*flag[1]) += 1;
 	if (!*flag[0])

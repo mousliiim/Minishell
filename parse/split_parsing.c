@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/14 07:03:42 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/19 21:15:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,8 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 		if (rafter_line(splitted_line.strings.array[i]))
 			rafter_cut(tab_struct, splitted_line, i);
 		else
-		{
 			tab_struct[i].split_command = ft_split \
 				(splitted_line.strings.array[i], ' ');
-		}
 		before_exec_to_positif(tab_struct, i);
 		i++;
 	}
