@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 18:11:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 20:18:59 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	quit_hd(int sign)
 	close(glo->link_heredoc[1]);
 	close(glo->link_heredoc[0]);
 	clear_lst(glo->struct_id, glo->nb);
-	free_inchild(glo);
+	hd_free_inchild(glo);
 	exit(130);
 }
 

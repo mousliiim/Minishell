@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/19 23:10:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 20:33:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,10 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 	{
 		stop = ft_strchr((char *)glo->personal_env.array[i], '=')
 			- (char *)glo->personal_env.array[i];
-		if (!ft_strncmp((char *)glo->personal_env.array[i], find, stop))
+		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
+			&& stop == end - start)
 		{
-			return ((char *)&glo->personal_env.array[i][stop + 1]);
+			return (& glo->personal_env.array[i][stop + 1]);
 		}
 		i++;
 	}
@@ -126,17 +127,12 @@ char	*catch_expand(t_global *glo, char *input)
 	len_to_malloc = ft_strlen(input);
 	while (input[i])
 	{
-		if (input[i] == '\'' && input[i] == '\"')
-		{
+		if (input[i] == '\'' || input[i] == '\"')
 			skip *= -1;
-		}
 		if (input[i] == '$')
 		{
-			// i++;
 			if (input[i] == '\'')
-			{
 				skip *= -1;
-			}
 			if (skip > 0)
 			{
 				start = i + 1;
@@ -171,15 +167,12 @@ char	*catch_expand(t_global *glo, char *input)
 	skip = 1;
 	while (input[i])
 	{
-		if (input[i] == '\''  && input[i] == '\"')
+		if (input[i] == '\'' || input[i] == '\"')
 			skip *= -1;
 		if (input[i] == '$')
 		{
-			// i++;
 			if (input[i] == '\'')
-			{
 				skip *= -1;
-			}
 			if (skip > 0)
 			{
 				start = i + 1;
@@ -190,9 +183,7 @@ char	*catch_expand(t_global *glo, char *input)
 					continue ;
 				}
 				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
-				{
 					i++;
-				}
 				to_replace_by = find_expand(glo, &input[start], start, i);
 				line_negatif_expand(to_replace_by);
 				if (input[i] == '?')

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/10 01:11:16 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 20:48:28 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,11 @@ int	export(t_global *global, int j)
 				i++;
 			}
 			pa_add(&global->personal_env,
-					ft_strdup(global->struct_id[j].split_command[idx_args]));
+			ft_strdup(global->struct_id[j].split_command[idx_args]));
 		}
+		else
+			printf("bash: export : '%s': not a valid identfier\n",
+					global->struct_id[j].split_command[idx_args]);
 		idx_args++;
 	}
 	return (0);
