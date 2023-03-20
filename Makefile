@@ -6,7 +6,7 @@
 #    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/10 06:06:38 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/03/20 20:35:01 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -44,10 +44,11 @@ ENV_DIR		= env
 FREE_DIR	= free
 
 SRC_FILES	=	$(addprefix parse/, \
-				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c) \
+				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c		split_parsing.c \
+				expand.c) \
 				\
 				$(addprefix exec/, \
-				exec.c		here_docs.c) \
+				exec.c		here_docs.c		wildcards.c) \
 				\
 				$(addprefix builtins/, \
 				cd.c		echo.c		exit.c		export.c		ls_color.c		pwd.c		unset.c) \

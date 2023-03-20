@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 19:53:56 by mparisse          #+#    #+#             */
-/*   Updated: 2023/01/10 01:59:18 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/12 01:07:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	*ft_calloc(size_t nmemb, size_t size)
 	void	*mem;
 
 	if (nmemb >= MAXOU || size >= MAXOU)
-		return (NULL);
-	if (nmemb * size / size != nmemb)
 		return (NULL);
 	mem = malloc(size * nmemb);
 	if (!mem)

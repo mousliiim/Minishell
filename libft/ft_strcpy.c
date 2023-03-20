@@ -1,34 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/16 11:08:55 by mparisse         ###   ########.fr       */
+/*   Created: 2023/03/09 09:19:57 by mparisse          #+#    #+#             */
+/*   Updated: 2023/03/09 09:20:00 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "libft.h"
 
-extern int	g_status;
-
-void	ctrl_d(int status)
+char	*ft_strcpy_maxou(char *dest, char *src)
 {
-	// need to free here mini shell allocated memory before ctrl + d
-	rl_clear_history();
-	ft_putendl_fd("exit", 2);
-	exit(status);
-}
+	int	i;
 
-void	ctrl_c(int sig)
-{
-	if (sig == SIGINT)
+	i = 0;
+	while (src[i] != '\0')
 	{
-		ft_putchar('\n');
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		dest[i] = src[i];
+		i++;
 	}
+	dest[i] = '\0';
+	return (dest);
 }

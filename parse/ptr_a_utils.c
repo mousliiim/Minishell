@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 02:17:13 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/13 23:35:36 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ t_ptr_array	pa_new(void)
 	new.size = 0;
 	new.capacity = 8;
 	new.array = ft_calloc(sizeof(void *), 8);
+	// proteger
 	return (new);
 }
 

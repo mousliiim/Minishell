@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 06:41:47 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:05:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <limits.h>
+# include <dirent.h>
 # include "../libft/libft.h"
 # include <readline/history.h>
 # include <readline/readline.h>
@@ -35,6 +36,7 @@
 # define GB "\001\033[1;32m\002"
 # define BRB "\001\033[1;33m\002"
 # define EB "\001\033[0m\002"
+# define TRUE 1
 # define PATH_MAXIMUM        4096
 
 typedef struct s_ptr_array
@@ -59,6 +61,15 @@ typedef struct s_list_mini
 	struct s_list_mini	*next;
 }	t_list_mini;
 
+typedef struct s_wildcards
+{
+	char		*pattern;
+	int			begin;
+	int			middle;
+	int			end;
+	struct s_wildcards	*next;
+}	t_wildcards;
+
 typedef struct s_tab_struct
 {
 	char			**commands;
@@ -66,7 +77,9 @@ typedef struct s_tab_struct
 	int				type;
 	int				prev_heredocs;
 	t_list_mini		*head;
+	t_wildcards		*wc;
 }	t_tab_struct;
+
 
 typedef struct s_global
 {
@@ -74,12 +87,17 @@ typedef struct s_global
 	t_tab_struct	*struct_id;
 	t_ptr_array		personal_env;
 	char			**path;
+	char			str_status[3];
 	int				*forkstates;
 	int				status;
 	int				link[2];
 	int				prev;
 	int				fd_solo_redirection;
 	size_t			nb;
+	size_t			nb_free;
+	int				nb_hd;
+	int				link_heredoc[2];
+	int				here_doc_failed;
 }	t_global;
 
 typedef struct s_split_line
@@ -90,6 +108,9 @@ typedef struct s_split_line
 }	t_split_line;
 
 typedef int	(*t_builtins)(t_global *, int);
+
+t_global		*endton(t_global *glo);
+char			*catch_expand(t_global *glo, char *input);
 
 /********************* PTR_A_UTILS **********************/
 t_ptr_array		pa_new(void);
@@ -104,7 +125,6 @@ size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 /********************************************************/
 
-t_split_line	split_line(const char line[]);
 int				ft_atoi(const char *nptr);
 int				ft_isspace(char c);
 
@@ -115,9 +135,15 @@ int				find_path_for_each_command(t_global *global);
 /******************************************************/
 
 /******************* HERE_DOCS ************************/
-int				start_heredoc(t_global *glo, int j, t_list_mini *head);
+int				start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd);
 void			catch_heredocs(t_global *glo, size_t nb_command);
+void			hd_free_inchild(t_global *glo);
+
 /******************************************************/
+
+/********************WILDCARDS****************************/
+int	activate_wc(t_global *glo, int i, int word_count);
+/*********************************************************/
 
 /*********************** PARSING ***********************/
 int				quote_checker(char *line);
@@ -132,6 +158,20 @@ size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
 int				check_first_char(char *line);
 int				ft_clean_quotes(char **line);
+void			rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j);
+/******************************************************/
+
+/******************* EXPAND ********************/
+char			*catch_expand(t_global *glo, char *input);
+int				have_expand(char *str);
+char			*find_expand(t_global *glo, char *find, int start, int end);
+char			*getter(char *env_var);
+/******************************************************/
+
+/******************* SPLIT_PARSING ********************/
+void			split_input(t_split_line splitted_line, t_tab_struct *tab_struct);
+t_split_line	split_line(const char *line);
+void	before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /******************************************************/
 
 /*********************** ENV **************************/
@@ -164,7 +204,8 @@ void			waiting(t_global *global, int size_wait);
 /***************************************************/
 
 /*********************** SIGNAL ***********************/
-void			ctrlc(int sig);
+void			ctrl_c(int sig);
+void			ctrl_d(int status);
 /***************************************************/
 
 /*********************** UTILS ***********************/
@@ -180,15 +221,17 @@ t_list_mini		*ft_lstlaste(t_list_mini *lst);
 t_list_mini		*ft_lstnewe(void *content, t_type type);
 void			ft_lstadde_back(t_list_mini **lst, t_list_mini *new);
 void			ft_lstcleare(t_list_mini **lst, void (*del)(void *));
+void			clear_lst(t_tab_struct *tab_struct, size_t size);
 /*****************************************************/
 
 /****************** FREE_FUNCTION ********************/
 void			free_splitted_line(t_split_line *del);
+void			free_inchild(t_global *glo);
 void			free_double_str(char **str);
 /*****************************************************/
 
 /********************* PROMPT ************************/
-char			*get_git_branch(void);
+int				get_git_branch(void);
 char			*build_prompt(void);
 /*****************************************************/
 

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:43:14 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/10 01:53:41 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/12 05:03:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,5 +59,17 @@ void	ft_lstcleare(t_list_mini **lst, void (*del)(void *))
 		del((*lst)->file_name);
 		free(*lst);
 		*lst = tmp;
+	}
+}
+
+void	clear_lst(t_tab_struct *tab_struct, size_t size)
+{
+	size_t	k;
+
+	k = 0;
+	while (k < size)
+	{
+		ft_lstcleare(&tab_struct[k].head, free);
+		k++;
 	}
 }

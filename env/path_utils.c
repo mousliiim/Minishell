@@ -3,16 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/10 02:24:06 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/16 11:22:49 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
+
+char	*getter(char *env_var)
+{
+	int	stop;
+
+	stop = ft_strchr(env_var, '=') - env_var;
+	return (&env_var[stop + 1]);
+}
+
+// t_ptr_array	pa_new(_envvoid)
+// {
+// 	t_ptr_array	new;
+
+// 	new.size = 0;
+// 	new.capacity = 8;
+// 	new.array = ft_calloc(sizeof(void *), 8);
+// 	return (new);
+// }
+
+void	pa_add_env(t_ptr_array *pa, char *new_str)
+{
+	if (pa->size == pa->capacity)
+	{
+		pa->capacity *= 2;
+		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
+				* sizeof(char *));
+	}
+	pa->array[pa->size++] = new_str;
+}
 
 t_ptr_array	build_personal_env(char **env)
 {
@@ -23,11 +52,12 @@ t_ptr_array	build_personal_env(char **env)
 	res = pa_new();
 	while (env[i])
 	{
-		pa_add(&res, ft_strdup(env[i]));
+		pa_add_env(&res, ft_strdup(env[i]));
 		i++;
 	}
 	return (res);
 }
+// incremente shlvl
 
 char	**set_path(t_global *global)
 {
@@ -51,7 +81,7 @@ char	**set_path(t_global *global)
 			i++;
 		}
 	}
-	return (0);
+	return(0);
 }
 
 int	find_path_for_each_command(t_global *global)
@@ -81,6 +111,8 @@ int	find_path_for_each_command(t_global *global)
 		while (global->path[j])
 		{
 			if (!struc[i].split_command[0])
+				break ;
+			if (ft_strchr(struc[i].split_command[0], '/'))
 				break ;
 			command_w_path = ft_sup_strjoin(global->path[j], '/',
 					struc[i].split_command[0]);
