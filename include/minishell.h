@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/18 00:50:34 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:05:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,8 @@ int				find_path_for_each_command(t_global *global);
 /******************* HERE_DOCS ************************/
 int				start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd);
 void			catch_heredocs(t_global *glo, size_t nb_command);
+void			hd_free_inchild(t_global *glo);
+
 /******************************************************/
 
 /********************WILDCARDS****************************/

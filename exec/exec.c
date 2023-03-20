@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/17 16:42:58 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:27:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	catch_wildcards(t_global *glo, char **cmd, int idx)
 
 	i = 1;
 	word_count = 0;
-	fprintf(stderr, "idx >> %d\n", idx);
+	// fprintf(stderr, "idx >> %d\n", idx);
 	while (cmd[i])
 	{
 		j = 0;
@@ -115,6 +115,7 @@ int	forking(t_global *glo, unsigned long i)
 				built_ptr(glo, i);
 			dup2(glo->fd_solo_redirection, STDOUT_FILENO);
 			close(glo->fd_solo_redirection);
+			// free_inchild(glo);
 			return (glo->nb--, 0);
 		}
 	}
@@ -130,17 +131,31 @@ int	forking(t_global *glo, unsigned long i)
 		close(glo->link[0]);
 		close(glo->link[1]);
 		if (openfiles(glo, i) == -1)
+		{
+			free_inchild(glo);
 			exit(1);
+		}
+			// exit(1);
 		if (glo->struct_id[i].split_command && built_ptr)
+		{
+			fprintf(stderr, "je suis arrive %i %s\n", __LINE__, __func__ );
 			built_ptr(glo, i);
+		}
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
-			exit(0);
-		catch_wildcards(glo, glo->struct_id[i].split_command, i);
+		{
+			if (!glo->struct_id[i].head)
+				ft_printf("miniboosted: : command not found\n");
+			// fprintf(stderr, "launching empty command");
+			free_inchild(glo);
+			exit(1);
+		}
 		if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
 			if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
+			{
 				execve(glo->struct_id[i].split_command[0],
 						glo->struct_id[i].split_command,
 						(char **)glo->personal_env.array);
+			}
 		if (errno == 13)
 			perror("miniboosted");
 		else

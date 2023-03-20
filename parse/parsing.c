@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/19 22:01:49 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:56:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -370,14 +370,14 @@ static int cut_raft(char **res, char *line, int *array[5])
 		(*flag[1]) += 1;
 	if (!*flag[0])
 	{
-		res[(*j)++] = ft_substr(line, *k, *i - *k);
-		if (!res[*j - 1])
+		res[(*j)] = ft_substr(line, *k, *i - *k);
+		if (!res[(*j)++])
 			return (0);
 	}
 	else
 		*flag[0] = 0;
-	res[(*j)++] = ft_substr(line, *i, *flag[1]);
-	if (!res[*j - 1])
+	res[(*j)] = ft_substr(line, *i, *flag[1]);
+	if (!res[(*j)++])
 		return (0);
 	*i += *flag[1] == 2;
 	*k = *i + 1;
@@ -405,8 +405,8 @@ char **ft_split_rafter(char *line)
 		if (line[i] == '>' || line[i] == '<')
 			cut_raft(res, line, (int *[5]){&i, &j, &k, &flag[0], &flag[1]});
 	}
-	res[j++] = ft_substr(line, k, i - k);
-	if (!res[j - 1])
+	res[j] = ft_substr(line, k, i - k);
+	if (!res[j++])
 		return (NULL);
 	res[j] = NULL;
 	return (res);

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/19 21:15:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/19 23:40:57 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 {
 	size_t		i;
+	char		**array;
 
 	i = 0;
 	while (i < splitted_line.strings.size)
@@ -76,8 +77,10 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 		if (rafter_line(splitted_line.strings.array[i]))
 			rafter_cut(tab_struct, splitted_line, i);
 		else
-			tab_struct[i].split_command = ft_split \
-				(splitted_line.strings.array[i], ' ');
+		{
+			array = ft_split(splitted_line.strings.array[i], ' ');
+			tab_struct[i].split_command = array;
+		}
 		before_exec_to_positif(tab_struct, i);
 		i++;
 	}

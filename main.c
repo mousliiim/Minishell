@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/19 22:18:55 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:23:30 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static int	loop_shell(t_global *global, char *input)
 	t_split_line	splitted_line;
 	t_tab_struct	*tab_struct;
 	size_t			i;
+	size_t			tempsize;
 
 	add_history(input);
 	if (!syntax_checker(input))
@@ -81,14 +82,21 @@ static int	loop_shell(t_global *global, char *input)
 	catch_heredocs(global, global->nb);
 	global->path = set_path(global);
 	global->status = g_status;
-	free_parsing(global);
+	// free_parsing(global);
+	tempsize = global->nb;
+	free(input);
 	if (global->here_doc_failed == 0)
 		go_exec(global);
-	free(input);
-	clear_lst(tab_struct, global->nb);
+	fprintf(stderr, "je suis arrive %i\n", __LINE__);
+	display(global->struct_id->head);
+	clear_lst(tab_struct, tempsize);
 	i = -1;
-	while (++i < global->nb)
+	while (++i < tempsize)
 		free_double_str(tab_struct[i].split_command);
+	i = -1;
+	while (++i < tempsize)
+		free_double_str(tab_struct[i].commands);
+	// printf("Commands pointer : %p\n", global->struct_id->commands);
 	free(tab_struct);
 	free_double_str(global->path);
 	return (1);

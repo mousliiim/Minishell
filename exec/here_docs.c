@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/19 21:04:39 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 18:11:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	quit_hd(int sign)
 	t_global	*glo;
 
 	(void) sign;
+	fprintf(stderr, "Dfdsfdsdfssdf\n");
 	write(1, "\n", 1);
 	rl_clear_history();
 	glo = NULL;
@@ -80,6 +81,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 				break ;
 			ft_putendl_fd(str, glo->link_heredoc[1]);
 		}
+		hd_free_inchild(glo);
 		close(glo->link_heredoc[1]);
 		close(glo->link_heredoc[0]);
 		exit(0);

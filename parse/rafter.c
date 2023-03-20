@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/19 22:14:46 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 17:58:04 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static void	rafter_cut_fill(t_tab_struct *tab_struct, int j, int choice, int c)
 		while (tab_struct[j].commands[k])
 		{
 			file_name = return_file_name(tab_struct[j].commands[k]);
+			free(tab_struct[j].commands[k]);
 			tab_struct[j].commands[k] = ft_no_take_first_word(file_name);
 			free(file_name);
 			k++;
