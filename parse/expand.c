@@ -88,7 +88,8 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
 		{
-			return (& glo->personal_env.array[i][stop + 1]);
+			;
+			// return (& glo->personal_env.array[i][stop + 1]);
 		}
 		i++;
 	}

@@ -56,7 +56,6 @@ void	waiting_hd(t_global *global, int forkstate)
 	g_status = status;
 	global->status = status;
 }
-// 284 in  11 blocks
 
 int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 {

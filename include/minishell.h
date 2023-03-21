@@ -201,7 +201,13 @@ int				forking(t_global *global, unsigned long i);
 t_builtins		find_ptr_builtin(char *ptr);
 int				openfiles_bt(t_global *glo, int j);
 int				openfiles(t_global *glo, int j);
+void			ctrl_antislash(int sig);
 void			waiting(t_global *global, int size_wait);
+/***************************************************/
+
+/*******************DIVIDED_PROCESS*********************/
+void			child_process(t_global *glo, t_builtins built_ptr, unsigned long i);
+void			error_msg(int err, char *cmd);
 /***************************************************/
 
 /*********************** SIGNAL ***********************/

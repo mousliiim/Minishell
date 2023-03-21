@@ -48,7 +48,7 @@ SRC_FILES	=	$(addprefix parse/, \
 				expand.c) \
 				\
 				$(addprefix exec/, \
-				exec.c		here_docs.c		wildcards.c) \
+				exec.c		here_docs.c		wildcards.c    divided_process.c) \
 				\
 				$(addprefix builtins/, \
 				cd.c		echo.c		exit.c		export.c		ls_color.c		pwd.c		unset.c) \
