@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 01:36:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 02:12:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,12 +127,12 @@ char	*catch_expand(t_global *glo, char *input)
 	len_to_malloc = ft_strlen(input);
 	while (input[i])
 	{
-		if (input[i] == '\'' || input[i] == '\"')
+		if (input[i] == '"' && skip != -1)
+			skip = 42;
+		if (input[i] == '\'' && skip != 42)
 			skip *= -1;
 		if (input[i] == '$')
 		{
-			if (input[i] == '\'')
-				skip *= -1;
 			if (skip > 0)
 			{
 				start = i + 1;
@@ -164,10 +164,11 @@ char	*catch_expand(t_global *glo, char *input)
 	new_input = ft_calloc(sizeof(char), len_to_malloc);
 	j = 0;
 	i = 0;
-	skip = 1;
 	while (input[i])
 	{
-		if (input[i] == '\'' || input[i] == '\"')
+		if (input[i] == '"' && skip != -1)
+			skip = 42;
+		if (input[i] == '\'' && skip != 42)
 			skip *= -1;
 		if (input[i] == '$')
 		{
