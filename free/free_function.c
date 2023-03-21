@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_function.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:30:47 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 18:11:22 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 23:53:21 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@ void	hd_free_inchild(t_global *glo)
 	}
 	free(glo->struct_id);
 	free_double_str((char **)glo->personal_env.array);
-	// free_double_str(glo->path);
 }
-
 
 void	free_splitted_line(t_split_line *del)
 {

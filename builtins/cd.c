@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:30 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 20:44:38 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 01:51:44 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	cd(t_global *global, int i)
 {
 	char	*env;
 
-	if (!global->struct_id[i].split_command[1])
+	if (!global->struct_id[i].split_command[1] && !global->struct_id[i].head)
 	{
 		env = getenv("HOME");
 		if (!env || !*env)
@@ -35,6 +35,8 @@ int	cd(t_global *global, int i)
 			exit(0);
 		return (g_status);
 	}
+	if (!global->struct_id[i].split_command[1])
+		return (0);
 	g_status = chdir(global->struct_id[i].split_command[1]);
 	if (g_status != 0)
 	{
@@ -42,7 +44,5 @@ int	cd(t_global *global, int i)
 		ft_putstr_fd(global->struct_id[i].split_command[1], 2);
 		ft_putstr_fd(": No such file or directory\n", 2);
 	}
-	if (global->nb > 1)
-		exit(0);
-	return (g_status);
+	return (0);
 }

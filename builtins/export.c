@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 20:48:28 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 23:08:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+extern int	g_status;
 
 int	export(t_global *global, int j)
 {
@@ -21,6 +23,7 @@ int	export(t_global *global, int j)
 	if (global->nb > 1)
 		exit(0);
 	idx_args = 1;
+	g_status = 0;
 	while (global->struct_id[j].split_command[idx_args])
 	{
 		if (!global->struct_id[j].split_command[idx_args])
@@ -28,6 +31,7 @@ int	export(t_global *global, int j)
 			ft_printf("bash: export : '%s': not a valid identfier\n",
 						global->struct_id[j].split_command[idx_args]);
 			idx_args++;
+			g_status = 1;
 			continue ;
 		}
 		if (ft_isdigit(global->struct_id[j].split_command[idx_args][0]) == 1
@@ -36,6 +40,7 @@ int	export(t_global *global, int j)
 			ft_printf("bash: export : '%s': not a valid identfier\n",
 						global->struct_id[j].split_command[idx_args]);
 			idx_args++;
+			g_status = 1;
 			continue ;
 		}
 		stuff = ft_strchr(global->struct_id[j].split_command[idx_args], '=') - global->struct_id[j].split_command[idx_args];

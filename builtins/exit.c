@@ -3,25 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/10 01:03:33 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 01:27:04 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+extern int	g_status;
+
+// static int	is_space(char c)
+// {
+// 	if ((c >= '\t' && c <= '\r') || c == ' ')
+// 		return (1);
+// 	return (0);
+// }
+
+// static long long int	atoi_exit(const char *str)
+// {
+// 	long	res;
+// 	int		negatif;
+
+// 	res = 0;
+// 	negatif = 1;
+// 	while (is_space(*str) == 1)
+// 		str++;
+// 	if (*str == '+' || *str == '-')
+// 	{
+// 		if (*str == '-')
+// 			negatif = negatif * -1;
+// 		str++;
+// 	}
+// 	while (ft_isdigit(*str))
+// 	{
+// 		res = res * 10 + (*str - 48);
+// 		str++;
+// 	}
+// 	return (res * negatif);
+// }
+
 int	builtin_exit(t_global *global, int j)
 {
 	int	i;
 
-	close(global->fd_solo_redirection);
-	close(global->link[0]);
-	if (global->nb > 1)
-		exit(0);
 	if (!global->struct_id[j].split_command[1])
+	{
+		free_inchild(global);
 		exit(0);
+	}
 	i = 0;
 	while (global->struct_id[j].split_command[1][i])
 	{
@@ -30,10 +61,11 @@ int	builtin_exit(t_global *global, int j)
 			ft_putstr_fd("bash: exit: ", 2);
 			ft_putstr_fd(global->struct_id[j].split_command[1], 2);
 			ft_putstr_fd(": numeric argument required", 2);
-
-			exit(0);
+			free_inchild(global);
+			exit(2);
 		}
 		i++;
 	}
 	exit ((unsigned char )ft_atoi(global->struct_id[j].split_command[1]));
 }
+

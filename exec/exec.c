@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 18:27:14 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 02:08:24 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,6 +140,8 @@ int	forking(t_global *glo, unsigned long i)
 		{
 			fprintf(stderr, "je suis arrive %i %s\n", __LINE__, __func__ );
 			built_ptr(glo, i);
+			free_inchild(glo);
+			exit(g_status);
 		}
 		if (!glo->struct_id[i].split_command || !glo->struct_id[i].split_command[0])
 		{
@@ -308,6 +310,10 @@ int	openfiles_bt(t_global *glo, int j)
 			}
 			dupnclose(fd, STDOUT_FILENO);
 		}
+		// if (list->redirect == IN)
+		// {
+		// 	fd = open(list->file_name, );
+		// }
 		list = list->next;
 	}
 	close(glo->link[1]);

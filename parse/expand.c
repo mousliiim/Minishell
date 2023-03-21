@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 20:33:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 01:36:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,6 @@ char	*catch_expand(t_global *glo, char *input)
 					i++;
 				if (!to_replace_by)
 					continue ;
-				fprintf(stderr, "replaceby = %s\nnew_input = %s\n", to_replace_by, new_input);
 				ft_strcat(new_input, to_replace_by);
 				j += ft_strlen(to_replace_by);
 				continue ;

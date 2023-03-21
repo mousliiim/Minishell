@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:49 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 19:31:10 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/20 23:08:17 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+extern int	g_status;
 
 static int	valid_option(char *option)
 {
@@ -62,7 +64,8 @@ int	echo(t_global *glo, int j)
 	while (s_cmd[i] && valid_option(s_cmd[i]))
 		i++;
 	print(s_cmd, i);
-	if (glo->nb > 1)
-		exit(0);
+	g_status = 0;
+	// if (glo->nb > 1)
+	// 	exit(0);
 	return (0);
 }
