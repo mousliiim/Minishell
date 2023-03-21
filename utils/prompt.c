@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/16 07:16:58 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 03:16:15 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,6 @@
 #define MAX_READ_SIZE 10
 
 extern int	g_status;
-
-#define MAX_READ_SIZE 10
-
 
 char	*build_prompt(void)
 {

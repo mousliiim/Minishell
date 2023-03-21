@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 02:08:24 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 02:43:36 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ int	forking(t_global *glo, unsigned long i)
 				built_ptr(glo, i);
 			dup2(glo->fd_solo_redirection, STDOUT_FILENO);
 			close(glo->fd_solo_redirection);
+			close(glo->link[1]);
 			// free_inchild(glo);
 			return (glo->nb--, 0);
 		}
@@ -310,12 +311,27 @@ int	openfiles_bt(t_global *glo, int j)
 			}
 			dupnclose(fd, STDOUT_FILENO);
 		}
-		// if (list->redirect == IN)
-		// {
-		// 	fd = open(list->file_name, );
-		// }
+		if (list->redirect == IN)
+		{
+			fd = open(list->file_name, O_RDONLY);
+			if (fd == -1)
+			{
+				perror("miniboosted");
+				return (-1);
+			}
+			close(fd);
+		}
+		else if (list->redirect == HERE_DOC)
+		{
+			if (!*list->file_name)
+			{
+				ft_printf("miniboosted: ambiguous redirect\n");
+				return (-1);
+			}
+			// dup2(glo->struct_id[j].prev_heredocs, STDIN_FILENO);
+			close(glo->struct_id[j].prev_heredocs);
+		}
 		list = list->next;
 	}
-	close(glo->link[1]);
 	return (0);
 }

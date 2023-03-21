@@ -6,13 +6,37 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 01:27:04 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 03:12:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
+#define DBL_MAX 1E+37
+
+long long	ft_atoull(const char *str)
+{
+	int			neg;
+	long long	res;
+
+	res = 0;
+	neg = 1;
+	while (ft_isspace(*str))
+		str++;
+	if (*str == '+' || *str == '-')
+	{
+		if (*str == '-')
+			neg *= -1;
+		str++;
+	}
+	while (ft_isdigit(*str))
+	{
+		res = (res * 10) + (*str - '0');
+		str++;
+	}
+	return (res * neg);
+}
 
 // static int	is_space(char c)
 // {
@@ -48,6 +72,9 @@ int	builtin_exit(t_global *global, int j)
 {
 	int	i;
 
+	close(global->link[0]);
+	close(global->link[1]);
+	close(global->fd_solo_redirection);
 	if (!global->struct_id[j].split_command[1])
 	{
 		free_inchild(global);
@@ -66,6 +93,9 @@ int	builtin_exit(t_global *global, int j)
 		}
 		i++;
 	}
-	exit ((unsigned char )ft_atoi(global->struct_id[j].split_command[1]));
+	if(ft_atoull(global->struct_id[j].split_command[1]) > DBL_MAX)
+		printf("TEST\n");
+	free_inchild(global);
+	exit (i);
 }
 
