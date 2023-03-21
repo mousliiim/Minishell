@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 03:30:52 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:43:40 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,6 @@ typedef struct s_list_mini
 	struct s_list_mini	*next;
 }	t_list_mini;
 
-typedef struct s_wildcards
-{
-	char		*pattern;
-	int			begin;
-	int			middle;
-	int			end;
-	struct s_wildcards	*next;
-}	t_wildcards;
-
 typedef struct s_tab_struct
 {
 	char			**commands;
@@ -78,7 +69,6 @@ typedef struct s_tab_struct
 	int				type;
 	int				prev_heredocs;
 	t_list_mini		*head;
-	t_wildcards		*wc;
 }	t_tab_struct;
 
 
@@ -142,18 +132,7 @@ void			hd_free_inchild(t_global *glo);
 
 /******************************************************/
 
-/********************WILDCARDS****************************/
-int	activate_wc(t_global *glo, int i, int word_count);
-/*********************************************************/
-
 /*********************** PARSING ***********************/
-int				quote_checker(char *line);
-int				is_operator(char *c, int j);
-void			line_negatif(char *line);
-void			line_positif(char *line);
-int				rafter_checker(char *str);
-int				rafter_check(char *str, int i, int *flag, int choice);
-int				pipe_checker(char *line);
 char			**ft_split_rafter(char *line);
 size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
@@ -161,6 +140,14 @@ int				check_first_char(char *line);
 int				ft_clean_quotes(char **line);
 void			rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j);
 /******************************************************/
+
+/******************* PARSE_CHECK ************************/
+void			line_negatif(char *line);
+int				quote_checker(char *line);
+int				rafter_check(char *str, int i, int *flag, int choice);
+int				rafter_checker(char *str);
+int				pipe_checker(char *line);
+/********************************************************/
 
 /******************* EXPAND ********************/
 char			*catch_expand(t_global *glo, char *input);
@@ -172,7 +159,7 @@ char			*getter(char *env_var);
 /******************* SPLIT_PARSING ********************/
 void			split_input(t_split_line splitted_line, t_tab_struct *tab_struct);
 t_split_line	split_line(const char *line);
-void	before_exec_to_positif(t_tab_struct *tab_struct, int j);
+void			before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /******************************************************/
 
 /*********************** ENV **************************/
@@ -221,6 +208,14 @@ char			*ft_no_take_first_word(char *line);
 void			*ft_realloc(void **old, size_t old_c, size_t new_c);
 t_type			return_redir_enum(char *line);
 char			*return_file_name(char *line);
+/*****************************************************/
+
+/******************* UTILS_SECOND *********************/
+char			*ft_strcpy(char *dest, const char *src, int choice);
+char			*ft_strdup2(char const *s, int choice);
+void			ft_strjoin2(char **line, const char *s1);
+int				is_operator(char *c, int j);
+void			line_positif(char *line);
 /*****************************************************/
 
 /******************** LST_UTILS ********************/

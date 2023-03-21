@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/19 23:40:57 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:52:24 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,3 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 		i++;
 	}
 }
-

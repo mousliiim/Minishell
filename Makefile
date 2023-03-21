@@ -6,7 +6,7 @@
 #    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/20 20:35:01 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/03/21 20:53:52 by mmourdal         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,16 +45,16 @@ FREE_DIR	= free
 
 SRC_FILES	=	$(addprefix parse/, \
 				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c		split_parsing.c \
-				expand.c) \
+				expand.c	syntax_check.c) \
 				\
 				$(addprefix exec/, \
-				exec.c		here_docs.c		wildcards.c    divided_process.c) \
+				exec.c		here_docs.c		divided_process.c) \
 				\
 				$(addprefix builtins/, \
-				cd.c		echo.c		exit.c		export.c		ls_color.c		pwd.c		unset.c) \
+				cd.c		echo.c		exit.c	export.c	pwd.c	unset.c) \
 				\
 				$(addprefix utils/, \
-				lst_utils.c	prompt.c		utils.c) \
+				lst_utils.c		prompt.c	utils.c		utils_second.c) \
 				\
 				$(addprefix signal/, \
 				signal.c) \

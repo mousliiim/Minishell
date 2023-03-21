@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/16 11:08:55 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:37:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ extern int	g_status;
 
 void	ctrl_d(int status)
 {
-	// need to free here mini shell allocated memory before ctrl + d
 	rl_clear_history();
 	ft_putendl_fd("exit", 2);
 	exit(status);

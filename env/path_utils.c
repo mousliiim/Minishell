@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/16 11:22:49 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:37:48 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,6 @@ char	*getter(char *env_var)
 	stop = ft_strchr(env_var, '=') - env_var;
 	return (&env_var[stop + 1]);
 }
-
-// t_ptr_array	pa_new(_envvoid)
-// {
-// 	t_ptr_array	new;
-
-// 	new.size = 0;
-// 	new.capacity = 8;
-// 	new.array = ft_calloc(sizeof(void *), 8);
-// 	return (new);
-// }
 
 void	pa_add_env(t_ptr_array *pa, char *new_str)
 {
@@ -81,7 +71,7 @@ char	**set_path(t_global *global)
 			i++;
 		}
 	}
-	return(0);
+	return (0);
 }
 
 int	find_path_for_each_command(t_global *global)
@@ -103,7 +93,8 @@ int	find_path_for_each_command(t_global *global)
 			i++;
 			continue ;
 		}
-		if (find_ptr_builtin(struc[i].split_command[0]) && struc[i].split_command)
+		if (find_ptr_builtin(struc[i].split_command[0])
+			&& struc[i].split_command)
 		{
 			i++;
 			continue ;
