@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 20:19:13 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 00:51:25 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ static int	loop_shell(t_global *global, char *input)
 	catch_heredocs(global, global->nb);
 	global->path = set_path(global);
 	global->status = g_status;
-	// free_parsing(global);
 	tempsize = global->nb;
 	free(input);
 	if (global->here_doc_failed == 0)
@@ -98,7 +97,6 @@ static int	loop_shell(t_global *global, char *input)
 		free_double_str(tab_struct[i].commands);
 	free(tab_struct);
 	free_double_str(global->path);
-	// printf("Commands pointer : %p\n", global->struct_id->commands);
 	return (1);
 }
 

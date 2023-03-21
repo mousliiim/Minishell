@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 17:56:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 01:51:25 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,39 +18,25 @@ int	ft_clean_quotes(char **line)
 {
 	int		i;
 	int		j;
-	int		k;
-	int		delim;
 	char	*tmp;
 
 	i = 0;
 	j = 0;
-	k = 0;
-	(void) k;
 	if (line == NULL || *line == NULL)
 		return (0);
-	tmp = ft_strdup(*line);
-	while (tmp[i])
+	tmp = malloc(sizeof(char) * (ft_strlen(*line) + 1));
+	if (!tmp)
+		return (0);
+	while ((*line)[i])
 	{
-		if (tmp[i] == '\'' || tmp[i] == '\"')
-		{
-			delim = i;
+		if ((*line)[i] == '"' || (*line)[i] == '\'')
 			i++;
-			while (tmp[i] != tmp[delim])
-			{
-				(*line)[j] = tmp[i];
-				i++;
-				j++;
-			}
-		}
 		else
-		{
-			(*line)[j] = tmp[i];
-			j++;
-		}
-		i++;
+			tmp[j++] = (*line)[i++];
 	}
-	(*line)[j] = '\0';
-	free(tmp);
+	tmp[j] = '\0';
+	free(*line);
+	*line = tmp;
 	return (1);
 }
 
@@ -207,6 +193,10 @@ int	pipe_checker(char *line)
 			if (line[i + 1] == '|')
 				return (0);
 			if (line[i + 1] == '\0')
+				return (0);
+			while (ft_isspace(line[i + 1]))
+				i++;
+			if (line[i + 1] == '|')
 				return (0);
 		}
 		i++;
