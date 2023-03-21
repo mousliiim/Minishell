@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 03:34:14 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:34:10 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,29 @@
 extern int	g_status;
 #define DBL_MAX 1E+37
 
-long long	ft_atoull(const char *str)
-{
-	int			neg;
-	long long	res;
+// long long	ft_atoull(const char *str)
+// {
+// 	int			neg;
+// 	// unsigned long long	res;
+// 	// long long		res;	
 
-	res = 0;
-	neg = 1;
-	while (ft_isspace(*str))
-		str++;
-	if (*str == '+' || *str == '-')
-	{
-		if (*str == '-')
-			neg *= -1;
-		str++;
-	}
-	while (ft_isdigit(*str))
-	{
-		res = (res * 10) + (*str - '0');
-		str++;
-	}
-	return (res * neg);
-}
+// 	res = 0;
+// 	neg = 1;
+// 	while (ft_isspace(*str))
+// 		str++;
+// 	if (*str == '+' || *str == '-')
+// 	{
+// 		if (*str == '-')
+// 			neg *= -1;
+// 		str++;
+// 	}
+// 	while (ft_isdigit(*str))
+// 	{
+// 		res = (res * 10) + (*str - '0');
+// 		str++;
+// 	}
+// 	return (res * neg);
+// }
 
 // static int	is_space(char c)
 // {
@@ -94,8 +95,8 @@ int	builtin_exit(t_global *global, int j)
 		}
 		i++;
 	}
-	if(ft_atoull(global->struct_id[j].split_command[1]) > DBL_MAX)
-		printf("TEST\n");
+	// if(ft_atoull(global->struct_id[j].split_command[1]) > DBL_MAX)
+	// 	printf("TEST\n");
 	free_inchild(global);
 	exit (i);
 }

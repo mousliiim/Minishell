@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 02:43:36 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 19:00:40 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ int	openfiles(t_global *glo, int j)
 		return (0);
 	while (list)
 	{
-		if (!*list->file_name)
+		if (!*list->file_name && list->redirect != HERE_DOC)
 			return (ft_printf("miniboosted: ambiguous redirect\n"), -1);
 		if (list->redirect == OUT)
 			fd = open(list->file_name, O_TRUNC | O_CREAT | O_WRONLY, 0666);
