@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:36:05 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 00:38:20 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,22 +44,26 @@ static void	init_shell(t_global *global, char **env)
 	signal(SIGQUIT, SIG_IGN);
 }
 
-void	free_parsing(t_global *global)
+static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
+		size_t tempsize)
 {
 	size_t	i;
 
+	clear_lst(tab_struct, tempsize);
 	i = -1;
-	while (++i < global->nb)
-	{
-		free_double_str(global->struct_id[i].commands);
-	}
+	while (++i < tempsize)
+		free_double_str(tab_struct[i].split_command);
+	i = -1;
+	while (++i < tempsize)
+		free_double_str(tab_struct[i].commands);
+	free(tab_struct);
+	free_double_str(global->path);
 }
 
 static int	loop_shell(t_global *global, char *input)
 {
 	t_split_line	splitted_line;
 	t_tab_struct	*tab_struct;
-	size_t			i;
 	size_t			tempsize;
 
 	add_history(input);
@@ -73,23 +77,15 @@ static int	loop_shell(t_global *global, char *input)
 	split_input(splitted_line, tab_struct);
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
-	free_splitted_line(&splitted_line);
-	catch_heredocs(global, global->nb);
 	global->path = set_path(global);
 	global->status = g_status;
+	free_splitted_line(&splitted_line);
+	catch_heredocs(global, global->nb);
 	tempsize = global->nb;
 	free(input);
 	if (global->here_doc_failed == 0)
 		go_exec(global);
-	clear_lst(tab_struct, tempsize);
-	i = -1;
-	while (++i < tempsize)
-		free_double_str(tab_struct[i].split_command);
-	i = -1;
-	while (++i < tempsize)
-		free_double_str(tab_struct[i].commands);
-	free(tab_struct);
-	free_double_str(global->path);
+	free_end_loop_shell(global, tab_struct, tempsize);
 	return (1);
 }
 

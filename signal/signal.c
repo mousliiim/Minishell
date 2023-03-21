@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 20:37:05 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 23:47:49 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_status = 130;
 		ft_putchar('\n');
 		rl_on_new_line();
 		rl_replace_line("", 0);

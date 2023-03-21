@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:38:19 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 00:51:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,28 +16,28 @@ extern int	g_status;
 
 int	ft_clean_quotes(char **line)
 {
-	int			i;
-	int			j;
+	int			ij[2];
 	char		*tmp;
-	static char	delim = 0;
+	char		delim;
 
-	i = 0;
-	j = 0;
+	delim = 0;
+	ij[0] = 0;
+	ij[1] = 0;
 	if (line == NULL || *line == NULL)
 		return (0);
 	tmp = malloc(sizeof(char) * (ft_strlen(*line) + 1));
 	if (!tmp)
 		return (0);
-	while ((*line)[i])
+	while ((*line)[ij[0]])
 	{
-		if (((*line)[i] == '"' || (*line)[i] == '\'') && delim == 0)
-			delim = (*line)[i++];
-		else if ((*line)[i] == delim)
-			i++;
+		if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') && delim == 0)
+			delim = (*line)[ij[0]++];
+		else if ((*line)[ij[0]] == delim)
+			ij[0]++;
 		else
-			tmp[j++] = (*line)[i++];
+			tmp[ij[1]++] = (*line)[ij[0]++];
 	}
-	tmp[j] = '\0';
+	tmp[ij[1]] = '\0';
 	free(*line);
 	*line = tmp;
 	return (1);

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:02:44 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 23:48:00 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,9 @@ extern int	g_status;
 
 char	*build_prompt(void)
 {
-	static const char	*arrows[3] = {GB ARROW EB CB "$MiniBoosted " EB, RB "→  " EB CB "$MiniBoosted " EB, BB "git:(" EB};
-	char				buffer[MAX_READ_SIZE + 1];
-	int					fd;
+	static const char		*arrows[3] = {GB ARROW EB CB "$MiniBoosted " EB, RB "→  " EB CB "$MiniBoosted " EB, BB "git:(" EB};
+	char					buffer[MAX_READ_SIZE + 1];
+	int						fd;
 	size_t					red;
 	static char				prompt[170];
 
