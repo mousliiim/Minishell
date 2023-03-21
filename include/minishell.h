@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 18:05:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 03:30:52 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@
 # define GB "\001\033[1;32m\002"
 # define BRB "\001\033[1;33m\002"
 # define EB "\001\033[0m\002"
+# define ARROW "\001→ \002"
 # define TRUE 1
 # define PATH_MAXIMUM        4096
 

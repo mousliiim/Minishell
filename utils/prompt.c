@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 03:16:15 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 03:30:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,16 @@ extern int	g_status;
 
 char	*build_prompt(void)
 {
-	static const char	*arrows[3] = {GB "→  " EB CB "$MiniBoosted " EB, RB "→  " EB CB "$MiniBoosted " EB, BB "git:(" EB};
+	static const char	*arrows[3] = {GB ARROW EB CB "$MiniBoosted " EB, RB "→  " EB CB "$MiniBoosted " EB, BB "git:(" EB};
 	char				buffer[MAX_READ_SIZE + 1];
 	int					fd;
 	size_t					red;
-	int					i;
 	static char				prompt[170];
 
-	(void) arrows[2];
-	(void) i;
-	// fprintf(stderr, "status >> %d\n", g_status);
 	if (g_status == 0)
-		ft_strcpy_maxou(prompt, GB "→  " EB RB "$MiniBoosted " EB);
+		ft_strcpy_maxou(prompt, GB ARROW EB RB "$MiniBoosted " EB);
 	else
-		ft_strcpy_maxou(prompt, RB "→  " EB RB "$MiniBoosted " EB);
+		ft_strcpy_maxou(prompt, RB ARROW EB RB "$MiniBoosted " EB);
 	fd = get_git_branch();
 	red = read(fd, buffer, 2);
 	buffer[3] = 0;
@@ -47,7 +43,7 @@ char	*build_prompt(void)
 	ft_strcat(prompt, RB);
 	ft_strcat(prompt, buffer);
 	ft_strcat(prompt, EB);
-	ft_strcat(prompt, BB ") " EB );
+	ft_strcat(prompt, BB ") " EB);
 	return (prompt);
 }
 
