@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 03:12:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 03:34:14 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,8 @@ int	builtin_exit(t_global *global, int j)
 
 	close(global->link[0]);
 	close(global->link[1]);
-	close(global->fd_solo_redirection);
+	if (global->fd_solo_redirection != -1)
+		close(global->fd_solo_redirection);
 	if (!global->struct_id[j].split_command[1])
 	{
 		free_inchild(global);
