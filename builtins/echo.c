@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:49 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 23:08:17 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:54:43 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,5 @@ int	echo(t_global *glo, int j)
 		i++;
 	print(s_cmd, i);
 	g_status = 0;
-	// if (glo->nb > 1)
-	// 	exit(0);
 	return (0);
 }

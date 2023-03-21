@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcat.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 09:40:37 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/09 09:40:38 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:36:32 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,3 @@ char	*ft_strcat(const char *dest, const char *src)
 	new_dest[j] = '\0';
 	return (new_dest);
 }
-

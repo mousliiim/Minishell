@@ -6,14 +6,13 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 00:51:25 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/21 20:36:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
-/*\*/
+
 int	g_status;
-/**/
 
 static int	syntax_checker(char *line)
 {
@@ -65,10 +64,7 @@ static int	loop_shell(t_global *global, char *input)
 
 	add_history(input);
 	if (!syntax_checker(input))
-	{
-		free(input);
 		return (-42);
-	}
 	input = catch_expand(global, input);
 	splitted_line = split_line(input);
 	tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
@@ -77,7 +73,6 @@ static int	loop_shell(t_global *global, char *input)
 	split_input(splitted_line, tab_struct);
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
-	i = -1;
 	free_splitted_line(&splitted_line);
 	catch_heredocs(global, global->nb);
 	global->path = set_path(global);
@@ -85,9 +80,7 @@ static int	loop_shell(t_global *global, char *input)
 	tempsize = global->nb;
 	free(input);
 	if (global->here_doc_failed == 0)
-	{
 		go_exec(global);
-	}
 	clear_lst(tab_struct, tempsize);
 	i = -1;
 	while (++i < tempsize)
@@ -120,11 +113,14 @@ int	main(int ac, char **av, char **env)
 		if (!*input)
 			continue ;
 		if (loop_shell(&global, input) == -42)
+		{
+			free(input);
+			g_status = 2;
 			continue ;
+		}
 	}
 }
 
 // $'$USER'p$LESS ls
 // miniboosted: command not found : mparisse-R
 // bash: $USERp-R: command not found
-
