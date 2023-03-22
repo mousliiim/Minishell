@@ -24,24 +24,6 @@ t_global	*endton(t_global *glo)
 	return (global);
 }
 
-void	quit_hd(int sign)
-{
-	t_global	*glo;
-
-	(void) sign;
-	write(1, "\n", 1);
-	rl_clear_history();
-	glo = NULL;
-	glo = endton(glo);
-	glo->nb_free = 0;
-	glo->forkstates = 0;
-	close(glo->link_heredoc[1]);
-	close(glo->link_heredoc[0]);
-	clear_lst(glo->struct_id, glo->nb);
-	hd_free_inchild(glo);
-	exit(130);
-}
-
 void	waiting_hd(t_global *global, int forkstate)
 {
 	int	status;
@@ -58,26 +40,23 @@ void	waiting_hd(t_global *global, int forkstate)
 
 int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 {
-	char	*str;
-	char	*limit;
-	int		forkstate;
+	t_airdock	airdock;
 
-	limit = head->file_name;
 	pipe(glo->link_heredoc);
 	signal(SIGINT, SIG_IGN);
-	forkstate = fork();
-	if (forkstate == 0)
+	airdock.forkstate = fork();
+	if (airdock.forkstate == 0)
 	{
 		signal(SIGINT, &quit_hd);
 		while (1)
 		{
-			str = readline("here_doc:");
-			if (!str)
+			airdock.str = readline("here_doc:");
+			if (!airdock.str)
 				break ;
-			str = catch_expand(glo, str);
-			if (!ft_strcmp(str, limit))
+			airdock.str = catch_expand(glo, airdock.str);
+			if (!ft_strcmp(airdock.str, head->file_name))
 				break ;
-			ft_putendl_fd(str, glo->link_heredoc[1]);
+			ft_putendl_fd(airdock.str, glo->link_heredoc[1]);
 		}
 		hd_free_inchild(glo);
 		close(glo->link_heredoc[1]);
@@ -88,9 +67,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 	if (nbhd != glo->nb_hd)
 		close(glo->link_heredoc[0]);
 	close(glo->link_heredoc[1]);
-	signal(SIGINT, &ctrl_c);
-	waiting_hd(glo, forkstate);
-	return (0);
+	return (signal(SIGINT, &ctrl_c), waiting_hd(glo, airdock.forkstate), 0);
 }
 
 void	len_heredoc(t_global *glo, size_t nb_command)

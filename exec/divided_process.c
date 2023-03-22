@@ -14,7 +14,7 @@
 
 extern int	g_status;	
 
-void error_msg(int err, char *cmd)
+void	error_msg(int err, char *cmd)
 {
 	if (err == 13)
 		perror("miniboosted");
@@ -22,7 +22,21 @@ void error_msg(int err, char *cmd)
 		ft_printf("miniboosted: command not found : %s\n", cmd);
 }
 
-void	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
+void	execute(t_global *glo, int i)
+{
+	if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
+	{
+		if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
+			execve(glo->struct_id[i].split_command[0],
+				glo->struct_id[i].split_command,
+				(char **)glo->personal_env.array);
+	}
+	error_msg(errno, glo->struct_id[i].split_command[0]);
+	free_inchild(glo);
+	exit(127);
+}
+
+int	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
 {
 	signal(SIGINT, &ctrl_c);
 	signal(SIGQUIT, &ctrl_antislash);
@@ -33,10 +47,7 @@ void	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
 	close(glo->link[0]);
 	close(glo->link[1]);
 	if (openfiles(glo, i) == -1)
-	{
-		free_inchild(glo);
-		exit(1);
-	}
+		return (free_inchild(glo), exit(1), 1);
 	if (glo->struct_id[i].split_command && built_ptr)
 	{
 		built_ptr(glo, i);
@@ -50,17 +61,27 @@ void	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
 		free_inchild(glo);
 		exit(1);
 	}
-	if (ft_strchr(glo->struct_id[i].split_command[0], '/'))
-	{
+	return (execute(glo, i), 0);
+}
 
-		if (!access(glo->struct_id[i].split_command[0], F_OK | X_OK))
-		{
-			execve(glo->struct_id[i].split_command[0],
-				glo->struct_id[i].split_command,
-				(char **)glo->personal_env.array);
-		}
-	}
-	error_msg(errno, glo->struct_id[i].split_command[0]);
-	free_inchild(glo);
-	exit(127);
+void	father_process(t_global *glo, unsigned long i)
+{
+	close(glo->link[1]);
+	if (glo->prev != -1)
+		close(glo->prev);
+	glo->prev = glo->link[0];
+	if (glo->struct_id[i].prev_heredocs != -1)
+		close(glo->struct_id[i].prev_heredocs);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	builtin_solo_process(t_global *glo, t_builtins built_ptr,
+		unsigned long i)
+{
+	glo->fd_solo_redirection = dup(STDOUT_FILENO);
+	if (openfiles_bt(glo, i) != -1)
+		built_ptr(glo, i);
+	dup2(glo->fd_solo_redirection, STDOUT_FILENO);
+	close(glo->fd_solo_redirection);
+	close(glo->link[1]);
 }

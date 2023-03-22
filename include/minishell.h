@@ -96,6 +96,12 @@ typedef struct s_split_line
 	t_ptr_array	strings;
 }	t_split_line;
 
+typedef struct s_airdock
+{
+	char	*str;
+	int		forkstate;
+}	t_airdock;
+
 typedef int	(*t_builtins)(t_global *, int);
 
 t_global		*endton(t_global *glo);
@@ -183,20 +189,26 @@ int				go_exec(t_global *global);
 void			dupnclose(int fd1, int fd2);
 int				forking(t_global *global, unsigned long i);
 t_builtins		find_ptr_builtin(char *ptr);
-int				openfiles_bt(t_global *glo, int j);
-int				openfiles(t_global *glo, int j);
-void			ctrl_antislash(int sig);
 void			waiting(t_global *global, int size_wait);
 /***************************************************/
 
+/*******************REDIRECTIONS*********************/
+int				openfiles_bt(t_global *glo, int j);
+int				openfiles(t_global *glo, int j);
+/***************************************************/
+
 /*******************DIVIDED_PROCESS*********************/
-void			child_process(t_global *glo, t_builtins built_ptr, unsigned long i);
-void			error_msg(int err, char *cmd);
+int				child_process(t_global *glo, t_builtins built_ptr, unsigned long i);
+void			father_process(t_global *glo, unsigned long i);
+void			builtin_solo_process(t_global *glo, t_builtins built_ptr, unsigned long i);
+void			error_msg(int err, char *cmd);	
 /***************************************************/
 
 /*********************** SIGNAL ***********************/
+void			ctrl_antislash(int sig);
 void			ctrl_c(int sig);
 void			ctrl_d(int status);
+void			quit_hd(int sign);
 /***************************************************/
 
 /*********************** UTILS ***********************/

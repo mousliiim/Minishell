@@ -32,3 +32,31 @@ void	ctrl_c(int sig)
 		rl_redisplay();
 	}
 }
+
+void	ctrl_antislash(int sig)
+{
+	if (sig == SIGQUIT)
+		exit(131);
+	if (sig == SIGINT)
+		exit(130);
+}
+
+
+void	quit_hd(int sign)
+{
+	t_global	*glo;
+
+	(void) sign;
+	write(1, "\n", 1);
+	rl_clear_history();
+	glo = NULL;
+	glo = endton(glo);
+	glo->nb_free = 0;
+	glo->forkstates = 0;
+	close(glo->link_heredoc[1]);
+	close(glo->link_heredoc[0]);
+	clear_lst(glo->struct_id, glo->nb);
+	hd_free_inchild(glo);
+	exit(130);
+}
+
