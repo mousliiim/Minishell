@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 00:38:20 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 05:50:36 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ static void	init_shell(t_global *global, char **env)
 	g_status = 0;
 	signal(SIGINT, &ctrl_c);
 	global->personal_env = build_personal_env(env);
+	if (!global->personal_env.array)
+	{
+		ft_printf("Error: malloc failed\n");
+		exit(1);
+	}
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -60,6 +65,15 @@ static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
 	free_double_str(global->path);
 }
 
+void	free_shell(t_global *global, char *input)
+{
+	free_double_str((char **)global->personal_env.array);
+	free(input);
+	ft_printf("Error: Allocation memory failed\n");
+	ft_printf("exit\n");
+	exit(1);
+}
+
 static int	loop_shell(t_global *global, char *input)
 {
 	t_split_line	splitted_line;
@@ -70,14 +84,19 @@ static int	loop_shell(t_global *global, char *input)
 	if (!syntax_checker(input))
 		return (-42);
 	input = catch_expand(global, input);
+	if (!input)
+		free_shell(global, input);
 	splitted_line = split_line(input);
+	if (!splitted_line.strings.capacity)
+		free_shell(global, input);
 	tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 	if (!tab_struct)
-		return (0);
-	split_input(splitted_line, tab_struct);
+		return (0); // A FREE A LA PLACE
+	if (!split_input(splitted_line, tab_struct))
+		return (0); // A FREE A LA PLACE
 	global->struct_id = tab_struct;
 	global->nb = splitted_line.strings.size;
-	global->path = set_path(global);
+	global->path = set_path(global); // A FREE A LA PLACE
 	global->status = g_status;
 	free_splitted_line(&splitted_line);
 	catch_heredocs(global, global->nb);
@@ -88,6 +107,7 @@ static int	loop_shell(t_global *global, char *input)
 	free_end_loop_shell(global, tab_struct, tempsize);
 	return (1);
 }
+
 
 int	main(int ac, char **av, char **env)
 {

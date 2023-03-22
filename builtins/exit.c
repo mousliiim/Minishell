@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/22 01:05:12 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:11:10 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	builtin_exit(t_global *global, int j)
 		i++;
 	}
 	i = ft_atoulld(global->struct_id[j].split_command[1]);
-	fprintf(stderr, "second argument %s\n", global->struct_id[j].split_command[1]);
 	free_inchild(global);
 	exit (i);
 }

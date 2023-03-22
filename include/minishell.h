@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 00:17:12 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 04:10:37 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,6 @@ typedef struct s_global
 typedef struct s_split_line
 {
 	t_ptr_array	strings;
-	const char	*error_message;
-	size_t		error_position;
 }	t_split_line;
 
 typedef int	(*t_builtins)(t_global *, int);
@@ -111,7 +109,7 @@ void			pa_pop_replace(t_ptr_array	*array, size_t index, void *new);
 /********************************************************/
 
 /****************** PTR_A_UTILS_SECOND *******************/
-void			pa_add(t_ptr_array *pa, void *ptr);
+int				pa_add(t_ptr_array *pa, void *ptr);
 size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 /********************************************************/
@@ -128,7 +126,6 @@ int				find_path_for_each_command(t_global *global);
 /******************* HERE_DOCS ************************/
 int				start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd);
 void			catch_heredocs(t_global *glo, size_t nb_command);
-void			hd_free_inchild(t_global *glo);
 
 /******************************************************/
 
@@ -138,7 +135,7 @@ size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab);
 int				check_first_char(char *line);
 int				ft_clean_quotes(char **line);
-void			rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j);
+int				rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j);
 /******************************************************/
 
 /******************* PARSE_CHECK ************************/
@@ -157,7 +154,7 @@ char			*getter(char *env_var);
 /******************************************************/
 
 /******************* SPLIT_PARSING ********************/
-void			split_input(t_split_line splitted_line, t_tab_struct *tab_struct);
+int				split_input(t_split_line splitted_line, t_tab_struct *tab_struct);
 t_split_line	split_line(const char *line);
 void			before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /******************************************************/
@@ -230,6 +227,8 @@ void			clear_lst(t_tab_struct *tab_struct, size_t size);
 void			free_splitted_line(t_split_line *del);
 void			free_inchild(t_global *glo);
 void			free_double_str(char **str);
+char			**ft_free(char **str, int i);
+void			hd_free_inchild(t_global *glo);
 /*****************************************************/
 
 /********************* PROMPT ************************/

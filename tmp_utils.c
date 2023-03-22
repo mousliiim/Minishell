@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tmp_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:27:00 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/14 04:51:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:17:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ void	display_split(t_tab_struct *tab_struct, t_global *info)
 		{
 			if (j == 0 || tab_struct[i].split_command[j][0] == '<'
 				|| tab_struct[i].split_command[j][0] == '>')
-				fprintf(stderr, "CMD = %s\n", tab_struct[i].split_command[j]);
+				ft_printf("CMD = %s\n", tab_struct[i].split_command[j]);
 			else
-				fprintf(stderr, "ARGS = %s\n", tab_struct[i].split_command[j]);
+				ft_printf("ARGS = %s\n", tab_struct[i].split_command[j]);
 			j++;
 		}
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 		i++;
 	}
 }

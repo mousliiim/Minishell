@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_function.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:30:47 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 23:53:21 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 04:21:25 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	hd_free_inchild(t_global *glo)
 {
 	size_t	i;
 
-	fprintf(stderr, "free_inchild called2\n");
 	i = 0;
 	clear_lst(glo->struct_id, glo->nb);
 	while (i < glo->nb)
@@ -28,6 +27,7 @@ void	hd_free_inchild(t_global *glo)
 		i++;
 	}
 	free(glo->struct_id);
+	free_double_str(glo->path);
 	free_double_str((char **)glo->personal_env.array);
 }
 
@@ -65,7 +65,6 @@ void	free_inchild(t_global *glo)
 {
 	size_t	i;
 
-	fprintf(stderr, "free_inchild called\n");
 	i = 0;
 	clear_lst(glo->struct_id, glo->nb);
 	while (i < glo->nb)
@@ -78,4 +77,12 @@ void	free_inchild(t_global *glo)
 	free(glo->forkstates);
 	free_double_str((char **)glo->personal_env.array);
 	free_double_str(glo->path);
+}
+
+char	**ft_free(char **str, int i)
+{
+	while (--i >= 0)
+		free(str[i]);
+	free(str);
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 17:58:04 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 03:01:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,13 @@ static void	rafter_cut_fill(t_tab_struct *tab_struct, int j, int choice, int c)
 	}
 }
 
-void	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
+int	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
 {
 	char	**array;
 
 	array = ft_split_rafter(splitted_line.strings.array[j]);
+	if (!array)
+		return (0);
 	tab_struct[j].split_command = ft_have_two_word(array);
 	tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 	if (tab_struct[j].split_command
@@ -97,4 +99,5 @@ void	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
 	else if (tab_struct[j].split_command == NULL)
 		rafter_cut_fill(tab_struct, j, 0, 0);
 	free_double_str(array);
+	return (1);
 }

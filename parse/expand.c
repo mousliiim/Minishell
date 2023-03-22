@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/22 00:29:52 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:54:07 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 	stop = 0;
 	if (!ft_strncmp(find, "?", end))
 	{
-		fprintf(stderr, "in condition find >> %s\n", find);
 		mini_itoa(glo);
 		return (glo->str_status);
 	}

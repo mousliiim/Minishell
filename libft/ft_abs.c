@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_abs.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/29 15:53:22 by mparisse          #+#    #+#             */
-/*   Updated: 2023/01/29 15:53:23 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:18:43 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,3 @@ int	ft_abs(int nb)
 		return (-1 * nb);
 	return (nb);
 }
-
-// int main()
-// {
-// 	int a = -6000;
-
-// 	printf("%d\n", a);
-// }

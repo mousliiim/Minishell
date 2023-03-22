@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/20 20:18:59 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:16:30 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	quit_hd(int sign)
 	t_global	*glo;
 
 	(void) sign;
-	fprintf(stderr, "Dfdsfdsdfssdf\n");
 	write(1, "\n", 1);
 	rl_clear_history();
 	glo = NULL;

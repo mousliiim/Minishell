@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 00:51:56 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:59:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,20 +138,24 @@ char	**ft_split_rafter(char *line)
 	int		i;
 	int		j;
 	int		k;
-	int		flag[2];
+	int		flg[2];
 
 	i = -1;
 	j = 0;
 	k = 0;
-	flag[0] = check_first_char(line) > 0;
+	flg[0] = check_first_char(line) > 0;
 	res = malloc(sizeof(char *) * (ft_strlen(line) + 1));
 	if (!res)
 		return (NULL);
 	while (line[++i])
 	{
-		flag[1] = 0;
+		flg[1] = 0;
 		if (line[i] == '>' || line[i] == '<')
-			cut_raft(res, line, (int *[5]){&i, &j, &k, &flag[0], &flag[1]});
+			if (!cut_raft(res, line, (int *[5]){&i, &j, &k, &flg[0], &flg[1]}))
+			{
+				ft_free(res, i);
+				return (NULL);
+			}
 	}
 	res[j] = ft_substr(line, k, i - k);
 	if (!res[j++])

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:37:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 05:48:10 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,61 @@ char	*getter(char *env_var)
 	return (&env_var[stop + 1]);
 }
 
-void	pa_add_env(t_ptr_array *pa, char *new_str)
+void	free_array(t_ptr_array pa)
 {
+	size_t	i;
+
+	i = 0;
+	while (i < pa.size)
+	{
+		free(pa.array[i]);
+		i++;
+	}
+	free(pa.array);
+}
+
+int	pa_add_env(t_ptr_array *pa, char *new_str)
+{
+	t_ptr_array	tmp;
+
 	if (pa->size == pa->capacity)
 	{
 		pa->capacity *= 2;
+		tmp = *pa;
 		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
 				* sizeof(char *));
+		if (!pa->array)
+		{
+			free_array(tmp);
+			pa->capacity = 0;
+			return (0);
+		}
 	}
 	pa->array[pa->size++] = new_str;
+	return (1);
 }
+
 
 t_ptr_array	build_personal_env(char **env)
 {
 	int			i;
+	char		*tmp;
 	t_ptr_array	res;
 
 	i = 0;
 	res = pa_new();
+	if (!res.capacity)
+		exit(1);
 	while (env[i])
 	{
-		pa_add_env(&res, ft_strdup(env[i]));
+		tmp = ft_strdup(env[i]);
+		if (!tmp)
+			return (free_double_str((char **)res.array), res);
+		if (!pa_add_env(&res, tmp))
+		{
+			free(tmp);
+			return (res);
+		}
 		i++;
 	}
 	return (res);

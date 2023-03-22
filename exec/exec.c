@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 19:00:40 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 02:11:23 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,15 +193,6 @@ int	openfiles(t_global *glo, int j)
 	return (0);
 }
 
-	// if (glo->nb == 1)
-	// {
-	// 	fprintf(stderr, "a quel moment je passe par la wesh\n");
-	// 	close(glo->link[0]);
-	// 	close(glo->link[1]);
-	// }
-// petit message pour mouss je sais plus si ce bout de code 
-// a quelque chose ca a l'aire de marcher sans donc ni touchons pas
-//  je laisse la au cas ou il sert a quelquechose
 int	openfiles_bt(t_global *glo, int j)
 {
 	t_list_mini	*list;
@@ -218,7 +209,7 @@ int	openfiles_bt(t_global *glo, int j)
 				perror("miniboosted");
 				return (-1);
 			}
-			dupnclose(fd, STDOUT_FILENO); // rediriger la sortie standard
+			dupnclose(fd, STDOUT_FILENO);
 		}
 		if (list->redirect == APPEND)
 		{

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 20:52:24 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 04:26:52 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ t_split_line	split_line(const char *line)
 	int				start;
 
 	res.strings = pa_new();
+	if (!res.strings.capacity)
+		return (res);
 	i = 0;
 	while (1)
 	{
@@ -33,7 +35,11 @@ t_split_line	split_line(const char *line)
 		if (i > start)
 		{
 			tmp = ft_substr(line, start, i - start);
+			if (!tmp)
+				return (free_double_str((char **)res.strings.array), res.strings.capacity = 0, res);
 			pa_add(&res.strings, tmp);
+			if (!res.strings.capacity)
+				return (res.strings.capacity = 0, res);
 		}
 		if (!line[i])
 			break ;
@@ -66,7 +72,7 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 	}
 }
 
-void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
+int	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 {
 	size_t		i;
 	char		**array;
@@ -75,7 +81,10 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 	while (i < splitted_line.strings.size)
 	{
 		if (rafter_line(splitted_line.strings.array[i]))
-			rafter_cut(tab_struct, splitted_line, i);
+		{
+			if (!rafter_cut(tab_struct, splitted_line, i))
+				return (0);
+		}
 		else
 		{
 			array = ft_split(splitted_line.strings.array[i], ' ');
@@ -84,4 +93,5 @@ void	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 		before_exec_to_positif(tab_struct, i);
 		i++;
 	}
+	return (1);
 }

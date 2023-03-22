@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:39:30 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 05:39:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,10 @@ void	pa_pop(t_ptr_array *array, size_t index)
 	array->size--;
 }
 
+// si ya un malloc qui fore dans split line 
+// il faut que lon free tout ce que split line a alloue
+// et on renvoie 0 dans loop shell comme ca lui peut free
+// le reste
 t_ptr_array	pa_new(void)
 {
 	t_ptr_array	new;

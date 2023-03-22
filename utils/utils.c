@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/19 22:05:00 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 05:49:05 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 
 	i = 0;
 	new = ft_calloc(sizeof(void *), new_c);
+	if (!new)
+		return (NULL);
 	while (i < old_c)
 	{
 		new[i] = old[i];
