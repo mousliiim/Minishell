@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 20:28:47 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:59:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,33 +80,46 @@ t_ptr_array	build_personal_env(char **env)
 	}
 	return (res);
 }
-// incremente shlvl
+
+void	free_path_malloc(t_global *global)
+{
+	size_t	i;
+
+	i = 0;
+	free_shell(global, NULL);
+	clear_lst(global->struct_id, global->nb);
+	while (i < global->nb)
+	{
+		free_double_str(global->struct_id[i].split_command);
+		free_double_str(global->struct_id[i].commands);
+		i++;
+	}
+	free(global->struct_id);
+	exit(1);
+}
 
 char	**set_path(t_global *global)
 {
 	size_t	i;
 	char	**path;
 
-	i = 0;
+	i = -1;
 	if (global->personal_env.size == 0)
 		return (0);
 	else
 	{
-		while (i < global->personal_env.size)
+		while (++i < global->personal_env.size)
 		{
 			if (ft_strnstr((char *)global->personal_env.array[i], "PATH=", 5))
 			{
 				path = ft_split((char *)global->personal_env.array[i] + 5, ':');
 				if (!path || !*path)
 				{
-					free_shell(global, NULL);
-					free(global->struct_id);
-					exit(1);
+					free_path_malloc(global);
 					return (0);
 				}
 				return (path);
 			}
-			i++;
 		}
 	}
 	return (0);

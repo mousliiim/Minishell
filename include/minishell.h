@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 19:45:12 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 23:24:30 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ typedef struct s_airdock
 
 typedef int	(*t_builtins)(t_global *, int);
 // free shell est dans main.c
-void			free_shell(t_global *global, char *input);
+void			free_shell(t_global *global, char *input, int choice);
 t_global		*endton(t_global *glo);
 char			*catch_expand(t_global *glo, char *input);
 
@@ -242,6 +242,7 @@ void			free_inchild(t_global *glo);
 void			free_double_str(char **str);
 char			**ft_free(char **str, int i);
 void			hd_free_inchild(t_global *glo);
+void			free_path_malloc(t_global *global);
 /*****************************************************/
 
 /********************* PROMPT ************************/

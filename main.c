@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 20:06:19 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 23:40:40 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static void	init_shell(t_global *global, char **env)
 		exit(1);
 	}
 	signal(SIGQUIT, SIG_IGN);
+	endton(global);
 }
 
 static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
@@ -65,8 +66,10 @@ static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
 	free_double_str(global->path);
 }
 
-void	free_shell(t_global *global, char *input)
+void	free_shell(t_global *global, char *input, int choice)
 {
+	if (choice)
+		free(global->struct_id);
 	free_double_str((char **)global->personal_env.array);
 	free(input);
 	ft_printf("Error: Allocation memory failed\n");
@@ -86,25 +89,20 @@ static int	loop_shell(t_global *global, char *input)
 		return (-42);
 	input = catch_expand(global, input);
 	if (!input)
-		free_shell(global, input);
+		free_shell(global, input, 0);
 	splitted_line = split_line(input);
 	if (!splitted_line.strings.capacity)
-		free_shell(global, input);
+		free_shell(global, input, 0);
 	tab_struct = ft_calloc(sizeof(t_tab_struct), splitted_line.strings.size);
 	if (!tab_struct)
-		return (free_shell(global, input), free_splitted_line(&splitted_line), 0); // A FREE A LA PLACE
-		// exit(0);
-	if (!split_input(splitted_line, tab_struct))
-		return (0); // A FREE A LA PLACE
+		return (free_shell(global, input, 0), free_splitted_line(&splitted_line), 0);
 	global->struct_id = tab_struct;
+	if (!split_input(splitted_line, tab_struct))
+		return (free_splitted_line(&splitted_line), free_shell(global, input, 1), 0);
 	global->nb = splitted_line.strings.size;
 	free_splitted_line(&splitted_line);
 	free(input);
-	global->path = set_path(global); // cher mate j'ai deja free la plupart des malloc dans le cas ou 
-	// le malloc de set_path il foire je ne sais juste pas comment free les malloc de la fonction split_input
-	// peux tu t'en occuper stp
-	// de mon cote je continue a normer et proteger
-	// PS: ca serait cool si on avait juste besoinde global pour free split input
+	global->path = set_path(global);
 	global->status = g_status;
 	catch_heredocs(global, global->nb);
 	tempsize = global->nb;
@@ -119,16 +117,20 @@ int	main(int ac, char **av, char **env)
 {
 	char			*input;
 	t_global		global;
+	char			*prompt;
 
 	if (ac != 1 || av[1])
 		return (0);
 	if (!isatty(STDIN_FILENO))
 		return (0);
 	init_shell(&global, env);
-	endton(&global);
+	if (global.personal_env.size == 0)
+		prompt = "miniboosted: ";
+	else
+		prompt = build_prompt();
 	while (TRUE)
 	{
-		input = readline(build_prompt());
+		input = readline(prompt);
 		if (!input)
 		{
 			free_double_str((char **)global.personal_env.array);
