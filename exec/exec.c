@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 02:11:23 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 20:27:08 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,13 @@ int	go_exec(t_global *global)
 	i = 0;
 	count_nb_bultin = 0;
 	global->nb_free = global->nb - global->nb_hd;
-	find_path_for_each_command(global);
+	if (!find_path_for_each_command(global))
+	{
+		free_shell(global, NULL);
+		free(global->struct_id);
+		free_double_str(global->path);
+		exit(1);
+	}
 	global->forkstates = malloc(sizeof(int) * global->nb);
 	global->prev = -1;
 	global->link[0] = -1;

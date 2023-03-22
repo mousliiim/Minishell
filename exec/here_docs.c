@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_docs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 02:16:30 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 22:02:06 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 	pipe(glo->link_heredoc);
 	signal(SIGINT, SIG_IGN);
 	airdock.forkstate = fork();
+	line_positif(head->file_name);
 	if (airdock.forkstate == 0)
 	{
 		signal(SIGINT, &quit_hd);
@@ -53,15 +54,14 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 			airdock.str = readline("here_doc:");
 			if (!airdock.str)
 				break ;
-			airdock.str = catch_expand(glo, airdock.str);
+			airdock.str = catch_expand(glo, airdock.str);	
 			if (!ft_strcmp(airdock.str, head->file_name))
 				break ;
 			ft_putendl_fd(airdock.str, glo->link_heredoc[1]);
 		}
 		hd_free_inchild(glo);
-		close(glo->link_heredoc[1]);
-		close(glo->link_heredoc[0]);
-		exit(0);
+		return (close(glo->link_heredoc[1]), close(glo->link_heredoc[0]),
+			exit(0), 0);
 	}
 	glo->struct_id[j].prev_heredocs = glo->link_heredoc[0];
 	if (nbhd != glo->nb_hd)
@@ -96,11 +96,11 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 	size_t		i;
 	int			nb_hd;
 
-	i = 0;
+	i = -1;
 	nb_hd = 0;
 	glo->here_doc_failed = 0;
 	len_heredoc(glo, nb_command);
-	while (i < nb_command)
+	while (++i < nb_command)
 	{
 		glo->struct_id[i].prev_heredocs = -1;
 		head = glo->struct_id[i].head;
@@ -113,7 +113,6 @@ void	catch_heredocs(t_global *glo, size_t nb_command)
 			}
 			head = head->next;
 		}
-		i++;
 	}
 	if (glo->here_doc_failed == 1)
 		close(glo->struct_id[0].prev_heredocs);

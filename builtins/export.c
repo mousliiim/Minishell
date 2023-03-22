@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 23:08:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 18:25:40 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ int	export(t_global *global, int j)
 	int		idx_args;
 	int		i;
 
-	if (global->nb > 1)
-		exit(0);
 	idx_args = 1;
 	g_status = 0;
 	while (global->struct_id[j].split_command[idx_args])

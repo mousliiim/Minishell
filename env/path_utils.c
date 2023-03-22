@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 05:48:10 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/22 20:28:47 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ int	pa_add_env(t_ptr_array *pa, char *new_str)
 	return (1);
 }
 
-
 t_ptr_array	build_personal_env(char **env)
 {
 	int			i;
@@ -99,7 +98,12 @@ char	**set_path(t_global *global)
 			{
 				path = ft_split((char *)global->personal_env.array[i] + 5, ':');
 				if (!path || !*path)
+				{
+					free_shell(global, NULL);
+					free(global->struct_id);
+					exit(1);
 					return (0);
+				}
 				return (path);
 			}
 			i++;
@@ -118,7 +122,7 @@ int	find_path_for_each_command(t_global *global)
 	i = 0;
 	struc = global->struct_id;
 	if (!global->path)
-		return (0);
+		return (1);
 	while (i < global->nb)
 	{
 		j = 0;
@@ -140,7 +144,9 @@ int	find_path_for_each_command(t_global *global)
 			if (ft_strchr(struc[i].split_command[0], '/'))
 				break ;
 			command_w_path = ft_sup_strjoin(global->path[j], '/',
-					struc[i].split_command[0]);
+					struc[i].split_command[0]); // malloc
+			if (!command_w_path)
+				return (0);
 			if (access(command_w_path, F_OK | X_OK) != -1)
 			{
 				free(struc[i].split_command[0]);
@@ -152,5 +158,5 @@ int	find_path_for_each_command(t_global *global)
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
