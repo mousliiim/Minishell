@@ -6,72 +6,55 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 20:34:10 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/22 01:05:12 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
-#define DBL_MAX 1E+37
+#define LL_MAXOU 9223372036854775807UL
 
-// long long	ft_atoull(const char *str)
-// {
-// 	int			neg;
-// 	// unsigned long long	res;
-// 	// long long		res;	
+long long	ft_atoulld(const char *str)
+{
+	int						neg;
+	int						i;
+	unsigned long long		res;
 
-// 	res = 0;
-// 	neg = 1;
-// 	while (ft_isspace(*str))
-// 		str++;
-// 	if (*str == '+' || *str == '-')
-// 	{
-// 		if (*str == '-')
-// 			neg *= -1;
-// 		str++;
-// 	}
-// 	while (ft_isdigit(*str))
-// 	{
-// 		res = (res * 10) + (*str - '0');
-// 		str++;
-// 	}
-// 	return (res * neg);
-// }
+	res = 0;
+	neg = 1;
+	i = 0;
+	while (ft_isspace(str[i]))
+		i++;
+	if (str[i] == '+' || str[i] == '-')
+	{
+			neg *= -1;
+		if (str[i] == '-')
+		i++;
+	}
+	while (ft_isdigit(str[i]))
+	{
+		res = (res * 10) + (str[i] - '0');
+		i++;
+		if (res > LL_MAXOU || (res > (LL_MAXOU + 1) && neg == -1))
+		{
+			ft_printf("miniboosted: exit: %s : numeric argument required\n", (char *)str);
+			return (2);
+		}
+	}
+	return ((long long)res * neg);
+}
 
-// static int	is_space(char c)
-// {
-// 	if ((c >= '\t' && c <= '\r') || c == ' ')
-// 		return (1);
-// 	return (0);
-// }
-
-// static long long int	atoi_exit(const char *str)
-// {
-// 	long	res;
-// 	int		negatif;
-
-// 	res = 0;
-// 	negatif = 1;
-// 	while (is_space(*str) == 1)
-// 		str++;
-// 	if (*str == '+' || *str == '-')
-// 	{
-// 		if (*str == '-')
-// 			negatif = negatif * -1;
-// 		str++;
-// 	}
-// 	while (ft_isdigit(*str))
-// 	{
-// 		res = res * 10 + (*str - 48);
-// 		str++;
-// 	}
-// 	return (res * negatif);
-// }
+static int	ft_isdigit_special(int arg)
+{
+	if ((arg >= '0' && arg <= '9') || arg == '-' || arg == '+')
+		return (1);
+	return (0);
+}
 
 int	builtin_exit(t_global *global, int j)
 {
-	int	i;
+	long long	i;
 
 	close(global->link[0]);
 	close(global->link[1]);
@@ -85,9 +68,9 @@ int	builtin_exit(t_global *global, int j)
 	i = 0;
 	while (global->struct_id[j].split_command[1][i])
 	{
-		if (!ft_isdigit(global->struct_id[j].split_command[1][i]))
+		if (!ft_isdigit_special(global->struct_id[j].split_command[1][i]))
 		{
-			ft_putstr_fd("bash: exit: ", 2);
+			ft_putstr_fd("miniboosted: exit: ", 2);
 			ft_putstr_fd(global->struct_id[j].split_command[1], 2);
 			ft_putstr_fd(": numeric argument required", 2);
 			free_inchild(global);
@@ -95,8 +78,8 @@ int	builtin_exit(t_global *global, int j)
 		}
 		i++;
 	}
-	// if(ft_atoull(global->struct_id[j].split_command[1]) > DBL_MAX)
-	// 	printf("TEST\n");
+	i = ft_atoulld(global->struct_id[j].split_command[1]);
+	fprintf(stderr, "second argument %s\n", global->struct_id[j].split_command[1]);
 	free_inchild(global);
 	exit (i);
 }
