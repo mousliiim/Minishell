@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 20:27:08 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:48:57 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,24 @@ void	waiting(t_global *global, int size_wait)
 	global->status = status;
 }
 
+void	free_exec_malloc(t_global *global)
+{
+	size_t	i;
+
+	i = 0;
+	free_shell(global, NULL, 0);
+	free_double_str(global->path);
+	clear_lst(global->struct_id, global->nb);
+	while (i < global->nb)
+	{
+		free_double_str(global->struct_id[i].split_command);
+		free_double_str(global->struct_id[i].commands);
+		i++;
+	}
+	free(global->struct_id);
+	exit(1);
+}
+
 int	go_exec(t_global *global)
 {
 	size_t	i;
@@ -46,13 +64,10 @@ int	go_exec(t_global *global)
 	count_nb_bultin = 0;
 	global->nb_free = global->nb - global->nb_hd;
 	if (!find_path_for_each_command(global))
-	{
-		free_shell(global, NULL,0);
-		free(global->struct_id);
-		free_double_str(global->path);
-		exit(1);
-	}
+		free_exec_malloc(global);
 	global->forkstates = malloc(sizeof(int) * global->nb);
+	if (!global->forkstates)
+		free_exec_malloc(global);
 	global->prev = -1;
 	global->link[0] = -1;
 	while (i < global->nb)

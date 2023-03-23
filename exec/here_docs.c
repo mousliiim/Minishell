@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_docs.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 22:02:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:34:22 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,11 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 			if (!ft_strcmp(airdock.str, head->file_name))
 				break ;
 			ft_putendl_fd(airdock.str, glo->link_heredoc[1]);
+			free(airdock.str);
 		}
 		hd_free_inchild(glo);
+		if (airdock.str)
+			free(airdock.str);
 		return (close(glo->link_heredoc[1]), close(glo->link_heredoc[0]),
 			exit(0), 0);
 	}

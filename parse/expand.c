@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/22 18:37:35 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/23 21:18:22 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 
 	i = 0;
 	stop = 0;
-	if (!ft_strncmp(find, "?", end))
+	if (!ft_strncmp(find, "?", end - start))
 	{
 		mini_itoa(glo);
 		return (glo->str_status);
@@ -86,10 +86,7 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 			- (char *)glo->personal_env.array[i];
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
-		{
-			;
-			// return (&glo->personal_env.array[i][stop + 1]);
-		}
+			return (&glo->personal_env.array[i][stop + 1]);
 		i++;
 	}
 	return (0);
@@ -142,7 +139,8 @@ char	*catch_expand(t_global *glo, char *input)
 					i++;
 					continue ;
 				}
-				while ((ft_isalnum(input[i]) || (input[i] == '_')) && input[i])
+				// while ((ft_isalnum(input[i]) || (input[i] == '_')) && input[i])
+				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_') || (input[i] == '?')))
 					i++;
 				to_replace_by = find_expand(glo, &input[start], start, i);
 				if (input[i] == '?')
@@ -158,7 +156,7 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	if (!start)
 		return (input);
-	new_input = NULL; //ft_calloc(sizeof(char), len_to_malloc);
+	new_input = ft_calloc(sizeof(char), len_to_malloc);
 	if (!new_input)
 		return (0);
 	j = 0;
@@ -182,7 +180,7 @@ char	*catch_expand(t_global *glo, char *input)
 					i++;
 					continue ;
 				}
-				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
+				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_') || (input[i] == '?')))
 					i++;
 				to_replace_by = find_expand(glo, &input[start], start, i);
 				line_negatif_expand(to_replace_by);
@@ -200,7 +198,6 @@ char	*catch_expand(t_global *glo, char *input)
 		i++;
 	}
 	free(input);
-	// line_negatif_expand(new_input);
 	return (new_input);
 }
 
