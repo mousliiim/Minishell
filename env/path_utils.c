@@ -86,7 +86,7 @@ void	free_path_malloc(t_global *global)
 	size_t	i;
 
 	i = 0;
-	free_shell(global, NULL);
+	free_shell(global, NULL, 0);
 	clear_lst(global->struct_id, global->nb);
 	while (i < global->nb)
 	{

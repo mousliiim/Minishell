@@ -54,7 +54,12 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 			airdock.str = readline("here_doc:");
 			if (!airdock.str)
 				break ;
-			airdock.str = catch_expand(glo, airdock.str);	
+			airdock.str = catch_expand(glo, airdock.str);
+			if (!airdock.str)
+			{
+				fprintf(stderr, "malloc failed in here docs\n");
+				quit_hd(42);
+			}
 			if (!ft_strcmp(airdock.str, head->file_name))
 				break ;
 			ft_putendl_fd(airdock.str, glo->link_heredoc[1]);

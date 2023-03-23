@@ -103,6 +103,7 @@ typedef struct s_airdock
 }	t_airdock;
 
 typedef int	(*t_builtins)(t_global *, int);
+
 // free shell est dans main.c
 void			free_shell(t_global *global, char *input, int choice);
 t_global		*endton(t_global *glo);

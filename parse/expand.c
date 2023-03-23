@@ -87,7 +87,8 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
 		{
-			return (&glo->personal_env.array[i][stop + 1]);
+			;
+			// return (&glo->personal_env.array[i][stop + 1]);
 		}
 		i++;
 	}
@@ -157,7 +158,7 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	if (!start)
 		return (input);
-	new_input = ft_calloc(sizeof(char), len_to_malloc);
+	new_input = NULL; //ft_calloc(sizeof(char), len_to_malloc);
 	if (!new_input)
 		return (0);
 	j = 0;

@@ -57,6 +57,8 @@ void	quit_hd(int sign)
 	close(glo->link_heredoc[0]);
 	clear_lst(glo->struct_id, glo->nb);
 	hd_free_inchild(glo);
+	if (sign == 42)
+		exit(42);
 	exit(130);
 }
 

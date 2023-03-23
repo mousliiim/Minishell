@@ -47,7 +47,7 @@ int	go_exec(t_global *global)
 	global->nb_free = global->nb - global->nb_hd;
 	if (!find_path_for_each_command(global))
 	{
-		free_shell(global, NULL);
+		free_shell(global, NULL,0);
 		free(global->struct_id);
 		free_double_str(global->path);
 		exit(1);
