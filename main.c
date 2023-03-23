@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 23:40:40 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/23 20:59:53 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,20 +117,17 @@ int	main(int ac, char **av, char **env)
 {
 	char			*input;
 	t_global		global;
-	char			*prompt;
 
 	if (ac != 1 || av[1])
 		return (0);
 	if (!isatty(STDIN_FILENO))
 		return (0);
+	if (!isatty(STDOUT_FILENO))
+		return (0);
 	init_shell(&global, env);
-	if (global.personal_env.size == 0)
-		prompt = "miniboosted: ";
-	else
-		prompt = build_prompt();
 	while (TRUE)
 	{
-		input = readline(prompt);
+		input = readline(build_prompt());
 		if (!input)
 		{
 			free_double_str((char **)global.personal_env.array);
