@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 23:47:49 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:35:35 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	ctrl_antislash(int sig)
 		exit(130);
 }
 
-
 void	quit_hd(int sign)
 {
 	t_global	*glo;
@@ -61,4 +60,3 @@ void	quit_hd(int sign)
 		exit(42);
 	exit(130);
 }
-

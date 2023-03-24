@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/23 21:18:22 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 19:13:50 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,9 +87,8 @@ char	*find_expand(t_global *glo, char *find, int start, int end)
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
 		{
-			;
+			return (&glo->personal_env.array[i][stop + 1]);
 		}
-			// return (&glo->personal_env.array[i][stop + 1]);
 		i++;
 	}
 	return (0);

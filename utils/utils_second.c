@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_second.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:03:00 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 20:13:17 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 20:36:16 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,4 +101,3 @@ void	line_positif(char *line)
 		i++;
 	}
 }
-

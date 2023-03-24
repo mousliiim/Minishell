@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/23 20:57:19 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 19:05:02 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,6 @@ int				pipe_checker(char *line);
 char			*catch_expand(t_global *glo, char *input);
 int				have_expand(char *str);
 char			*find_expand(t_global *glo, char *find, int start, int end);
-char			*getter(char *env_var);
 /******************************************************/
 
 /******************* SPLIT_PARSING ********************/
@@ -257,6 +256,8 @@ char			**ft_free(char **str, int i);
 void			hd_free_inchild(t_global *glo);
 void			free_path_malloc(t_global *global);
 /*SEQUEL*/
+void			free_array(t_ptr_array pa);
+void			free_path_malloc(t_global *global);
 void			free_exec_malloc(t_global *global);
 /*****************************************************/
 

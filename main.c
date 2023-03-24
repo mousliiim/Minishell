@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/23 20:59:53 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 19:15:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,13 @@ int	main(int ac, char **av, char **env)
 		}
 	}
 }
+
+
+// things to test export invalid and valid identifier
+// exit
+// heredocs
+// everythings in the fucking shell
+
 
 // $'$USER'p$LESS ls
 // miniboosted: command not found : mparisse-R

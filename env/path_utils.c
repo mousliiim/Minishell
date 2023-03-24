@@ -3,37 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/23 21:48:07 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 19:04:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
-
-char	*getter(char *env_var)
-{
-	int	stop;
-
-	stop = ft_strchr(env_var, '=') - env_var;
-	return (&env_var[stop + 1]);
-}
-
-void	free_array(t_ptr_array pa)
-{
-	size_t	i;
-
-	i = 0;
-	while (i < pa.size)
-	{
-		free(pa.array[i]);
-		i++;
-	}
-	free(pa.array);
-}
 
 int	pa_add_env(t_ptr_array *pa, char *new_str)
 {
@@ -81,23 +60,6 @@ t_ptr_array	build_personal_env(char **env)
 	return (res);
 }
 
-void	free_path_malloc(t_global *global)
-{
-	size_t	i;
-
-	i = 0;
-	free_shell(global, NULL, 0);
-	clear_lst(global->struct_id, global->nb);
-	while (i < global->nb)
-	{
-		free_double_str(global->struct_id[i].split_command);
-		free_double_str(global->struct_id[i].commands);
-		i++;
-	}
-	free(global->struct_id);
-	exit(1);
-}
-
 char	**set_path(t_global *global)
 {
 	size_t	i;
@@ -125,12 +87,37 @@ char	**set_path(t_global *global)
 	return (0);
 }
 
+int	sub_path_command(t_global *global, int i)
+{
+	int				j;
+	char			*command_w_path;
+
+	j = -1;
+	while (global->path[++j])
+	{
+		if (!global->struct_id[i].split_command[0])
+			break ;
+		if (ft_strchr(global->struct_id[i].split_command[0], '/'))
+			break ;
+		command_w_path = ft_sup_strjoin(global->path[j], '/',
+				global->struct_id[i].split_command[0]);
+		if (!command_w_path)
+			return (0);
+		if (access(command_w_path, F_OK | X_OK) != -1)
+		{
+			free(global->struct_id[i].split_command[0]);
+			global->struct_id[i].split_command[0] = command_w_path;
+			break ;
+		}
+		free(command_w_path);
+	}
+	return (1);
+}
+
 int	find_path_for_each_command(t_global *global)
 {
 	size_t			i;
-	size_t			j;
 	t_tab_struct	*struc;
-	char			*command_w_path;
 
 	i = -1;
 	struc = global->struct_id;
@@ -138,31 +125,15 @@ int	find_path_for_each_command(t_global *global)
 		return (1);
 	while (++i < global->nb)
 	{
-		if (!struc[i].split_command || (find_ptr_builtin(struc[i].split_command[0]) 
-			&& struc[i].split_command))
+		if (!struc[i].split_command
+			|| (find_ptr_builtin(struc[i].split_command[0])
+				&& struc[i].split_command))
 		{
 			i++;
 			continue ;
 		}
-		j = -1;
-		while (global->path[++j])
-		{
-			if (!struc[i].split_command[0])
-				break ;
-			if (ft_strchr(struc[i].split_command[0], '/'))
-				break ;
-			command_w_path = ft_sup_strjoin(global->path[j], '/',
-					struc[i].split_command[0]);
-			if (!command_w_path)
-				return (0);
-			if (access(command_w_path, F_OK | X_OK) != -1)
-			{
-				free(struc[i].split_command[0]);
-				struc[i].split_command[0] = command_w_path;
-				break ;
-			}
-			free(command_w_path);
-		}
+		if (sub_path_command(global, i) == 0)
+			return (0);
 	}
 	return (1);
 }
