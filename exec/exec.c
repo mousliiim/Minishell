@@ -37,23 +37,23 @@ void	waiting(t_global *global, int size_wait)
 	global->status = status;
 }
 
-void	free_exec_malloc(t_global *global)
-{
-	size_t	i;
+// void	free_exec_malloc(t_global *global)
+// {
+// 	size_t	i;
 
-	i = 0;
-	free_shell(global, NULL, 0);
-	free_double_str(global->path);
-	clear_lst(global->struct_id, global->nb);
-	while (i < global->nb)
-	{
-		free_double_str(global->struct_id[i].split_command);
-		free_double_str(global->struct_id[i].commands);
-		i++;
-	}
-	free(global->struct_id);
-	exit(1);
-}
+// 	i = 0;
+// 	free_shell(global, NULL, 0);
+// 	free_double_str(global->path);
+// 	clear_lst(global->struct_id, global->nb);
+// 	while (i < global->nb)
+// 	{
+// 		free_double_str(global->struct_id[i].split_command);
+// 		free_double_str(global->struct_id[i].commands);
+// 		i++;
+// 	}
+// 	free(global->struct_id);
+// 	exit(1);
+// }
 
 int	go_exec(t_global *global)
 {

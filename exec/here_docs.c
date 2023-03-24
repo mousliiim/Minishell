@@ -38,6 +38,26 @@ void	waiting_hd(t_global *global, int forkstate)
 	global->status = status;
 }
 
+void	loop_here_docks(t_airdock *airdock, t_global *glo, t_list_mini *head)
+{
+	while (1)
+	{
+		airdock->str = readline("here_doc:");
+		if (!airdock->str)
+			break ;
+		airdock->str = catch_expand(glo, airdock->str);
+		if (!airdock->str)
+		{
+			fprintf(stderr, "malloc failed in here docs\n");
+			quit_hd(42);
+		}
+		if (!ft_strcmp(airdock->str, head->file_name))
+			break ;
+		ft_putendl_fd(airdock->str, glo->link_heredoc[1]);
+		free(airdock->str);
+	}
+}
+
 int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 {
 	t_airdock	airdock;
@@ -49,22 +69,7 @@ int	start_heredoc(t_global *glo, int j, t_list_mini *head, int nbhd)
 	if (airdock.forkstate == 0)
 	{
 		signal(SIGINT, &quit_hd);
-		while (1)
-		{
-			airdock.str = readline("here_doc:");
-			if (!airdock.str)
-				break ;
-			airdock.str = catch_expand(glo, airdock.str);
-			if (!airdock.str)
-			{
-				fprintf(stderr, "malloc failed in here docs\n");
-				quit_hd(42);
-			}
-			if (!ft_strcmp(airdock.str, head->file_name))
-				break ;
-			ft_putendl_fd(airdock.str, glo->link_heredoc[1]);
-			free(airdock.str);
-		}
+		loop_here_docks(&airdock, glo, head);
 		hd_free_inchild(glo);
 		if (airdock.str)
 			free(airdock.str);
@@ -98,30 +103,30 @@ void	len_heredoc(t_global *glo, size_t nb_command)
 	}
 }
 
-void	catch_heredocs(t_global *glo, size_t nb_command)
-{
-	t_list_mini	*head;
-	size_t		i;
-	int			nb_hd;
+// void	catch_heredocs(t_global *glo, size_t nb_command)
+// {
+// 	t_list_mini	*head;
+// 	size_t		i;
+// 	int			nb_hd;
 
-	i = -1;
-	nb_hd = 0;
-	glo->here_doc_failed = 0;
-	len_heredoc(glo, nb_command);
-	while (++i < nb_command)
-	{
-		glo->struct_id[i].prev_heredocs = -1;
-		head = glo->struct_id[i].head;
-		while (head)
-		{
-			if (head->redirect == HERE_DOC && glo->here_doc_failed == 0)
-			{
-				nb_hd++;
-				start_heredoc(glo, i, head, nb_hd);
-			}
-			head = head->next;
-		}
-	}
-	if (glo->here_doc_failed == 1)
-		close(glo->struct_id[0].prev_heredocs);
-}
+// 	i = -1;
+// 	nb_hd = 0;
+// 	glo->here_doc_failed = 0;
+// 	len_heredoc(glo, nb_command);
+// 	while (++i < nb_command)
+// 	{
+// 		glo->struct_id[i].prev_heredocs = -1;
+// 		head = glo->struct_id[i].head;
+// 		while (head)
+// 		{
+// 			if (head->redirect == HERE_DOC && glo->here_doc_failed == 0)
+// 			{
+// 				nb_hd++;
+// 				start_heredoc(glo, i, head, nb_hd);
+// 			}
+// 			head = head->next;
+// 		}
+// 	}
+// 	if (glo->here_doc_failed == 1)
+// 		close(glo->struct_id[0].prev_heredocs);
+// }

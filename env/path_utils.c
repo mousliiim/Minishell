@@ -132,25 +132,20 @@ int	find_path_for_each_command(t_global *global)
 	t_tab_struct	*struc;
 	char			*command_w_path;
 
-	i = 0;
+	i = -1;
 	struc = global->struct_id;
 	if (!global->path)
 		return (1);
-	while (i < global->nb)
+	while (++i < global->nb)
 	{
-		j = 0;
-		if (!struc[i].split_command)
+		if (!struc[i].split_command || (find_ptr_builtin(struc[i].split_command[0]) 
+			&& struc[i].split_command))
 		{
 			i++;
 			continue ;
 		}
-		if (find_ptr_builtin(struc[i].split_command[0])
-			&& struc[i].split_command)
-		{
-			i++;
-			continue ;
-		}
-		while (global->path[j])
+		j = -1;
+		while (global->path[++j])
 		{
 			if (!struc[i].split_command[0])
 				break ;
@@ -167,9 +162,7 @@ int	find_path_for_each_command(t_global *global)
 				break ;
 			}
 			free(command_w_path);
-			j++;
 		}
-		i++;
 	}
 	return (1);
 }

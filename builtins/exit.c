@@ -15,6 +15,13 @@
 extern int	g_status;
 #define LL_MAXOU 9223372036854775807UL
 
+void	error_message_exit(char *str)
+{
+	ft_putstr_fd("miniboosted: exit: ", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd(": numeric argument required", 2);
+}
+
 long long	ft_atoulld(const char *str)
 {
 	int						neg;
@@ -37,10 +44,7 @@ long long	ft_atoulld(const char *str)
 		res = (res * 10) + (str[i] - '0');
 		i++;
 		if (res > LL_MAXOU || (res > (LL_MAXOU + 1) && neg == -1))
-		{
-			ft_printf("miniboosted: exit: %s : numeric argument required\n", (char *)str);
-			return (2);
-		}
+			return (error_message_exit((char *)str), 2);
 	}
 	return ((long long)res * neg);
 }
@@ -70,9 +74,7 @@ int	builtin_exit(t_global *global, int j)
 	{
 		if (!ft_isdigit_special(global->struct_id[j].split_command[1][i]))
 		{
-			ft_putstr_fd("miniboosted: exit: ", 2);
-			ft_putstr_fd(global->struct_id[j].split_command[1], 2);
-			ft_putstr_fd(": numeric argument required", 2);
+			error_message_exit(global->struct_id[j].split_command[1]);
 			free_inchild(global);
 			exit(2);
 		}
@@ -82,4 +84,3 @@ int	builtin_exit(t_global *global, int j)
 	free_inchild(global);
 	exit (i);
 }
-

@@ -163,3 +163,31 @@ char	**ft_split_rafter(char *line)
 	res[j] = NULL;
 	return (res);
 }
+
+void	catch_heredocs(t_global *glo, size_t nb_command)
+{
+	t_list_mini	*head;
+	size_t		i;
+	int			nb_hd;
+
+	i = -1;
+	nb_hd = 0;
+	glo->here_doc_failed = 0;
+	len_heredoc(glo, nb_command);
+	while (++i < nb_command)
+	{
+		glo->struct_id[i].prev_heredocs = -1;
+		head = glo->struct_id[i].head;
+		while (head)
+		{
+			if (head->redirect == HERE_DOC && glo->here_doc_failed == 0)
+			{
+				nb_hd++;
+				start_heredoc(glo, i, head, nb_hd);
+			}
+			head = head->next;
+		}
+	}
+	if (glo->here_doc_failed == 1)
+		close(glo->struct_id[0].prev_heredocs);
+}

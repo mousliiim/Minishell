@@ -63,7 +63,7 @@ SRC_FILES	=	$(addprefix parse/, \
 				env.c		path_utils.c) \
 				\
 				$(addprefix free/, \
-				free_function.c) \
+				free_function.c free_function_sequel.c) \
 				\
 				main.c tmp_utils.c
 
