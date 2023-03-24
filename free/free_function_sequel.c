@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   free_function_sequel.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/24 07:54:37 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 19:04:39 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:33:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+void	free_shell(t_global *global, char *input, int choice)
+{
+	if (choice)
+		free(global->struct_id);
+	free_double_str((char **)global->personal_env.array);
+	free(input);
+	ft_printf("Error: Allocation memory failed\n");
+	ft_printf("exit\n");
+	if (input)
+		exit(1);
+}
 
 void	free_exec_malloc(t_global *global)
 {

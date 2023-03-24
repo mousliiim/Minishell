@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:52:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/20 23:09:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:26:30 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	pwd(t_global *glo, int j)
 	g_status = 0;
 	if (!getcwd(pwdd, PATH_MAXIMUM))
 	{
-		ft_printf("pwd: error retrieving current directory:");
+		ft_printf("pwd: error retrieving current directory: ");
 		ft_printf("getcwd: cannot access parent directories: ");
 		ft_printf("No such file or directory\n");
 		g_status = 1;

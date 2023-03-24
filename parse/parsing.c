@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/22 02:59:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:51:19 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,14 +152,11 @@ char	**ft_split_rafter(char *line)
 		flg[1] = 0;
 		if (line[i] == '>' || line[i] == '<')
 			if (!cut_raft(res, line, (int *[5]){&i, &j, &k, &flg[0], &flg[1]}))
-			{
-				ft_free(res, i);
-				return (NULL);
-			}
+				return (ft_free(res, i), NULL);
 	}
 	res[j] = ft_substr(line, k, i - k);
 	if (!res[j++])
-		return (NULL);
+		return (ft_free(res, j), NULL);
 	res[j] = NULL;
 	return (res);
 }

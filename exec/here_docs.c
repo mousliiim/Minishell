@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/23 21:34:22 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:28:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	loop_here_docks(t_airdock *airdock, t_global *glo, t_list_mini *head)
 		airdock->str = catch_expand(glo, airdock->str);
 		if (!airdock->str)
 		{
-			fprintf(stderr, "malloc failed in here docs\n");
+			ft_printf("Malloc failed in here docs\n");
 			quit_hd(42);
 		}
 		if (!ft_strcmp(airdock->str, head->file_name))
@@ -102,31 +102,3 @@ void	len_heredoc(t_global *glo, size_t nb_command)
 		i++;
 	}
 }
-
-// void	catch_heredocs(t_global *glo, size_t nb_command)
-// {
-// 	t_list_mini	*head;
-// 	size_t		i;
-// 	int			nb_hd;
-
-// 	i = -1;
-// 	nb_hd = 0;
-// 	glo->here_doc_failed = 0;
-// 	len_heredoc(glo, nb_command);
-// 	while (++i < nb_command)
-// 	{
-// 		glo->struct_id[i].prev_heredocs = -1;
-// 		head = glo->struct_id[i].head;
-// 		while (head)
-// 		{
-// 			if (head->redirect == HERE_DOC && glo->here_doc_failed == 0)
-// 			{
-// 				nb_hd++;
-// 				start_heredoc(glo, i, head, nb_hd);
-// 			}
-// 			head = head->next;
-// 		}
-// 	}
-// 	if (glo->here_doc_failed == 1)
-// 		close(glo->struct_id[0].prev_heredocs);
-// }

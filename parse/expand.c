@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 19:13:50 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:38:11 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,36 +202,3 @@ char	*catch_expand(t_global *glo, char *input)
 	free(input);
 	return (new_input);
 }
-
-// $$ pid de mon programme
-// if (input[i] == )
-
-// int	have_expand(char *str)
-// {
-// 	int		expand;
-// 	size_t	i;
-
-// 	expand = 0;
-// 	i = 0;
-// 	while (str[i])
-// 	{
-// 		if (str[i] == '$' && str[i + 1] && str[i + 1] != ' ')
-// 			return (1);
-// 		i++;
-// 	}
-// 	return (0);
-// }
-// charactere a expand lettre underscore et le chiffre en premier
-// expand gerer tout les cas esssayer de le normer
-// ctrl /
-// ctrl c desactiver les signaux dans l enfant
-// plus de norme
-// plus de free
-
-/*
-
-→  $MiniBoosted git:(main) export a=">"
-nbers of command 1
-→  $MiniBoosted git:(main) $a
-
-*/

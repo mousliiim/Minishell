@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:30 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 20:34:28 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:25:40 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	cd(t_global *global, int i)
 	{
 		env = getenv("HOME");
 		if (!env || !*env)
-			ft_printf("miniboosted: cd: HOME : not set\n");
+			ft_printf("MiniBoosted: cd: HOME : not set\n");
 		else
 			g_status = chdir(env);
 		if (g_status != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 19:15:41 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:33:03 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@ static int	syntax_checker(char *line)
 	line_negatif(line);
 	if (!quote_checker(line))
 	{
-		ft_printf("Syntax error : quote not closed\n");
+		ft_printf("MiniBoosted: quote not closed\n");
 		return (0);
 	}
 	if (!rafter_checker(line))
 	{
-		ft_printf("bash: syntax error near unexpected token 'newline'\n");
+		ft_printf("MiniBoosted: syntax error near unexpected token 'newline'\n");
 		return (0);
 	}
 	if (!pipe_checker(line))
 	{
-		ft_printf("bash: syntax error near unexpected token `|'\n");
+		ft_printf("MiniBoosted: syntax error near unexpected token `|'\n");
 		return (0);
 	}
 	return (1);
@@ -50,7 +50,7 @@ static void	init_shell(t_global *global, char **env)
 	endton(global);
 }
 
-static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
+void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
 		size_t tempsize)
 {
 	size_t	i;
@@ -64,18 +64,6 @@ static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct, \
 		free_double_str(tab_struct[i].commands);
 	free(tab_struct);
 	free_double_str(global->path);
-}
-
-void	free_shell(t_global *global, char *input, int choice)
-{
-	if (choice)
-		free(global->struct_id);
-	free_double_str((char **)global->personal_env.array);
-	free(input);
-	ft_printf("Error: Allocation memory failed\n");
-	ft_printf("exit\n");
-	if (input)
-		exit(1);
 }
 
 static int	loop_shell(t_global *global, char *input)
@@ -120,9 +108,7 @@ int	main(int ac, char **av, char **env)
 
 	if (ac != 1 || av[1])
 		return (0);
-	if (!isatty(STDIN_FILENO))
-		return (0);
-	if (!isatty(STDOUT_FILENO))
+	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO))
 		return (0);
 	init_shell(&global, env);
 	while (TRUE)
@@ -139,18 +125,6 @@ int	main(int ac, char **av, char **env)
 		{
 			free(input);
 			g_status = 2;
-			continue ;
 		}
 	}
 }
-
-
-// things to test export invalid and valid identifier
-// exit
-// heredocs
-// everythings in the fucking shell
-
-
-// $'$USER'p$LESS ls
-// miniboosted: command not found : mparisse-R
-// bash: $USERp-R: command not found

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:21:23 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/21 20:41:36 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:20:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ extern int	g_status;
 void	error_msg(int err, char *cmd)
 {
 	if (err == 13)
-		perror("miniboosted");
+		perror("MiniBoosted");
 	else
-		ft_printf("miniboosted: command not found : %s\n", cmd);
+		ft_printf("MiniBoosted: command not found : %s\n", cmd);
 }
 
 void	execute(t_global *glo, int i)

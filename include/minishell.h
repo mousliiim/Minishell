@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 19:05:02 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/24 22:44:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,34 +111,28 @@ typedef struct s_prompt
 
 typedef int	(*t_builtins)(t_global *, int);
 
-// free shell est dans main.c
-void			free_shell(t_global *global, char *input, int choice);
-t_global		*endton(t_global *glo);
-char			*catch_expand(t_global *glo, char *input);
 
-/********************* PTR_A_UTILS **********************/
+/********************* PARSE/PTR_A_UTILS **********************/
 t_ptr_array		pa_new(void);
 void			pa_pop(t_ptr_array	*array, size_t index);
 void			pa_delete(t_ptr_array *pa);
 void			pa_pop_replace(t_ptr_array	*array, size_t index, void *new);
 /********************************************************/
 
-/****************** PTR_A_UTILS_SECOND *******************/
+/****************** PARSE/PTR_A_UTILS_SECOND *******************/
 int				pa_add(t_ptr_array *pa, void *ptr);
 size_t			pa_size(t_ptr_array *pa);
 void			*pa_get(t_ptr_array *pa, size_t index);
 /********************************************************/
 
-int				ft_atoi(const char *nptr);
-int				ft_isspace(char c);
-
-/******************* PATH_UTILS ************************/
+/******************* ENV/PATH_UTILS ************************/
 char			**set_path(t_global *global);
 t_ptr_array		build_personal_env(char **env);
 int				find_path_for_each_command(t_global *global);
 /******************************************************/
 
-/******************* HERE_DOCS ************************/
+/******************* EXEC/HERE_DOCS ************************/
+t_global		*endton(t_global *glo);
 int				start_heredoc(t_global *glo, int j,
 					t_list_mini *head, int nbhd);
 void			len_heredoc(t_global *glo, size_t nb_command);
@@ -164,12 +158,12 @@ int				pipe_checker(char *line);
 /********************************************************/
 
 /******************* EXPAND ********************/
+void			mini_itoa(t_global *glo);
 char			*catch_expand(t_global *glo, char *input);
-int				have_expand(char *str);
 char			*find_expand(t_global *glo, char *find, int start, int end);
 /******************************************************/
 
-/******************* SPLIT_PARSING ********************/
+/******************* PARSE/SPLIT_PARSING.c ********************/
 int				split_input(t_split_line splitted_line,
 					t_tab_struct *tab_struct);
 t_split_line	split_line(const char *line);
@@ -180,14 +174,12 @@ void			before_exec_to_positif(t_tab_struct *tab_struct, int j);
 int				print_env(t_global *glo, int j);
 
 /******************* /BUILTINS ************************/
-char			**create_tab_color(char **cmd);
-int				export(t_global *global, int j);
-int				ls_color(t_global *glo, int j);
-int				pwd(t_global *glo, int j);
-int				builtin_exit(t_global *global, int j);
-int				echo(t_global *glo, int j);
-int				unset(t_global *glo, int j);
 int				cd(t_global *global, int i);
+int				echo(t_global *glo, int j);
+int				builtin_exit(t_global *global, int j);
+int				export(t_global *global, int j);
+int				pwd(t_global *glo, int j);
+int				unset(t_global *glo, int j);
 /******************************************************/
 
 /*********************** RAFTER ***********************/
@@ -249,13 +241,15 @@ void			clear_lst(t_tab_struct *tab_struct, size_t size);
 /*****************************************************/
 
 /****************** FREE_FUNCTION ********************/
-void			free_splitted_line(t_split_line *del);
-void			free_inchild(t_global *glo);
-void			free_double_str(char **str);
-char			**ft_free(char **str, int i);
 void			hd_free_inchild(t_global *glo);
-void			free_path_malloc(t_global *global);
-/*SEQUEL*/
+void			free_splitted_line(t_split_line *del);
+void			free_double_str(char **str);
+void			free_inchild(t_global *glo);
+char			**ft_free(char **str, int i);
+/*****************************************************/
+
+/*************** FREE_FUNCTION_SEQUEL ****************/
+void			free_shell(t_global *global, char *input, int choice);
 void			free_array(t_ptr_array pa);
 void			free_path_malloc(t_global *global);
 void			free_exec_malloc(t_global *global);
