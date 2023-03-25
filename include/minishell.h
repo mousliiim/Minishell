@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:44:14 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 00:59:26 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int				pipe_checker(char *line);
 /******************* EXPAND ********************/
 void			mini_itoa(t_global *glo);
 char			*catch_expand(t_global *glo, char *input);
-char			*find_expand(t_global *glo, char *find, int start, int end);
+char			*find_expand(t_global *glo, char *find, int start, int end, int skip);
 /******************************************************/
 
 /******************* PARSE/SPLIT_PARSING.c ********************/

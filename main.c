@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:33:03 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/24 23:52:22 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int	main(int ac, char **av, char **env)
 			free_double_str((char **)global.personal_env.array);
 			ctrl_d(g_status);
 		}
-		if (!*input)
+		else if (!*input)
 			continue ;
 		if (loop_shell(&global, input) == -42)
 		{
