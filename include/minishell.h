@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 03:22:12 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:12:59 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void			len_heredoc(t_global *glo, size_t nb_command);
 
 /*********************** PARSING ***********************/
 char			**ft_split_rafter(char *line);
+int				first_command(char **tab, char **arg, char *tmp, int *array[2]);
 size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
 char			**ft_have_two_word(char **tab, int j);
 int				check_first_char(char *line);

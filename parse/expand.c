@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 17:10:19 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 17:25:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,12 @@ char	*find_expand(t_global *glo, char *find, int start, int end, int skip)
 	int	stop;
 
 	i = 0;
-	printf("find_expand = %s\n", find);
 	if (!ft_strncmp(find, "?", 1))
 	{
 		mini_itoa(glo);
 		return (glo->str_status);
 	}
-	fprintf(stderr, "end - start>> %d\n", (end- start));
-	if (!end - start)
+	if (!(end - start))
 	{
 		if ((find[0] == '\'' || find[0] == '"') && skip == 1)
 			return (0);
@@ -87,8 +85,8 @@ char	*find_expand(t_global *glo, char *find, int start, int end, int skip)
 			- (char *)glo->personal_env.array[i];
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
-			return (&glo->personal_env.array[i][stop + 1]);
-			// return ((char *)(glo->personal_env.array[i] + stop + 1));
+			// return (&glo->personal_env.array[i][stop + 1]);
+			return ((char *)(glo->personal_env.array[i] + stop + 1));
 		i++;
 	}
 	return (0);

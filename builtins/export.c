@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 02:55:31 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:06:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,47 @@
 
 extern int	g_status;
 
+int	ft_identifier(int c, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (ft_isdigit(c))
+	{
+		while (str[i])
+		{
+			if (ft_isalpha(str[i]))
+				return (1);
+			i++;
+		}
+	}
+	if (ft_isalpha(c) || c == '_' || c == '=')
+		return (1);
+	return (0);
+}
+
+void	export_error_message(char *str)
+{
+	ft_putstr_fd("MiniBoosted: export:'", 2);
+	ft_putstr_fd(str, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+}
+
 int	check_identifier(t_global *global, int j, int idx_args)
 {
-	if (!global->struct_id[j].split_command[idx_args])
+	int		i;
+	char	*str;
+
+	i = 0;
+	str = global->struct_id[j].split_command[idx_args];
+	while (global->struct_id[j].split_command[idx_args][i])
 	{
-		ft_printf("MiniBoosted: export : '%s': not a valid identfier\n",
-			global->struct_id[j].split_command[idx_args]);
-		g_status = 1;
-		return (0);
-	}
-	if (ft_isdigit(global->struct_id[j].split_command[idx_args][0]) == 1
-		|| global->struct_id[j].split_command[idx_args][0] == '=')
-	{
-		ft_printf("MiniBoosted: export : '%s': not a valid identfier\n",
-			global->struct_id[j].split_command[idx_args]);
-		g_status = 1;
-		return (0);
+		if (!ft_identifier(str[i], str))
+		{
+			export_error_message(global->struct_id[j].split_command[idx_args]);
+			return (0);
+		}
+		i++;
 	}
 	return (1);
 }
@@ -51,12 +76,6 @@ int	check_env(t_global *global, int j, int idx_args, int stuff)
 	return (-1);
 }
 
-void	export_error_message(char *str)
-{
-	ft_putstr_fd("MiniBoosted: export:'", 2);
-	ft_putstr_fd(str, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
-}
 
 int	export(t_global *global, int j)
 {
