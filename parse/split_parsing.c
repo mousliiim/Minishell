@@ -6,13 +6,42 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/23 21:53:15 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 03:20:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int		g_status;
+
+char	**ft_have_two_word(char **tab, int j)
+{
+	char	*tmp;
+	char	*arg;
+	char	**split;
+	int		i;
+
+	arg = NULL;
+	tmp = NULL;
+	i = -1;
+	while (tab && tab[++i])
+	{
+		j = 0;
+		first_command(tab, &arg, tmp, (int *[2]){&i, &j});
+		while (tab[i][j])
+		{
+			if (ft_isspace(tab[i][j]))
+				if (find_option(tab, &arg, tmp, (int *[2]){&i, &j}))
+					break ;
+			if (!tab[i][j++])
+				break ;
+		}
+	}
+	if (!arg)
+		return (NULL);
+	split = ft_split(arg, ' ');
+	return (free(arg), split);
+}
 
 t_split_line	split_line(const char *line)
 {
@@ -62,14 +91,6 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 			k++;
 		}
 	}
-	if (tab_struct[j].commands)
-	{
-		while (tab_struct[j].commands[k])
-		{
-			line_positif(tab_struct[j].commands[k]);
-			k++;
-		}
-	}
 }
 
 void	ft_free_input(t_tab_struct *tab_struct, size_t size)
@@ -86,6 +107,7 @@ void	ft_free_input(t_tab_struct *tab_struct, size_t size)
 		i++;
 	}
 }
+
 int	split_input(t_split_line splitted_line, t_tab_struct *tab_struct)
 {
 	size_t		i;

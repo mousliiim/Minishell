@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 00:59:26 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 03:22:12 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ typedef int	(*t_builtins)(t_global *, int);
 
 
 /********************* PARSE/PTR_A_UTILS **********************/
+int				find_option(char **tab, char **arg, char *tmp, int *array[2]);
 t_ptr_array		pa_new(void);
 void			pa_pop(t_ptr_array	*array, size_t index);
 void			pa_delete(t_ptr_array *pa);
@@ -141,7 +142,7 @@ void			len_heredoc(t_global *glo, size_t nb_command);
 /*********************** PARSING ***********************/
 char			**ft_split_rafter(char *line);
 size_t			ft_strlcpy2(char *dst, const char *src, size_t size);
-char			**ft_have_two_word(char **tab);
+char			**ft_have_two_word(char **tab, int j);
 int				check_first_char(char *line);
 void			catch_heredocs(t_global *glo, size_t nb_command);
 int				ft_clean_quotes(char **line);
