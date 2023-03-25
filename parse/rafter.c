@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rafter.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/05 00:32:34 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 19:06:04 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/25 02:52:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line, int j)
 	array = ft_split_rafter(splitted_line.strings.array[j]);
 	if (!array)
 		return (0);
-	tab_struct[j].split_command = ft_have_two_word(array);
+	tab_struct[j].split_command = ft_have_two_word(array, 0);
 	tab_struct[j].commands = ft_split_rafter(splitted_line.strings.array[j]);
 	if (!tab_struct[j].commands)
 		return (free_double_str(array),

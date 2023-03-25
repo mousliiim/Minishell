@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 13:45:12 by mparisse          #+#    #+#             */
-/*   Updated: 2023/02/28 03:09:26 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/25 03:09:58 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	is_c(char chr, char c)
 {
-	if (chr == c)
+	if (chr == c || c == '\t')
 		return (1);
 	return (0);
 }

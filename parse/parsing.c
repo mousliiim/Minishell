@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:51:19 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 03:18:21 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,64 +43,26 @@ int	ft_clean_quotes(char **line)
 	return (1);
 }
 
-char	**ft_have_two_word(char **tab)
+int	first_command(char **tab, char **arg, char *tmp, int *array[2])
 {
-	char	*tmp;
-	char	*arg;
-	char	**split;
-	int		i;
-	int		j;
+	int	*i;
+	int	*j;
 
-	arg = NULL;
-	split = NULL;
-	i = 0;
-	while (tab[i])
+	i = array[0];
+	j = array[1];
+	if (*i == 0 && !check_first_char(tab[0]))
 	{
-		j = 0;
-		if (i == 0 && !check_first_char(tab[0]))
-		{
-			tmp = ft_substr(tab[i], 0, ft_strlen(tab[i]));
-			if (!tmp)
-				return (NULL);
-			ft_strjoin2(&arg, tmp);
-			if (!arg)
-				return (NULL);
-			free(tmp);
-		}
-		while (ft_isspace(tab[i][j]))
-			j++;
-		while (tab[i][j])
-		{
-			if (ft_isspace(tab[i][j]))
-			{
-				while (ft_isspace(tab[i][j]))
-					j++;
-				if (tab[i][j] && !ft_isspace(tab[i][j]))
-				{
-					if (i == 0)
-						break ;
-					tmp = ft_strndup(tab[i] + j, ft_strlen(tab[i]) - j);
-					if (!tmp)
-						return (NULL);
-					ft_strjoin2(&arg, tmp);
-					free(tmp);
-					if (!arg)
-						return (NULL);
-					break ;
-				}
-			}
-			if (!tab[i][j])
-				break ;
-			j++;
-		}
-		i++;
+		tmp = ft_substr(tab[*i], 0, ft_strlen(tab[*i]));
+		if (!tmp)
+			return (0);
+		ft_strjoin2(arg, tmp);
+		if (!arg)
+			return (0);
+		free(tmp);
 	}
-	if (arg)
-	{
-		split = ft_split(arg, ' ');
-		free(arg);
-	}
-	return (split);
+	while (ft_isspace(tab[*i][*j]))
+		(*j)++;
+	return (1);
 }
 
 static int	cut_raft(char **res, char *line, int *array[5])
