@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 01:07:43 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 03:22:01 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ char	*find_expand(t_global *glo, char *find, int start, int end, int skip)
 		mini_itoa(glo);
 		return (glo->str_status);
 	}
+	fprintf(stderr, "end - start>> %d\n", (end- start));
 	if (!end - start)
 	{
 		if ((find[0] == '\'' || find[0] == '"') && skip == 1)
@@ -86,7 +87,8 @@ char	*find_expand(t_global *glo, char *find, int start, int end, int skip)
 			- (char *)glo->personal_env.array[i];
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
-			return ((char *)(glo->personal_env.array[i] + stop + 1));
+			return (&glo->personal_env.array[i][stop + 1]);
+			// return ((char *)(glo->personal_env.array[i] + stop + 1));
 		i++;
 	}
 	return (0);
@@ -157,7 +159,11 @@ char	*catch_expand(t_global *glo, char *input)
 		return (input);
 	new_input = ft_calloc(sizeof(char), len_to_malloc);
 	if (!new_input)
+	{
+		free_double_str((char **)glo->personal_env.array);
+		ctrl_d(g_status);
 		return (0);
+	}
 	skip = 1;
 	j = 0;
 	i = 0;
