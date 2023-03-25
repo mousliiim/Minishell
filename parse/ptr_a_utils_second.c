@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils_second.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/22 05:24:01 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:27:00 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	pa_add(t_ptr_array *pa, void *new_str)
 {
 	if (pa->size == pa->capacity)
 	{
+		fprintf(stderr, "par ici\n");
 		pa->capacity *= 2;
 		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
 				* sizeof(void *));

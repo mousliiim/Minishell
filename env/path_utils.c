@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 19:04:58 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:09:11 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,11 +119,11 @@ int	find_path_for_each_command(t_global *global)
 	size_t			i;
 	t_tab_struct	*struc;
 
-	i = -1;
+	i = 0;
 	struc = global->struct_id;
 	if (!global->path)
 		return (1);
-	while (++i < global->nb)
+	while (i < global->nb)
 	{
 		if (!struc[i].split_command
 			|| (find_ptr_builtin(struc[i].split_command[0])
@@ -134,6 +134,7 @@ int	find_path_for_each_command(t_global *global)
 		}
 		if (sub_path_command(global, i) == 0)
 			return (0);
+		i++;
 	}
 	return (1);
 }

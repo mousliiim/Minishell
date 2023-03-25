@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 18:06:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:32:36 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,11 @@ int	check_env(t_global *global, int j, int idx_args, int stuff)
 		if (!ft_strncmp(global->struct_id[j].split_command[idx_args],
 				(char *)global->personal_env.array[i], stuff))
 		{
-			pa_pop(&global->personal_env, i);
 			return (i);
 		}
 	}
 	return (-1);
 }
-
 
 int	export(t_global *global, int j)
 {
@@ -93,6 +91,7 @@ int	export(t_global *global, int j)
 			- global->struct_id[j].split_command[idx_args];
 		if (stuff > 0)
 		{
+			fprintf(stderr, "x\n");
 			i = check_env(global, j, idx_args, stuff);
 			if (i != -1)
 				pa_pop(&global->personal_env, i);

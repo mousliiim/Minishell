@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 03:19:44 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:29:23 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	pa_pop(t_ptr_array *array, size_t index)
 {
 	free(array->array[index]);
 	array->array[index] = 0;
+	fprintf(stderr, "boucle\n");
 	while (index < array->size)
 	{
 		array->array[index] = array->array[index + 1];
@@ -56,7 +57,7 @@ void	pa_pop(t_ptr_array *array, size_t index)
 	array->size--;
 }
 
-// si ya un malloc qui fore dans split line 
+// si ya un malloc qui foire dans split line 
 // il faut que lon free tout ce que split line a alloue
 // et on renvoie 0 dans loop shell comme ca lui peut free
 // le reste
