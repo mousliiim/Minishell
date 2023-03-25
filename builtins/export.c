@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 18:48:00 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/25 22:06:43 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,8 @@ int	check_env(t_global *global, int j, int idx_args, int stuff)
 	}
 	return (-1);
 }
-
+// export a -> creer a sauf sil existe deja
+//export a= ->  
 int	export(t_global *global, int j)
 {
 	int	stuff;
@@ -95,15 +96,15 @@ int	export(t_global *global, int j)
 			- global->struct_id[j].split_command[idx_args];
 		if (stuff > 0)
 		{
-			fprintf(stderr, "x\n");
+		// 	fprintf(stderr, "x\n");
 			i = check_env(global, j, idx_args, stuff);
 			if (i != -1)
 				pa_pop(&global->personal_env, i);
 			pa_add(&global->personal_env,
 				ft_strdup(global->struct_id[j].split_command[idx_args]));
 		}
-		else
-			export_error_message(global->struct_id[j].split_command[idx_args]);
+		// else
+		// 	export_error_message(global->struct_id[j].split_command[idx_args]);
 	}
 	return (0);
 }
