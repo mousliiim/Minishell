@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 18:32:36 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/25 18:48:00 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,16 @@ int	ft_identifier(int c, char *str)
 	i = 0;
 	if (ft_isdigit(c))
 	{
-		while (str[i])
+		while (str[i] != '=')
 		{
-			if (ft_isalpha(str[i]))
+			if (ft_isalpha(str[i]) || str[i] == '_')
 				return (1);
+			else if (ft_isdigit(str[i])
+				|| str[i] == '=' || str[i] == '\0')
+				return (0);
 			i++;
 		}
+		return (0);
 	}
 	if (ft_isalpha(c) || c == '_' || c == '=')
 		return (1);
