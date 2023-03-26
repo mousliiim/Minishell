@@ -172,6 +172,8 @@ void					mini_itoa(t_global *glo);
 char					*catch_expand(t_global *glo, char *input);
 char					*find_expand(t_global *glo, char *find, int start,
 							int end, int skip);
+void					replace_variables(t_global *glo, char *input, char *new_input);
+size_t					get_replacement_size(t_global *glo, char *input, size_t len_to_malloc);
 /******************************************************/
 
 /******************* PARSE/SPLIT_PARSING.c ********************/

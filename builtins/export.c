@@ -61,6 +61,7 @@ int	check_identifier(t_global *global, int j, int idx_args)
 		if (!ft_identifier(str[i], str))
 		{
 			export_error_message(global->struct_id[j].split_command[idx_args]);
+			g_status = 1;
 			return (0);
 		}
 		i++;
