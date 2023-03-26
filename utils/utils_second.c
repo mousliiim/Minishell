@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_second.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 20:03:00 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 20:36:16 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 04:08:17 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,8 @@ int	is_operator(char *c, int j)
 void	line_positif(char *line)
 {
 	int	i;
-	int	j;
 
 	i = 0;
-	j = 0;
-	(void) j;
 	while (line[i])
 	{
 		if (line[i] && line[i] < 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils_second.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 18:27:00 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 03:07:15 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,19 @@ size_t	pa_size(t_ptr_array *pa)
 void	*pa_get(t_ptr_array *pa, size_t index)
 {
 	return (pa->array[index]);
+}
+
+void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
+{
+	int	k;
+
+	k = 0;
+	if (tab_struct[j].split_command)
+	{
+		while (tab_struct[j].split_command[k])
+		{
+			line_positif(tab_struct[j].split_command[k]);
+			k++;
+		}
+	}
 }

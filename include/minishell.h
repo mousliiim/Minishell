@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 01:01:59 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 03:07:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ void					pa_pop_replace(t_ptr_array *array, size_t index,
 int						pa_add(t_ptr_array *pa, void *ptr);
 size_t					pa_size(t_ptr_array *pa);
 void					*pa_get(t_ptr_array *pa, size_t index);
+void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /********************************************************/
 
 /******************* ENV/PATH_UTILS ************************/
@@ -168,10 +169,10 @@ char					*find_expand(t_global *glo, char *find, int start,
 /******************************************************/
 
 /******************* PARSE/SPLIT_PARSING.c ********************/
-int	split_input(t_split_line splitted_line,
-				t_tab_struct *tab_struct);
-t_split_line			split_line(const char *line);
-void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
+int						split_input(t_split_line splitted_line,
+							t_tab_struct *tab_struct);
+t_split_line			split_line_c(char *s, int i, int go, t_split_line res);
+t_split_line			split_line(char *line);
 /******************************************************/
 
 /*********************** ENV **************************/
@@ -222,7 +223,7 @@ void					quit_hd(int sign);
 /***************************************************/
 
 /*********************** UTILS ***********************/
-void					display_split(t_tab_struct *tab_struct, t_global *info);
+int						syntax_checker(char *line);
 char					*ft_no_take_first_word(char *line);
 void					*ft_realloc(void **old, size_t old_c, size_t new_c);
 t_type					return_redir_enum(char *line);

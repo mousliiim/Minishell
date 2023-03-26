@@ -3,41 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 01:06:46 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:43:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
-
-// $ >  $
-// $? > status
-// $?$ > status$
-// $:$= > $:$=
-// $HOME > variable env home
-// \$HOME > $HOME
-// $HOME4 > rien
-// $9HOME > HOME
-// $UID$HOME% > veuid vehome %
-// $"" > rien
-// "$""" > $
-// pareil avec quote > $
-// $"HOME" > HOME
-// $''HOME > HOME
-// pareil squote > HOME
-// "$HO"ME > ME
-// '$HO'ME > $HOME
-
-/*
-chose a demander a mouss
-
-comment je peux mettre en negatif
-les quotes apres le $
-*/
 
 void	mini_itoa(t_global *glo)
 {
@@ -85,7 +60,6 @@ char	*find_expand(t_global *glo, char *find, int start, int end, int skip)
 			- (char *)glo->personal_env.array[i];
 		if (!ft_strncmp(find, (char *)glo->personal_env.array[i], stop)
 			&& stop == end - start)
-			// return (&glo->personal_env.array[i][stop + 1]);
 			return ((char *)(glo->personal_env.array[i] + stop + 1));
 		i++;
 	}

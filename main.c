@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 01:01:01 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:43:38 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,7 @@
 
 int			g_status;
 
-static int	syntax_checker(char *line)
-{
-	line_negatif(line);
-	if (!quote_checker(line))
-	{
-		ft_printf("MiniBoosted: quote not closed\n");
-		return (0);
-	}
-	if (!rafter_checker(line))
-	{
-		ft_printf("MiniBoosted: syntax error near unexpected token 'newline'\n");
-		return (0);
-	}
-	if (!pipe_checker(line))
-	{
-		ft_printf("MiniBoosted: syntax error near unexpected token `|'\n");
-		return (0);
-	}
-	return (1);
-}
-
-int	init_shell(t_global *global, char **env)
+static int	init_shell(t_global *global, char **env)
 {
 	global->status = 0;
 	g_status = 0;
@@ -53,7 +32,7 @@ int	init_shell(t_global *global, char **env)
 	return (1);
 }
 
-void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct,
+static void	free_end_loop_shell(t_global *global, t_tab_struct *tab_struct,
 		size_t tempsize)
 {
 	size_t	i;

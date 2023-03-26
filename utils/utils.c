@@ -6,11 +6,32 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 22:42:11 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:41:42 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+int	syntax_checker(char *line)
+{
+	line_negatif(line);
+	if (!quote_checker(line))
+	{
+		ft_printf("MiniBoosted: quote not closed\n");
+		return (0);
+	}
+	if (!rafter_checker(line))
+	{
+		ft_printf("MiniBoosted: syntax error near unexpected token 'newline'\n");
+		return (0);
+	}
+	if (!pipe_checker(line))
+	{
+		ft_printf("MiniBoosted: syntax error near unexpected token `|'\n");
+		return (0);
+	}
+	return (1);
+}
 
 char	*ft_no_take_first_word(char *line)
 {
