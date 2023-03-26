@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:49 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/21 20:54:43 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 22:20:11 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,15 +51,15 @@ static void	print(char **arg, int i)
 
 int	echo(t_global *glo, int j)
 {
-	int			i;
-	char		**s_cmd;
+	int		i;
+	char	**s_cmd;
 
 	s_cmd = glo->struct_id[j].split_command;
 	i = 1;
 	if (s_cmd[1] && s_cmd[1][0] == '-' && !s_cmd[1][1])
 	{
-		printf("-\n");
-		return (0);
+		printf("- ");
+		// return (0);
 	}
 	while (s_cmd[i] && valid_option(s_cmd[i]))
 		i++;

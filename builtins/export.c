@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 00:40:31 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:36:32 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,14 @@ int	ft_identifier(int c, char *str)
 	{
 		while (str[++i] != '=')
 		{
-			if (ft_isalpha(str[i]) || str[i] == '_')
+			if (ft_isalpha(str[i]) || str[i] == '_' || str[i] == '-')
 				return (1);
 			else if (ft_isdigit(str[i]) || str[i] == '=' || str[i] == '\0')
 				return (0);
 		}
 		return (0);
 	}
-	if (c == '/')
+	if (c == '/' || c == '-' || ft_isspace(c))
 	{
 		while (str[++i] != '=')
 			if (str[i] == '/')

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 18:29:23 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:38:17 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	pa_pop(t_ptr_array *array, size_t index)
 {
 	free(array->array[index]);
 	array->array[index] = 0;
-	fprintf(stderr, "boucle\n");
 	while (index < array->size)
 	{
 		array->array[index] = array->array[index + 1];

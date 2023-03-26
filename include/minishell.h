@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 19:39:21 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:53:41 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,11 +110,12 @@ typedef struct s_prompt
 
 typedef struct s_expand
 {
-	int		start;
-	int		skip;
-	int		i;
-	char	*to_replace_by;
-}	t_expand;
+	int					start;
+	int					skip;
+	int					i;
+	int					j;
+	char				*to_replace_by;
+}						t_expand;
 
 typedef int				(*t_builtins)(t_global *, int);
 
@@ -157,7 +158,8 @@ int						check_first_char(char *line);
 void					catch_heredocs(t_global *glo, size_t nb_command);
 int						ft_clean_quotes(char **line);
 int						rafter_cut(t_tab_struct *tab_struct,
-							t_split_line splitted_line, int j);
+							t_split_line splitted_line,
+							int j);
 /******************************************************/
 
 /******************* PARSE_CHECK ************************/
@@ -171,15 +173,20 @@ int						pipe_checker(char *line);
 /******************* EXPAND ********************/
 void					mini_itoa(t_global *glo);
 char					*catch_expand(t_global *glo, char *input);
-char					*find_expand(t_global *glo, char *find, int start,
-							int end, int skip);
-void					replace_variables(t_global *glo, char *input, char *new_input);
-size_t					get_replacement_size(t_global *glo, char *input, size_t len_to_malloc);
+char					*find_expand(t_global *glo, char *find, t_expand *exp);
+// void					replace_variables(t_global *glo, char *input,
+// 							char *new_input);
+size_t					get_replacement_size(t_global *glo, t_expand *exp,
+							char *input, size_t len_to_malloc);
+void					replace_variables(t_global *glo, t_expand *exp,
+							char *input, char *new_input);
+// size_t					get_replacement_size(t_global *glo,  char *input,
+// 							size_t len_to_malloc);
 /******************************************************/
 
 /******************* PARSE/SPLIT_PARSING.c ********************/
-int	split_input(t_split_line splitted_line,
-				t_tab_struct *tab_struct);
+int						split_input(t_split_line splitted_line,
+							t_tab_struct *tab_struct);
 t_split_line			split_line(const char *line);
 void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
 /******************************************************/
@@ -218,7 +225,7 @@ int						openfiles(t_global *glo, int j);
 int						child_process(t_global *glo, t_builtins built_ptr,
 							unsigned long i);
 void					father_process(t_global *glo, unsigned long i);
-void	builtin_solo_process(t_global *glo,
+void					builtin_solo_process(t_global *glo,
 							t_builtins built_ptr,
 							unsigned long i);
 void					error_msg(int err, char *cmd);

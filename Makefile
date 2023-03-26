@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
+#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/22 00:30:07 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/03/27 00:51:30 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,7 +45,7 @@ FREE_DIR	= free
 
 SRC_FILES	=	$(addprefix parse/, \
 				parsing.c		ptr_a_utils.c		ptr_a_utils_second.c		rafter.c		split_parsing.c \
-				expand.c	syntax_check.c) \
+				expand.c	expand_2.c	syntax_check.c) \
 				\
 				$(addprefix exec/, \
 				exec.c		here_docs.c		divided_process.c  redirections.c) \
