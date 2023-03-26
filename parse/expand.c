@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 01:43:14 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 21:27:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ char	*catch_expand(t_global *glo, char *input)
 			skip *= -1;
 		if (input[i] == '$')
 		{
+			if (input[i] == '\'')
+				skip *= -1;
 			if (skip > 0)
 			{
 				start = i + 1;
@@ -122,6 +124,7 @@ char	*catch_expand(t_global *glo, char *input)
 					continue ;
 				len_to_malloc += ft_strlen(to_replace_by);
 				len_to_malloc -= i - start;
+				skip = 1;
 				continue ;
 			}
 		}
@@ -143,7 +146,7 @@ char	*catch_expand(t_global *glo, char *input)
 	{
 		if (input[i] == '"' && skip != -1)
 			skip = 42;
-		if (input[i] == '\'' && skip != 42)
+		if (input[i] == '\'')
 			skip *= -1;
 		if (input[i] == '$')
 		{
@@ -167,6 +170,7 @@ char	*catch_expand(t_global *glo, char *input)
 					continue ;
 				ft_strcat(new_input, to_replace_by);
 				j += ft_strlen(to_replace_by);
+				skip = 1;
 				continue ;
 			}
 		}
