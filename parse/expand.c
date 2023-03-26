@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 17:25:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:06:46 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,8 +178,7 @@ char	*catch_expand(t_global *glo, char *input)
 			if (skip > 0)
 			{
 				start = i + 1;
-				i++;
-				if (ft_isdigit(input[i]))
+				if (ft_isdigit(input[++i]))
 				{
 					i++;
 					continue ;
@@ -197,9 +196,7 @@ char	*catch_expand(t_global *glo, char *input)
 				continue ;
 			}
 		}
-		new_input[j] = input[i];
-		j++;
-		i++;
+		new_input[j++] = input[i++];
 	}
 	free(input);
 	return (new_input);

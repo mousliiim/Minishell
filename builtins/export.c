@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/25 22:06:43 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 00:40:31 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,24 @@ int	ft_identifier(int c, char *str)
 {
 	int	i;
 
-	i = 0;
-	if (ft_isdigit(c))
+	i = -1;
+	if (ft_isdigit(c) || c == '\\')
 	{
-		while (str[i] != '=')
+		while (str[++i] != '=')
 		{
 			if (ft_isalpha(str[i]) || str[i] == '_')
 				return (1);
-			else if (ft_isdigit(str[i])
-				|| str[i] == '=' || str[i] == '\0')
+			else if (ft_isdigit(str[i]) || str[i] == '=' || str[i] == '\0')
 				return (0);
-			i++;
 		}
 		return (0);
+	}
+	if (c == '/')
+	{
+		while (str[++i] != '=')
+			if (str[i] == '/')
+				return (0);
+		return (1);
 	}
 	if (ft_isalpha(c) || c == '_' || c == '=')
 		return (1);
@@ -71,7 +76,8 @@ int	check_env(t_global *global, int j, int idx_args, int stuff)
 	while (global->personal_env.array[++i])
 	{
 		if (!ft_strncmp(global->struct_id[j].split_command[idx_args],
-				(char *)global->personal_env.array[i], stuff))
+						(char *)global->personal_env.array[i],
+						stuff))
 		{
 			return (i);
 		}
@@ -79,7 +85,7 @@ int	check_env(t_global *global, int j, int idx_args, int stuff)
 	return (-1);
 }
 // export a -> creer a sauf sil existe deja
-//export a= ->  
+//export a= ->
 int	export(t_global *global, int j)
 {
 	int	stuff;
@@ -96,12 +102,12 @@ int	export(t_global *global, int j)
 			- global->struct_id[j].split_command[idx_args];
 		if (stuff > 0)
 		{
-		// 	fprintf(stderr, "x\n");
+			// 	fprintf(stderr, "x\n");
 			i = check_env(global, j, idx_args, stuff);
 			if (i != -1)
 				pa_pop(&global->personal_env, i);
 			pa_add(&global->personal_env,
-				ft_strdup(global->struct_id[j].split_command[idx_args]));
+					ft_strdup(global->struct_id[j].split_command[idx_args]));
 		}
 		// else
 		// 	export_error_message(global->struct_id[j].split_command[idx_args]);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   prompt.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/23 20:42:17 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:01:26 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,15 @@
 
 extern int	g_status;
 
-char	*build_prompt(void)
+char	*build_prompt(int opt)
 {
-	char					buffer[MAX_READ_SIZE + 1];
-	int						fd;
-	size_t					red;
-	static char				prompt[170];
+	char		buffer[MAX_READ_SIZE + 1];
+	int			fd;
+	size_t		red;
+	static char	prompt[170];
 
+	if (!opt)
+		return ("$MiniBoosted : ");
 	if (g_status == 0)
 		ft_strcpy_maxou(prompt, GB ARROW EB RB "$MiniBoosted " EB);
 	else
@@ -70,14 +72,18 @@ int	get_git_branch(void)
 	pipe(prompt.link);
 	prompt.forkstate = fork();
 	if (prompt.forkstate == 0)
+	{
 		exec_cmd_git(&prompt, (char **)command1, 1);
+	}
 	wait(0);
 	prompt.prev = prompt.link[0];
 	close(prompt.link[1]);
 	pipe(prompt.link);
 	prompt.forkstate = fork();
 	if (prompt.forkstate == 0)
+	{
 		exec_cmd_git(&prompt, (char **)command2, 2);
+	}
 	wait(0);
 	close(prompt.link[1]);
 	close(prompt.prev);
