@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 01:01:59 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 01:44:45 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,12 @@ typedef struct s_prompt
 	int					link[2];
 	int					forkstate;
 }						t_prompt;
+
+typedef struct s_expand
+{
+	int		start;
+	int		skip;
+}	t_expand;
 
 typedef int				(*t_builtins)(t_global *, int);
 

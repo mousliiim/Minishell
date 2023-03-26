@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 01:06:46 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 03:24:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,53 +107,69 @@ void	line_negatif_expand(char *input)
 	}
 }
 
+int	advance_idx(t_expand *expand, char *input, int i)
+{
+	if (expand->skip < 0)
+		return (-1);
+	if (expand->skip > 0)
+	{
+		expand->start = i + 1;
+		i++;
+		if (ft_isdigit(input[i]))
+		{
+			i++;
+			return (-1);
+		}
+		while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
+			i++;
+	}
+	return (i);
+}
+
 char	*catch_expand(t_global *glo, char *input)
 {
 	int		i;
 	int		j;
-	int		start;
+	// int		start;
 	int		skip;
+	t_expand	expand;
 	char	*to_replace_by;
 	size_t	len_to_malloc;
 	char	*new_input;
 
 	i = 0;
 	to_replace_by = 0;
-	start = 0;
-	skip = 1;
+	expand.start = 0;
+	expand.skip = 1;
 	len_to_malloc = ft_strlen(input);
 	while (input[i])
 	{
-		if (input[i] == '"' && skip != -1)
-			skip = 42;
-		if (input[i] == '\'' && skip != 42)
-			skip *= -1;
+		if (input[i] == '"' && expand.skip != -1)
+			expand.skip = 42;
+		if (input[i] == '\'' && expand.skip != 42)
+			expand.skip *= -1;
 		if (input[i] == '$')
 		{
-			if (skip > 0)
-			{
-				start = i + 1;
-				i++;
-				if (ft_isdigit(input[i]))
+				skip = advance_idx(&expand, input, i);
+				if (skip == -1)
 				{
 					i++;
 					continue ;
 				}
-				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
-					i++;
-				to_replace_by = find_expand(glo, &input[start], start, i, skip);
+				else
+					i = skip;
+				to_replace_by = find_expand(glo, &input[expand.start], expand.start, i, expand.skip);
 				if (input[i] == '?')
 					i++;
 				if (!to_replace_by)
 					continue ;
 				len_to_malloc += ft_strlen(to_replace_by);
-				len_to_malloc -= i - start;
+				len_to_malloc -= i - expand.start;
 				continue ;
-			}
 		}
 		i++;
 	}
-	if (!start)
+	if (!expand.start)
 		return (input);
 	new_input = ft_calloc(sizeof(char), len_to_malloc);
 	if (!new_input)
@@ -162,30 +178,28 @@ char	*catch_expand(t_global *glo, char *input)
 		ctrl_d(g_status);
 		return (0);
 	}
-	skip = 1;
+	expand.skip = 1;
 	j = 0;
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '"' && skip != -1)
-			skip = 42;
-		if (input[i] == '\'' && skip != 42)
-			skip *= -1;
+		if (input[i] == '"' && expand.skip != -1)
+			expand.skip = 42;
+		if (input[i] == '\'' && expand.skip != 42)
+			expand.skip *= -1;
 		if (input[i] == '$')
 		{
-			if (input[i] == '\'')
-				skip *= -1;
-			if (skip > 0)
-			{
-				start = i + 1;
-				if (ft_isdigit(input[++i]))
+				skip = advance_idx(&expand, input, i);
+				if (skip == -1)
 				{
 					i++;
 					continue ;
 				}
+				else
+					i = skip;
 				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
 					i++;
-				to_replace_by = find_expand(glo, &input[start], start, i, skip);
+				to_replace_by = find_expand(glo, &input[expand.start], expand.start, i, expand.skip);
 				line_negatif_expand(to_replace_by);
 				if (input[i] == '?')
 					i++;
@@ -194,10 +208,12 @@ char	*catch_expand(t_global *glo, char *input)
 				ft_strcat(new_input, to_replace_by);
 				j += ft_strlen(to_replace_by);
 				continue ;
-			}
 		}
 		new_input[j++] = input[i++];
 	}
 	free(input);
 	return (new_input);
 }
+
+			// if (input[i] == '\'')
+			// 	expand.skip *= -1;
