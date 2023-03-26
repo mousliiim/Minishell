@@ -67,3 +67,5 @@ int	echo(t_global *glo, int j)
 	g_status = 0;
 	return (0);
 }
+
+// Echo
