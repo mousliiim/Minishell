@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 03:41:00 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 19:43:49 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ char	*catch_expand(t_global *glo, char *input)
 
 	len_to_malloc = ft_strlen(input);
 	tmp = get_replacement_size(glo, input, 0);
-	if (!tmp)
+	if (tmp == -1)
 		return (input);
 	len_to_malloc = get_replacement_size(glo, input, len_to_malloc);
 	if (!len_to_malloc)
@@ -133,91 +133,66 @@ char	*catch_expand(t_global *glo, char *input)
 	return (new_input);
 }
 
-char	*get_replace(t_global *glo, char *input, int values[3])
+// 0 i     1 start    2 skip
+int	advance_idx(char *input, int *i, int *start, int *flag)
 {
-	if (input[values[0]] == '\'')
-		values[2] *= -1;
-	if (values[2] > 0)
+	if (input[*i] == '\'')
+		*flag *= -1;
+	if (*flag < 0)
+		return (0);
+	*start = *i + 1;
+	(*i)++;
+	if (ft_isdigit(input[*i]))
 	{
-		values[1] = values[0] + 1;
-		values[0]++;
-		if (ft_isdigit(input[values[0]]))
-		{
-			values[0]++;
-			return (0);
-		}
-		while (input[values[0]] && (ft_isalnum(input[values[0]]) || (input[values[0]] == '_')))
-			values[0]++;
-		return (find_expand(glo, &input[values[1]], values[1], values[0], values[2]));
+		(*i)++;
+		return (0);
 	}
-	return (0);
+	while (input[*i] && (ft_isalnum(input[*i]) || (input[*i] == '_')))
+		(*i)++;
+	return(1);
 }
 
-// int	advance_idx(int	*i, int	*start, int *end)
-// {
-// 	if (input[*i] == '\'')
-// 		values[2] *= -1;
-// 	if (values[2] < 0)
-// 		return (0);
-// 	values[1] = i + 1;
-// 	i++;
-// 	if (ft_isdigit(input[i]))
-// 	{
-// 		i++;
-// 		continue ;
-// 	}
-// 	while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
-// 		i++;
-// 	return(1)
-// }
-// 0 i     1 start    2 skip
+void	change_flags(char *input, int i, int *flag)
+{
+	if (input[i] == '"' && *flag != -1)
+		*flag = 42;
+	if (input[i] == '\'' && *flag != 42)
+		*flag *= -1;
+}
+
 size_t	get_replacement_size(t_global *glo, char *input, size_t len_to_malloc)
 {
+	t_expand	expand;
 	int		values[3];
-	// char	*t	mp;
 	int		i;
-	char	*to_replace_by;
+	// char	*to_replace_by;
 
 	i = 0; 
-	values[1] = 0; 
-	values[2] = 1; 
+	expand.start = 0; 
+	expand. = 1; 
 	while (input[i])
 	{
-		if (input[i] == '"' && values[2] != -1)
-			values[2] = 42;
-		if (input[i] == '\'' && values[2] != 42)
-			values[2] *= -1;
+		change_flags(input, i, &values[2]);
 		if (input[i] == '$')
 		{
-			// if (advance_idx(&i, &values[1], &values[2]))
-			if (input[i] == '\'')
-				values[2] *= -1;
-			if (values[2] > 0)
+			if (advance_idx(input, &i, &expand.start, &values[2]))
 			{
-				values[1] = i + 1;
-				i++;
-				if (ft_isdigit(input[i]))
-				{
-					i++;
-					continue ;
-				}
-				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
-					i++;
-				// advance_idx(&i, &values[1], &values[2]);
-				to_replace_by = find_expand(glo, &input[values[1]], values[1], i, values[2]);
+				expand.to_replace_by = find_expand(glo, &input[expand.start], expand.start, i, values[2]);
 				if (input[i] == '?')
 					i++;
-				if (!to_replace_by)
+				if (!expand.to_replace_by)
 					continue ;
-				len_to_malloc += ft_strlen(to_replace_by);
-				len_to_malloc -= i - values[1];
+				len_to_malloc += ft_strlen(expand.to_replace_by);
+				len_to_malloc -= i - expand.start;
 				continue ;
 			}
 		}
+		if (!input[i])
+			break ;
 		i++;
 	}
 	if (!values[1])
-		return (0);
+		return (-1);
 	return (len_to_malloc);
 }
 
@@ -235,25 +210,11 @@ void	replace_variables(t_global *glo, char *input, char *new_input)
 	i = 0;
 	while (input[i])
 	{
-		if (input[i] == '"' && values[2] != -1)
-			values[2] = 42;
-		if (input[i] == '\'' && values[2] != 42)
-			values[2] *= -1;
+		change_flags(input, i, &values[2]);
 		if (input[i] == '$')
 		{
-			if (input[i] == '\'')
-				values[2] *= -1;
-			if (values[2] > 0)
+			if (advance_idx(input, &i, &values[1], &values[2]))
 			{
-				values[1] = i + 1;
-				i++;
-				if (ft_isdigit(input[i]))
-				{
-					i++;
-					continue ;
-				}
-				while (input[i] && (ft_isalnum(input[i]) || (input[i] == '_')))
-					i++;
 				to_replace_by = find_expand(glo, &input[values[1]], values[1], i, values[2]);
 				if (input[i] == '?')
 					i++;
@@ -264,6 +225,8 @@ void	replace_variables(t_global *glo, char *input, char *new_input)
 				continue ;
 			}
 		}
+		if (!input[i])
+			break ;
 		new_input[j++] = input[i++];
 	}
 }

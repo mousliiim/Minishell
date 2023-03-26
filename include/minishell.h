@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 03:34:47 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 19:39:21 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,8 @@ typedef struct s_expand
 {
 	int		start;
 	int		skip;
-	char	*new_input;
+	int		i;
+	char	*to_replace_by;
 }	t_expand;
 
 typedef int				(*t_builtins)(t_global *, int);
