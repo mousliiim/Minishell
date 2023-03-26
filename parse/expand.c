@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 03:24:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/26 03:41:00 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,21 +128,20 @@ int	advance_idx(t_expand *expand, char *input, int i)
 
 char	*catch_expand(t_global *glo, char *input)
 {
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 	// int		start;
-	int		skip;
+	int			skip;
 	t_expand	expand;
-	char	*to_replace_by;
-	size_t	len_to_malloc;
-	char	*new_input;
+	char		*to_replace_by;
+	size_t		len_to_malloc;
 
 	i = 0;
 	to_replace_by = 0;
 	expand.start = 0;
 	expand.skip = 1;
 	len_to_malloc = ft_strlen(input);
-	while (input[i])
+	while (input[++i])
 	{
 		if (input[i] == '"' && expand.skip != -1)
 			expand.skip = 42;
@@ -171,8 +170,8 @@ char	*catch_expand(t_global *glo, char *input)
 	}
 	if (!expand.start)
 		return (input);
-	new_input = ft_calloc(sizeof(char), len_to_malloc);
-	if (!new_input)
+	expand.new_input = ft_calloc(sizeof(char), len_to_malloc);
+	if (!expand.new_input)
 	{
 		free_double_str((char **)glo->personal_env.array);
 		ctrl_d(g_status);
@@ -205,14 +204,14 @@ char	*catch_expand(t_global *glo, char *input)
 					i++;
 				if (!to_replace_by)
 					continue ;
-				ft_strcat(new_input, to_replace_by);
+				ft_strcat(expand.new_input, to_replace_by);
 				j += ft_strlen(to_replace_by);
 				continue ;
 		}
-		new_input[j++] = input[i++];
+		expand.new_input[j++] = input[i++];
 	}
 	free(input);
-	return (new_input);
+	return (expand.new_input);
 }
 
 			// if (input[i] == '\'')
