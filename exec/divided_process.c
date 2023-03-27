@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   divided_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:21:23 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 03:49:40 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:08:16 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
 		dup2(glo->link[1], STDOUT_FILENO);
 	close(glo->link[0]);
 	close(glo->link[1]);
+	file_name_to_positif(glo->struct_id[i].head);
 	if (openfiles(glo, i) == -1)
 		return (free_inchild(glo), exit(1), 1);
 	if (glo->struct_id[i].split_command && built_ptr)

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 19:55:37 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:02:37 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,25 +55,3 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 	}
 }
 
-void	clean_quote(char **line, char *tmp, int ijc[3], int *delim)
-{
-	if (((*line)[ijc[0]] == '"' || (*line)[ijc[0]] == '\'') &&
-			(ijc[2] == 0 || *delim != (*line)[ijc[0]]))
-	{
-		*delim = (*line)[ijc[0]];
-		(ijc[0])++;
-		(ijc[2])++;
-	}
-	else if ((*line)[ijc[0]] == *delim)
-	{
-		delim = 0;
-		(ijc)[0]++;
-		(ijc)[2]--;
-	}
-	else
-	{
-		tmp[ijc[1]] = (*line)[ijc[0]];
-		(ijc)[0]++;
-		(ijc)[1]++;
-	}
-}

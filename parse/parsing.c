@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 19:48:57 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:19:59 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	ft_clean_quotes(char **line)
 	int		ijq[3];
 	char	*tmp;
 
+	if (!line || !*line)
+		return (0);
 	ft_bzero(ijq, sizeof(int) * 3);
 	tmp = malloc(sizeof(char) * (ft_strlen(*line) + 1));
 	if (!tmp)
@@ -38,8 +40,7 @@ int	ft_clean_quotes(char **line)
 	}
 	tmp[ijq[1]] = '\0';
 	free(*line);
-	*line = tmp;
-	return (1);
+	return (*line = tmp, 1);
 }
 
 int	first_command(char **tab, char **arg, char *tmp, int *array[2])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 03:54:20 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:35:07 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ extern int	g_status;
 void	handle_signal_waiting(int signal_number)
 {
 	if (signal_number == SIGINT)
-	{
-		write(2, "\n", 1);
 		g_status = 130;
-	}
 	else if (signal_number == SIGQUIT)
 		g_status = 131;
 }
@@ -31,7 +28,7 @@ void	ctrl_d(int status)
 	ft_putendl_fd("exit", 2);
 	exit(status);
 }
-
+	
 void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)

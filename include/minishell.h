@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 04:39:57 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:08:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,8 +134,6 @@ int						pa_add(t_ptr_array *pa, void *ptr);
 size_t					pa_size(t_ptr_array *pa);
 void					*pa_get(t_ptr_array *pa, size_t index);
 void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
-void					clean_quote(char **line, char *tmp, int ij[2],
-							int *delim);
 /********************************************************/
 
 /******************* ENV/PATH_UTILS ************************/
@@ -216,6 +214,7 @@ void					waiting(t_global *global, int size_wait);
 /***************************************************/
 
 /*******************REDIRECTIONS*********************/
+void					file_name_to_positif(t_list_mini *list);
 int						openfiles_bt(t_global *glo, int j);
 int						openfiles(t_global *glo, int j);
 /***************************************************/

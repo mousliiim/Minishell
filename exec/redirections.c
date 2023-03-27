@@ -6,13 +6,32 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 07:07:05 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 19:16:51 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:09:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
+
+void	file_name_to_positif(t_list_mini *list)
+{
+	int	i;
+
+	if (!list)
+		return ;
+	i = 0;
+	while (list)
+	{
+		while (list->file_name[i])
+		{
+			if (list->file_name[i] < 0)
+				list->file_name[i] = list->file_name[i] * -1;
+			i++;
+		}
+		list = list->next;
+	}
+}
 
 int	openfiles(t_global *glo, int j)
 {
