@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 00:53:41 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:01:12 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,6 +232,7 @@ void					error_msg(int err, char *cmd);
 /***************************************************/
 
 /*********************** SIGNAL ***********************/
+void					handle_signal_waiting(int signal_number);
 void					ctrl_antislash(int sig);
 void					ctrl_c(int sig);
 void					ctrl_d(int status);

@@ -6,11 +6,13 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:40:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 00:49:23 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 01:00:12 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+extern int	g_status;
 
 void	mini_itoa(t_global *glo)
 {
