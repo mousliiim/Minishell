@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 03:18:21 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/26 23:40:17 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,29 +14,48 @@
 
 extern int	g_status;
 
+void	clean_quote(char **line, char *tmp, int ij[2], int *delim)
+{
+	int	count;
+
+	count = 0;
+	if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') &&
+			(count == 0 || *delim != (*line)[ij[0]]))
+	{
+		*delim = (*line)[ij[0]];
+		ij[0]++;
+		count++;
+	}
+	else if ((*line)[ij[0]] == *delim)
+	{
+		delim = 0;
+		ij[0]++;
+		count--;
+	}
+	else
+	{
+		tmp[ij[1]] = (*line)[ij[0]];
+		ij[0]++;
+		ij[1]++;
+	}
+}
+
 int	ft_clean_quotes(char **line)
 {
-	int			ij[2];
-	char		*tmp;
-	char		delim;
+	int		ij[2];
+	char	*tmp;
+	int		delim;
 
-	delim = 0;
+	if (!line || !(*line))
+		return (0);
 	ij[0] = 0;
 	ij[1] = 0;
-	if (line == NULL || *line == NULL)
-		return (0);
+	delim = 0;
 	tmp = malloc(sizeof(char) * (ft_strlen(*line) + 1));
 	if (!tmp)
 		return (0);
 	while ((*line)[ij[0]])
-	{
-		if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') && delim == 0)
-			delim = (*line)[ij[0]++];
-		else if ((*line)[ij[0]] == delim)
-			ij[0]++;
-		else
-			tmp[ij[1]++] = (*line)[ij[0]++];
-	}
+		clean_quote(line, tmp, ij, &delim);
 	tmp[ij[1]] = '\0';
 	free(*line);
 	*line = tmp;
