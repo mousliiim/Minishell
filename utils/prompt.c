@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:32:09 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 23:37:04 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/28 00:47:14 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,3 @@ char	*build_prompt(int opt)
 	ft_strcat(prompt, BB ") " EB);
 	return (prompt);
 }
-
-

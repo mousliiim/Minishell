@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 23:01:29 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/28 00:46:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ static void	waiting_hd(t_global *global, int forkstate)
 	global->status = status;
 }
 
-static void	loop_here_docks(t_airdock *airdock, t_global *glo, t_list_mini *head)
+static void	loop_here_docks(t_airdock *airdock, t_global *glo,
+	t_list_mini *head)
 {
 	while (1)
 	{

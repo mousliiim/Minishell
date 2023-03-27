@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 07:07:05 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 21:09:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/28 00:36:26 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@ void	file_name_to_positif(t_list_mini *list)
 
 	if (!list)
 		return ;
-	i = 0;
 	while (list)
 	{
+		i = 0;
 		while (list->file_name[i])
 		{
 			if (list->file_name[i] < 0)
