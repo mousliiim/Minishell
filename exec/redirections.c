@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 07:07:05 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:16:44 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 00:51:55 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+extern int	g_status;
 
 int	openfiles(t_global *glo, int j)
 {

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/22 19:39:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 01:04:09 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ void	error_message_exit(char *str)
 
 long long	ft_atoulld(const char *str)
 {
-	int						neg;
-	int						i;
-	unsigned long long		res;
+	int					neg;
+	int					i;
+	unsigned long long	res;
 
 	res = 0;
 	neg = 1;
@@ -35,9 +35,9 @@ long long	ft_atoulld(const char *str)
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 	{
-			neg *= -1;
+		neg *= -1;
 		if (str[i] == '-')
-		i++;
+			i++;
 	}
 	while (ft_isdigit(str[i]))
 	{
@@ -82,5 +82,5 @@ int	builtin_exit(t_global *global, int j)
 	}
 	i = ft_atoulld(global->struct_id[j].split_command[1]);
 	free_inchild(global);
-	exit (i);
+	exit(i);
 }

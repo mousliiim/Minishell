@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   divided_process.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/21 17:21:23 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:20:21 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 01:42:50 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-extern int	g_status;	
+extern int	g_status;
 
 void	error_msg(int err, char *cmd)
 {
@@ -38,7 +38,7 @@ void	execute(t_global *glo, int i)
 
 int	child_process(t_global *glo, t_builtins built_ptr, unsigned long i)
 {
-	signal(SIGINT, &ctrl_c);
+	signal(SIGINT, &ctrl_antislash);
 	signal(SIGQUIT, &ctrl_antislash);
 	if (i != 0)
 		dupnclose(glo->prev, STDIN_FILENO);

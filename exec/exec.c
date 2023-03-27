@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 20:29:28 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:00:37 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,44 +25,23 @@ void	waiting(t_global *global, int size_wait)
 	i = 0;
 	status = 0;
 	check = 0;
+	signal(SIGINT, handle_signal_waiting);
+	signal(SIGQUIT, handle_signal_waiting);
 	while (i < size_wait)
 	{
 		waitpid(global->forkstates[i], &status, 0);
-		if (WIFEXITED(status))
-			status = WEXITSTATUS(status);
-		if (status == 131 && !check++)
+		if (g_status == 131 && !check++)
 			ft_printf("Quit (core dumped)\n");
 		i++;
 	}
-	signal(SIGINT, &ctrl_c);
-	g_status = status;
-	global->status = status;
 }
-
-// void	free_exec_malloc(t_global *global)
-// {
-// 	size_t	i;
-
-// 	i = 0;
-// 	free_shell(global, NULL, 0);
-// 	free_double_str(global->path);
-// 	clear_lst(global->struct_id, global->nb);
-// 	while (i < global->nb)
-// 	{
-// 		free_double_str(global->struct_id[i].split_command);
-// 		free_double_str(global->struct_id[i].commands);
-// 		i++;
-// 	}
-// 	free(global->struct_id);
-// 	exit(1);
-// }
 
 int	go_exec(t_global *global)
 {
 	size_t	i;
 	size_t	count_nb_bultin;
 
-	i = 0;
+	i = -1;
 	count_nb_bultin = 0;
 	global->nb_free = global->nb - global->nb_hd;
 	if (!find_path_for_each_command(global))
@@ -72,14 +51,14 @@ int	go_exec(t_global *global)
 		free_exec_malloc(global);
 	global->prev = -1;
 	global->link[0] = -1;
-	while (i < global->nb)
+	while (++i < global->nb)
 	{
 		signal(SIGINT, SIG_IGN);
 		pipe(global->link);
 		forking(global, i);
-		i++;
 	}
 	waiting(global, global->nb - count_nb_bultin);
+	signal(SIGINT, &ctrl_c);
 	if (global->link[0] != -1)
 		close(global->link[0]);
 	free(global->forkstates);

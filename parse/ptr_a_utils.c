@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:47:19 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 03:01:22 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:17:36 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	pa_pop(t_ptr_array *array, size_t index)
 {
 	free(array->array[index]);
 	array->array[index] = 0;
-	fprintf(stderr, "boucle\n");
 	while (index < array->size)
 	{
 		array->array[index] = array->array[index + 1];
