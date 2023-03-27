@@ -71,7 +71,9 @@ static int	loop_shell(t_global *global, char *input)
 
 	add_history(input);
 	if (!syntax_checker(input))
-		return (-42);
+	{
+		return (g_status = 2, -42);
+	}
 	input = catch_expand(global, input);
 	if (!input)
 		free_shell(global, input, 0);
@@ -111,11 +113,11 @@ int	main(int ac, char **av, char **env)
 			ctrl_d(g_status);
 		}
 		else if (!*input)
-			continue ;
-		if (loop_shell(&global, input) == -42)
 		{
-			free(input);
-			g_status = 2;
+			free (input);
+			continue ;
 		}
+		if (loop_shell(&global, input) == -42)
+			free(input);
 	}
 }

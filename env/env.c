@@ -14,25 +14,6 @@
 
 extern int	g_status;
 
-int	identifier_last(int c, char *str)
-{
-	int	i;
-
-	i = -1;
-	if (c == ':')
-	{
-		while (str[++i] != '=')
-		{
-			if (str[i] == ':')
-				return (0);
-			else
-				return (1);
-		}
-		return (0);
-	}
-	return (1);
-}
-
 int	print_env(t_global *glo, int j)
 {
 	int	i;

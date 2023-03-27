@@ -14,38 +14,29 @@
 
 extern int	g_status;
 
-static int	ft_identifier(int c, char *str, int i)
+static int	ft_identifier(char *str)
 {
-	if (ft_isdigit(c) || c == '\\')
-	{
-		while (str[++i] != '=')
-		{
-			if (ft_isalpha(str[i]) || str[i] == '_' || str[i] == '-')
-				return (1);
-			else if (ft_isdigit(str[i]) || str[i] == '=' || str[i] == '\0')
-				return (0);
-		}
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (0);
-	}
-	if (c == '/' || c == '-' || ft_isspace(c))
+	if (str[0] == '=' && !str[1])
+		return (0);
+	while (str[i] && str[i] != '=')
 	{
-		while (str[++i] != '=')
-			if (str[i] == '/')
-				return (0);
-		return (1);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (0);
+	i++;
 	}
-	if (ft_isalpha(c) || c == '_' || c == '=')
-		return (1);
-	if (identifier_last(c, str))
-		return (1);
-	return (0);
+	return (1);
 }
 
 void	export_error_message(char *str)
 {
-	ft_putstr_fd("MiniBoosted: export:'", 2);
+	ft_putstr_fd("MiniBoosted: export: '", 2);
 	ft_putstr_fd(str, 2);
-	ft_putstr_fd("': not a valid identifier\n", 2);
+	ft_putstr_fd("' : not a valid identifier\n", 2);
 }
 
 int	check_identifier(t_global *global, int j, int idx_args)
@@ -57,13 +48,7 @@ int	check_identifier(t_global *global, int j, int idx_args)
 	str = global->struct_id[j].split_command[idx_args];
 	while (global->struct_id[j].split_command[idx_args][i])
 	{
-		if (str[i] == '=' && !str[i + 1] && i == 0)
-		{
-			export_error_message(global->struct_id[j].split_command[idx_args]);
-			g_status = 1;
-			return (0);
-		}
-		if (!ft_identifier(str[i], str, -1))
+		if (!ft_identifier(str))
 		{
 			export_error_message(global->struct_id[j].split_command[idx_args]);
 			g_status = 1;

@@ -192,7 +192,6 @@ void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
 
 /*********************** ENV **************************/
 int						print_env(t_global *glo, int j);
-int						identifier_last(int c, char *str);
 
 /******************* /BUILTINS ************************/
 int						cd(t_global *global, int i);
