@@ -6,13 +6,13 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:43:14 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/12 05:03:21 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:33:56 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-t_list_mini	*ft_lstlaste(t_list_mini *lst)
+static t_list_mini	*ft_lstlaste(t_list_mini *lst)
 {
 	if (!lst)
 		return (0);

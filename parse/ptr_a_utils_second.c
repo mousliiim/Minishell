@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 21:41:17 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:16:47 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	pa_add(t_ptr_array *pa, void *new_str)
 {
 	if (pa->size == pa->capacity)
 	{
-		fprintf(stderr, "par ici\n");
 		pa->capacity *= 2;
 		pa->array = ft_realloc(pa->array, pa->size, pa->capacity
 				* sizeof(void *));

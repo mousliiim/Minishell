@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 19:18:34 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:12:09 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-void	line_negatif_expand(char *input)
+static void	line_negatif_expand(char *input)
 {
 	size_t	i;
 
@@ -29,7 +29,7 @@ void	line_negatif_expand(char *input)
 	}
 }
 
-int	advance_idx(char *input, int *i, int *start, int *flag)
+static int	advance_idx(char *input, int *i, int *start, int *flag)
 {
 	if (input[*i] == '\'')
 		*flag *= -1;
@@ -47,7 +47,7 @@ int	advance_idx(char *input, int *i, int *start, int *flag)
 	return (1);
 }
 
-void	change_flags(char *input, int i, t_expand *expand)
+static void	change_flags(char *input, int i, t_expand *expand)
 {
 	if (input[i] == '"' && expand->skip != -1)
 		expand->skip = 42;

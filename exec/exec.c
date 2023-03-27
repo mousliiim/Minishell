@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 21:28:00 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:40:59 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,29 @@ void	waiting(t_global *global, int size_wait)
 	signal(SIGQUIT, SIG_IGN);
 }
 
+static int	forking(t_global *glo, unsigned long i)
+{
+	t_builtins	built_ptr;
+
+	built_ptr = 0;
+	glo->fd_solo_redirection = -1;
+	if (glo->struct_id[i].split_command && glo->struct_id[i].split_command[0])
+	{
+		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
+		if (glo->nb == 1 && built_ptr)
+		{
+			builtin_solo_process(glo, built_ptr, i);
+			return (glo->nb--, 0);
+		}
+	}
+	glo->forkstates[i] = fork();
+	if (glo->forkstates[i] == 0)
+		child_process(glo, built_ptr, i);
+	else if (glo->forkstates[i] > 0)
+		father_process(glo, i);
+	return (0);
+}
+
 int	go_exec(t_global *global)
 {
 	size_t	i;
@@ -65,29 +88,6 @@ int	go_exec(t_global *global)
 	if (global->link[0] != -1)
 		close(global->link[0]);
 	free(global->forkstates);
-	return (0);
-}
-
-int	forking(t_global *glo, unsigned long i)
-{
-	t_builtins	built_ptr;
-
-	built_ptr = 0;
-	glo->fd_solo_redirection = -1;
-	if (glo->struct_id[i].split_command && glo->struct_id[i].split_command[0])
-	{
-		built_ptr = find_ptr_builtin(glo->struct_id[i].split_command[0]);
-		if (glo->nb == 1 && built_ptr)
-		{
-			builtin_solo_process(glo, built_ptr, i);
-			return (glo->nb--, 0);
-		}
-	}
-	glo->forkstates[i] = fork();
-	if (glo->forkstates[i] == 0)
-		child_process(glo, built_ptr, i);
-	else if (glo->forkstates[i] > 0)
-		father_process(glo, i);
 	return (0);
 }
 

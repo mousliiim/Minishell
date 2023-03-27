@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:40:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 21:52:50 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:10:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-void	mini_itoa(t_global *glo)
+static void	mini_itoa(t_global *glo)
 {
 	int	tmp_status;
 	int	i;

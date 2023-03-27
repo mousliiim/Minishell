@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:30 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/24 22:25:40 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:41:58 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-void	cd_error_message(char *str, int choice)
+static void	cd_error_message(char *str, int choice)
 {
 	if (choice == 1)
 	{
@@ -28,7 +28,7 @@ void	cd_error_message(char *str, int choice)
 	g_status = 1;
 }
 
-int	len_split_command(t_global *glo, int idx)
+static int	len_split_command(t_global *glo, int idx)
 {
 	int	i;
 

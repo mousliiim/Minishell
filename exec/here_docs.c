@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:06:20 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/24 22:28:51 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:01:29 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_global	*endton(t_global *glo)
 	return (global);
 }
 
-void	waiting_hd(t_global *global, int forkstate)
+static void	waiting_hd(t_global *global, int forkstate)
 {
 	int	status;
 
@@ -38,7 +38,7 @@ void	waiting_hd(t_global *global, int forkstate)
 	global->status = status;
 }
 
-void	loop_here_docks(t_airdock *airdock, t_global *glo, t_list_mini *head)
+static void	loop_here_docks(t_airdock *airdock, t_global *glo, t_list_mini *head)
 {
 	while (1)
 	{

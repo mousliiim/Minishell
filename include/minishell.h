@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 21:40:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:40:23 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,166 +119,140 @@ typedef struct s_expand
 
 typedef int				(*t_builtins)(t_global *, int);
 
-/********************* PARSE/PTR_A_UTILS **********************/
-int						find_option(char **tab, char **arg, char *tmp,
-							int *array[2]);
-t_ptr_array				pa_new(void);
-void					pa_pop(t_ptr_array *array, size_t index);
-void					pa_delete(t_ptr_array *pa);
-void					pa_pop_replace(t_ptr_array *array, size_t index,
-							void *new);
-/********************************************************/
+/*************** /BUILTINS ***************/
+/************      CD        *************/
+int				cd(t_global *global, int i);
+/************      ECHO      *************/
+int				echo(t_global *glo, int j);
+/************      EXIT      *************/
+int				builtin_exit(t_global *global, int j);
+/************      EXPORT    *************/
+int				check_env(t_global *global, int j, int idx_args, int stuff);
+int				export(t_global *global, int j);
+/************      PWD       *************/
+int				pwd(t_global *glo, int j);
+/************      UNSET     *************/
+int				unset(t_global *glo, int j);
+/*****************************************/
 
-/****************** PARSE/PTR_A_UTILS_SECOND *******************/
-int						pa_add(t_ptr_array *pa, void *ptr);
-size_t					pa_size(t_ptr_array *pa);
-void					*pa_get(t_ptr_array *pa, size_t index);
-void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
-/********************************************************/
+/****************** /ENV *****************/
+/************      ENV      **************/
+int				print_env(t_global *glo, int j);
+/**********    PATH_UTILS      ***********/
+t_ptr_array		build_personal_env(char **env);
+char			**set_path(t_global *global);
+int				find_path_for_each_command(t_global *global);
+/*****************************************/
 
-/******************* ENV/PATH_UTILS ************************/
-char					**set_path(t_global *global);
-t_ptr_array				build_personal_env(char **env);
-int						find_path_for_each_command(t_global *global);
-/******************************************************/
+/***************** /EXEC *****************/
+/*******     DIVIDED_PROCESS     *********/
+int				child_process(t_global *glo, t_builtins built_ptr,
+					unsigned long i);
+void			father_process(t_global *glo, unsigned long i);
+void			builtin_solo_process(t_global *glo, t_builtins built_ptr,
+					unsigned long i);
+/************     EXEC     ***************/
+void			waiting(t_global *global, int size_wait);
+int				go_exec(t_global *global);
+void			dupnclose(int fd1, int fd2);
+t_builtins		find_ptr_builtin(char *ptr);
+/***********     HERE_DOCS    ************/
+t_global		*endton(t_global *glo);
+int				start_heredoc(t_global *glo, int j, t_list_mini *head,
+					int nbhd);
+void			len_heredoc(t_global *glo, size_t nb_command);
+/**********     REDIRECTIONS    **********/
+void			file_name_to_positif(t_list_mini *list);
+int				openfiles(t_global *glo, int j);
+int				openfiles_bt(t_global *glo, int j);
+/****************************************/
 
-/******************* EXEC/HERE_DOCS ************************/
-t_global				*endton(t_global *glo);
-int						start_heredoc(t_global *glo, int j, t_list_mini *head,
-							int nbhd);
-void					len_heredoc(t_global *glo, size_t nb_command);
-/******************************************************/
+/*************     /FREE     **************/
+/*****     FREE_FUNCTION_SEQUEL      ******/
+void			free_shell(t_global *global, char *input, int choice);
+void			free_exec_malloc(t_global *global);
+void			free_path_malloc(t_global *global);
+void			free_array(t_ptr_array pa);
+/********      FREE_FUNCTION      *********/
+void			hd_free_inchild(t_global *glo);
+void			free_splitted_line(t_split_line *del);
+void			free_double_str(char **str);
+void			free_inchild(t_global *glo);
+char			**ft_free(char **str, int i);
+/*****************************************/
 
-/*********************** PARSING ***********************/
-char					**ft_split_rafter(char *line);
-int						first_command(char **tab, char **arg, char *tmp,
-							int *array[2]);
-size_t					ft_strlcpy2(char *dst, const char *src, size_t size);
-char					**ft_have_two_word(char **tab, int j);
-int						check_first_char(char *line);
-void					catch_heredocs(t_global *glo, size_t nb_command);
-int						ft_clean_quotes(char **line);
-int						rafter_cut(t_tab_struct *tab_struct,
-							t_split_line splitted_line,
-							int j);
-/******************************************************/
+/*************     /PARSE     **************/
+/************     EXPAND_2     *************/
+char			*find_expand(t_global *glo, char *find, t_expand *exp);
+char			*catch_expand(t_global *glo, char *input);
+/*************    EXPAND     ***************/
+size_t			get_replacement_size(t_global *glo, t_expand *exp, char *input,
+					size_t len_to_malloc);
+void			replace_variables(t_global *glo, t_expand *exp, char *input,
+					char *new_input);
+/************     PARSING     *************/
+int				ft_clean_quotes(char **line);
+int				first_command(char **tab, char **arg, char *tmp, int *array[2]);
+char			**ft_split_rafter(char *line);
+void			catch_heredocs(t_global *glo, size_t nb_command);
+/********    PTR_A_UTILS_SECOND   *********/
+int				pa_add(t_ptr_array *pa, void *new_str);
+size_t			pa_size(t_ptr_array *pa);
+void			*pa_get(t_ptr_array *pa, size_t index);
+void			before_exec_to_positif(t_tab_struct *tab_struct, int j);
+/**********      PTR_A_UTILS   ***********/
+int				find_option(char **tab, char **arg, char *tmp, int *array[2]);
+void			pa_pop_replace(t_ptr_array *array, size_t index, void *new);
+void			pa_pop(t_ptr_array *array, size_t index);
+t_ptr_array		pa_new(void);
+void			pa_delete(t_ptr_array *pa);
+/************      RAFTER   *************/
+int				rafter_line(char *line);
+int				check_first_char(char *line);
+int				rafter_cut(t_tab_struct *tab_struct, t_split_line splitted_line,
+					int j);
+/*********       SPLIT_PARSING   ********/
+char			**ft_have_two_word(char **tab, int j);
+t_split_line	split_line(char *line);
+int				split_input(t_split_line splitted_line,
+					t_tab_struct *tab_struct);
+/*********       SYNTAX_CHECK   ********/
+int				quote_checker(char *line);
+int				rafter_check(char *str, int i, int *flag, int choice);
+int				rafter_checker(char *str);
+int				pipe_checker(char *line);
+void			line_negatif(char *line);
+/*****************************************/
 
-/******************* PARSE_CHECK ************************/
-void					line_negatif(char *line);
-int						quote_checker(char *line);
-int						rafter_check(char *str, int i, int *flag, int choice);
-int						rafter_checker(char *str);
-int						pipe_checker(char *line);
-/********************************************************/
+/************     /SIGNAL     ************/
+/************     SIGNAL     *************/
+void			handle_signal_waiting(int signal_number);
+void			ctrl_d(int status);
+void			ctrl_c(int sig);
+void			ctrl_antislash(int sig);
+void			quit_hd(int sign);
+/*****************************************/
 
-/******************* EXPAND ********************/
-void					mini_itoa(t_global *glo);
-char					*catch_expand(t_global *glo, char *input);
-char					*find_expand(t_global *glo, char *find, t_expand *exp);
-size_t					get_replacement_size(t_global *glo, t_expand *exp,
-							char *input, size_t len_to_malloc);
-void					replace_variables(t_global *glo, t_expand *exp,
-							char *input, char *new_input);
-/******************************************************/
-
-/******************* PARSE/SPLIT_PARSING.c ********************/
-int						split_input(t_split_line splitted_line,
-							t_tab_struct *tab_struct);
-t_split_line			split_line(char *line);
-void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
-/******************************************************/
-
-/*********************** ENV **************************/
-int						print_env(t_global *glo, int j);
-
-/******************* /BUILTINS ************************/
-int						cd(t_global *global, int i);
-int						echo(t_global *glo, int j);
-int						builtin_exit(t_global *global, int j);
-int						export(t_global *global, int j);
-int						pwd(t_global *glo, int j);
-int						unset(t_global *glo, int j);
-/******************************************************/
-
-/*********************** RAFTER ***********************/
-int						rafter_line(char *line);
-int						check_first_char(char *line);
-/******************************************************/
-
-/*********************** EXEC ***********************/
-int						go_exec(t_global *global);
-void					dupnclose(int fd1, int fd2);
-int						forking(t_global *global, unsigned long i);
-t_builtins				find_ptr_builtin(char *ptr);
-void					waiting(t_global *global, int size_wait);
-/***************************************************/
-
-/*******************REDIRECTIONS*********************/
-void					file_name_to_positif(t_list_mini *list);
-int						openfiles_bt(t_global *glo, int j);
-int						openfiles(t_global *glo, int j);
-/***************************************************/
-
-/*******************DIVIDED_PROCESS*********************/
-int						child_process(t_global *glo, t_builtins built_ptr,
-							unsigned long i);
-void					father_process(t_global *glo, unsigned long i);
-void					builtin_solo_process(t_global *glo,
-							t_builtins built_ptr,
-							unsigned long i);
-void					error_msg(int err, char *cmd);
-/***************************************************/
-
-/*********************** SIGNAL ***********************/
-void					handle_signal_waiting(int signal_number);
-void					ctrl_antislash(int sig);
-void					ctrl_c(int sig);
-void					ctrl_d(int status);
-void					quit_hd(int sign);
-/***************************************************/
-
-/*********************** UTILS ***********************/
-int						syntax_checker(char *line);
-char					*ft_no_take_first_word(char *line);
-void					*ft_realloc(void **old, size_t old_c, size_t new_c);
-t_type					return_redir_enum(char *line);
-char					*return_file_name(char *line);
-/*****************************************************/
-
-/******************* UTILS_SECOND *********************/
-char					*ft_strcpy(char *dest, const char *src, int choice);
-char					*ft_strdup2(char const *s, int choice);
-void					ft_strjoin2(char **line, const char *s1);
-int						is_operator(char *c, int j);
-void					line_positif(char *line);
-/*****************************************************/
-
-/******************** LST_UTILS ********************/
-t_list_mini				*ft_lstlaste(t_list_mini *lst);
-t_list_mini				*ft_lstnewe(void *content, t_type type);
-void					ft_lstadde_back(t_list_mini **lst, t_list_mini *new);
-void					ft_lstcleare(t_list_mini **lst, void (*del)(void *));
-void					clear_lst(t_tab_struct *tab_struct, size_t size);
-/*****************************************************/
-
-/****************** FREE_FUNCTION ********************/
-void					hd_free_inchild(t_global *glo);
-void					free_splitted_line(t_split_line *del);
-void					free_double_str(char **str);
-void					free_inchild(t_global *glo);
-char					**ft_free(char **str, int i);
-/*****************************************************/
-
-/*************** FREE_FUNCTION_SEQUEL ****************/
-void					free_shell(t_global *global, char *input, int choice);
-void					free_array(t_ptr_array pa);
-void					free_path_malloc(t_global *global);
-void					free_exec_malloc(t_global *global);
-/*****************************************************/
-
-/********************* PROMPT ************************/
-int						get_git_branch(void);
-char					*build_prompt(int opt);
-/*****************************************************/
+/************     /UTILS     *************/
+/**********     LST_UTILS     ************/
+t_list_mini		*ft_lstnewe(void *content, t_type type);
+void			ft_lstadde_back(t_list_mini **lst, t_list_mini *new);
+void			ft_lstcleare(t_list_mini **lst, void (*del)(void *));
+void			clear_lst(t_tab_struct *tab_struct, size_t size);
+/************     PROMPT     **************/
+char			*build_prompt(int opt);
+/**********    UTILS_SECOND     ***********/
+char			*ft_strcpy(char *dest, const char *src, int choice);
+char			*ft_strdup2(char const *s, int choice);
+void			ft_strjoin2(char **line, const char *s1);
+int				is_operator(char *c, int j);
+void			line_positif(char *line);
+/************     UTILS     **************/
+int				syntax_checker(char *line);
+char			*ft_no_take_first_word(char *line);
+void			*ft_realloc(void **old, size_t old_c, size_t new_c);
+t_type			return_redir_enum(char *line);
+char			*return_file_name(char *line);
+/*****************************************/
 
 #endif

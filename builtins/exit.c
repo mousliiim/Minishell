@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 03:30:58 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:43:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 extern int	g_status;
 #define LL_MAXOU 9223372036854775807UL
 
-void	error_message_exit(char *str)
+static void	error_message_exit(char *str)
 {
 	ft_putstr_fd("miniboosted: exit: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
-long long	ft_atoulld(const char *str)
+static long long	ft_atoulld(const char *str)
 {
 	int					neg;
 	int					i;

@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:08:57 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 18:38:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 23:27:01 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**ft_have_two_word(char **tab, int j)
 	return (free(arg), split);
 }
 
-t_split_line	split_line_c(char *s, int i, int go, t_split_line res)
+static t_split_line	split_line_c(char *s, int i, int go, t_split_line res)
 {
 	char	*tmp;
 
@@ -88,7 +88,7 @@ t_split_line	split_line(char *line)
 	return (res);
 }
 
-void	ft_free_input(t_tab_struct *tab_struct, size_t size)
+static void	ft_free_input(t_tab_struct *tab_struct, size_t size)
 {
 	size_t	i;
 

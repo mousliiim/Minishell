@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 04:13:12 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 22:51:51 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern int	g_status;
 
-int	pa_add_env(t_ptr_array *pa, char *new_str)
+static int	pa_add_env(t_ptr_array *pa, char *new_str)
 {
 	t_ptr_array	tmp;
 
@@ -87,7 +87,7 @@ char	**set_path(t_global *global)
 	return (0);
 }
 
-int	sub_path_command(t_global *global, int i)
+static int	sub_path_command(t_global *global, int i)
 {
 	int				j;
 	char			*command_w_path;
