@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 21:02:37 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:41:17 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,3 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 		}
 	}
 }
-

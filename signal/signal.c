@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 21:35:07 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:40:54 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	ctrl_d(int status)
 	ft_putendl_fd("exit", 2);
 	exit(status);
 }
-	
+
 void	ctrl_c(int sig)
 {
 	if (sig == SIGINT)

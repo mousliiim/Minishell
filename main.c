@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:47:32 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 19:14:48 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:50:59 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ static int	loop_shell(t_global *global, char *input)
 
 	add_history(input);
 	if (!syntax_checker(input))
-	{
 		return (g_status = 2, -42);
-	}
 	input = catch_expand(global, input);
 	if (!input)
 		free_shell(global, input, 0);

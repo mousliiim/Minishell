@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 21:08:56 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:40:42 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,12 +279,6 @@ void					free_exec_malloc(t_global *global);
 /********************* PROMPT ************************/
 int						get_git_branch(void);
 char					*build_prompt(int opt);
-/*****************************************************/
-
-/****************** TMP_UTILS ************************/
-void					display_split(t_tab_struct *tab_struct, t_global *info);
-void					print_tab(char **str);
-void					display(t_list_mini *head);
 /*****************************************************/
 
 #endif

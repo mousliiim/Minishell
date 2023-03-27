@@ -6,7 +6,7 @@
 /*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:40:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 19:18:03 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 21:52:50 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,11 @@ char	*find_expand(t_global *glo, char *find, t_expand *exp)
 	return (0);
 }
 
-// 
+static void	ft_just_raft(char *new_input)
+{
+	if (check_first_char(new_input))
+		ft_strcpy(new_input, new_input, 1);
+}
 
 char	*catch_expand(t_global *glo, char *input)
 {
@@ -93,6 +97,6 @@ char	*catch_expand(t_global *glo, char *input)
 	ft_memset(&exp, 0, sizeof(exp));
 	replace_variables(glo, &exp, input, new_input);
 	free(input);
-	// ft_just_raft(new_input);
+	ft_just_raft(new_input);
 	return (new_input);
 }
