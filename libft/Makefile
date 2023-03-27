@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+         #
+#    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/05 17:21:41 by mparisse          #+#    #+#              #
-#    Updated: 2023/03/24 22:13:38 by mmourdal         ###   ########.fr        #
+#    Updated: 2023/03/27 03:23:37 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ CFLAGS = -Wall -Werror -Wextra
 all:	${NAME}
 
 .c.o :
-	@gcc -Wall -Werror -Wall -c $< -o ${<:.c=.o}
+	@cc -Wall -Werror -Wextra -c $< -o ${<:.c=.o}
 
 ${NAME}:	${OBJS}
 		@ar rcs libft.a ${OBJS}

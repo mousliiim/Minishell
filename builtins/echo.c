@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:49 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 03:03:17 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:26:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	is_hyphen(char **arg)
 		{
 			write(1, arg[j], ft_strlen(arg[j]));
 			j++;
-			if (arg[j + 1])
+			if (arg[j])
 				write(1, " ", 1);
 		}
 		return (1);
