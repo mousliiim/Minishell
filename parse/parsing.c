@@ -3,42 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/26 23:40:17 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:39:28 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 extern int	g_status;
-
-void	clean_quote(char **line, char *tmp, int ij[2], int *delim)
-{
-	int	count;
-
-	count = 0;
-	if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') &&
-			(count == 0 || *delim != (*line)[ij[0]]))
-	{
-		*delim = (*line)[ij[0]];
-		ij[0]++;
-		count++;
-	}
-	else if ((*line)[ij[0]] == *delim)
-	{
-		delim = 0;
-		ij[0]++;
-		count--;
-	}
-	else
-	{
-		tmp[ij[1]] = (*line)[ij[0]];
-		ij[0]++;
-		ij[1]++;
-	}
-}
 
 int	ft_clean_quotes(char **line)
 {

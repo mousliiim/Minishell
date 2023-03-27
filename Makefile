@@ -6,7 +6,7 @@
 #    By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/03/10 03:16:15 by mmourdal          #+#    #+#              #
-#    Updated: 2023/03/27 00:51:30 by mparisse         ###   ########.fr        #
+#    Updated: 2023/03/27 02:35:52 by mparisse         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,7 @@ SRC_FILES	=	$(addprefix parse/, \
 				$(addprefix free/, \
 				free_function.c free_function_sequel.c) \
 				\
-				main.c tmp_utils.c
+				main.c
 
 ################################################################################
 #                                  OBJETS                                      #

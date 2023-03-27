@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:49 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:22:32 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:03:17 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ static int	is_hyphen(char **arg)
 {
 	int	j;
 
-	j = 0;
 	if (arg[1][0] == '-' && arg[1][1] != 'n')
 	{
 		j = 1;
@@ -55,10 +54,9 @@ static int	is_hyphen(char **arg)
 		{
 			write(1, arg[j], ft_strlen(arg[j]));
 			j++;
-			if (arg[j])
+			if (arg[j + 1])
 				write(1, " ", 1);
 		}
-		write(1, "\n", 1);
 		return (1);
 	}
 	return (0);
@@ -69,8 +67,11 @@ static void	print(char **arg, int i)
 	int	have_option;
 
 	have_option = (i > 1);
-	if (is_hyphen(arg))
-		return ;
+	if (arg[1])
+	{
+		if (is_hyphen(arg))
+			return ;
+	}
 	while (arg[i])
 	{
 		if (arg[i + 1])

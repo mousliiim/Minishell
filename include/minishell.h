@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 02:20:29 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:44:09 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,8 @@ int						pa_add(t_ptr_array *pa, void *ptr);
 size_t					pa_size(t_ptr_array *pa);
 void					*pa_get(t_ptr_array *pa, size_t index);
 void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
+void					clean_quote(char **line, char *tmp, int ij[2],
+							int *delim);
 /********************************************************/
 
 /******************* ENV/PATH_UTILS ************************/

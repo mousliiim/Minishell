@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 05:34:48 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 01:41:42 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:50:34 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,18 @@ void	*ft_realloc(void **old, size_t old_c, size_t new_c)
 t_type	return_redir_enum(char *line)
 {
 	int		i;
-	t_type	type;
 
 	i = 0;
 	while (line[i] == ' ')
 		i++;
 	if (line[i] == '>' && line[i + 1] != '>')
-		return (type = OUT);
+		return (OUT);
 	else if (line[i] == '<' && line[i + 1] != '<')
-		return (type = IN);
+		return (IN);
 	else if (line[i] == '<' && line[i + 1] == '<')
-		return (type = HERE_DOC);
+		return (HERE_DOC);
 	else if (line[i] == '>' && line[i + 1] == '>')
-		return (type = APPEND);
+		return (APPEND);
 	return (0);
 }
 

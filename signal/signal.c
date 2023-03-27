@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:00:43 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:38:56 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 extern int	g_status;
 
-void handle_signal_waiting(int signal_number)
+void	handle_signal_waiting(int signal_number)
 {
-    if (signal_number == SIGINT)
+	if (signal_number == SIGINT)
 	{
 		write(2, "\n", 1);
 		g_status = 130;
 	}
-    else if (signal_number == SIGQUIT)
+	else if (signal_number == SIGQUIT)
 		g_status = 131;
 }
 
@@ -56,7 +56,7 @@ void	quit_hd(int sign)
 {
 	t_global	*glo;
 
-	(void) sign;
+	(void)sign;
 	write(1, "\n", 1);
 	rl_clear_history();
 	glo = NULL;

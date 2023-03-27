@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/22 07:07:05 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 00:51:55 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:08:51 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ extern int	g_status;
 
 int	openfiles(t_global *glo, int j)
 {
-	t_list_mini	*list;
-	int			fd;
+	t_list_mini			*list;
+	static int			fd = -1;
 
 	list = glo->struct_id[j].head;
 	while (list)
@@ -45,8 +45,8 @@ int	openfiles(t_global *glo, int j)
 
 int	openfiles_bt(t_global *glo, int j)
 {
-	t_list_mini	*list;
-	int			fd;
+	t_list_mini			*list;
+	static int			fd = -1;
 
 	list = glo->struct_id[j].head;
 	while (list)

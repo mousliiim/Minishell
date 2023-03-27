@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils_second.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/26 03:07:15 by mmourdal         ###   ########.fr       */
+/*   Updated: 2023/03/27 02:40:25 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,31 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 			line_positif(tab_struct[j].split_command[k]);
 			k++;
 		}
+	}
+}
+
+void	clean_quote(char **line, char *tmp, int ij[2], int *delim)
+{
+	int	count;
+
+	count = 0;
+	if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') &&
+			(count == 0 || *delim != (*line)[ij[0]]))
+	{
+		*delim = (*line)[ij[0]];
+		ij[0]++;
+		count++;
+	}
+	else if ((*line)[ij[0]] == *delim)
+	{
+		delim = 0;
+		ij[0]++;
+		count--;
+	}
+	else
+	{
+		tmp[ij[1]] = (*line)[ij[0]];
+		ij[0]++;
+		ij[1]++;
 	}
 }
