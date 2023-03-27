@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/27 17:44:33 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 02:39:28 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 19:48:57 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,27 @@ extern int	g_status;
 
 int	ft_clean_quotes(char **line)
 {
-	int		ij[2];
+	int		ijq[3];
 	char	*tmp;
-	int		delim;
 
-	if (!line || !(*line))
-		return (0);
-	ij[0] = 0;
-	ij[1] = 0;
-	delim = 0;
+	ft_bzero(ijq, sizeof(int) * 3);
 	tmp = malloc(sizeof(char) * (ft_strlen(*line) + 1));
 	if (!tmp)
 		return (0);
-	while ((*line)[ij[0]])
-		clean_quote(line, tmp, ij, &delim);
-	tmp[ij[1]] = '\0';
+	while ((*line)[ijq[0]])
+	{
+		if ((*line)[ijq[0]] == '\'' || (*line)[ijq[0]] == '\"')
+		{
+			ijq[2] = (*line)[ijq[0]++];
+			while ((*line)[ijq[0]] && (*line)[ijq[0]] != ijq[2])
+				tmp[ijq[1]++] = (*line)[ijq[0]++];
+			if ((*line)[ijq[0]] == ijq[2])
+				ijq[0]++;
+		}
+		else
+			tmp[ijq[1]++] = (*line)[ijq[0]++];
+	}
+	tmp[ijq[1]] = '\0';
 	free(*line);
 	*line = tmp;
 	return (1);

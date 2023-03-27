@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ptr_a_utils_second.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 23:59:26 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:40:25 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 19:55:37 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,25 @@ void	before_exec_to_positif(t_tab_struct *tab_struct, int j)
 	}
 }
 
-void	clean_quote(char **line, char *tmp, int ij[2], int *delim)
+void	clean_quote(char **line, char *tmp, int ijc[3], int *delim)
 {
-	int	count;
-
-	count = 0;
-	if (((*line)[ij[0]] == '"' || (*line)[ij[0]] == '\'') &&
-			(count == 0 || *delim != (*line)[ij[0]]))
+	if (((*line)[ijc[0]] == '"' || (*line)[ijc[0]] == '\'') &&
+			(ijc[2] == 0 || *delim != (*line)[ijc[0]]))
 	{
-		*delim = (*line)[ij[0]];
-		ij[0]++;
-		count++;
+		*delim = (*line)[ijc[0]];
+		(ijc[0])++;
+		(ijc[2])++;
 	}
-	else if ((*line)[ij[0]] == *delim)
+	else if ((*line)[ijc[0]] == *delim)
 	{
 		delim = 0;
-		ij[0]++;
-		count--;
+		(ijc)[0]++;
+		(ijc)[2]--;
 	}
 	else
 	{
-		tmp[ij[1]] = (*line)[ij[0]];
-		ij[0]++;
-		ij[1]++;
+		tmp[ijc[1]] = (*line)[ijc[0]];
+		(ijc)[0]++;
+		(ijc)[1]++;
 	}
 }

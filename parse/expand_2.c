@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/27 00:40:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 01:00:12 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 19:18:03 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ char	*find_expand(t_global *glo, char *find, t_expand *exp)
 	return (0);
 }
 
+// 
+
 char	*catch_expand(t_global *glo, char *input)
 {
 	int			tmp;
@@ -81,7 +83,7 @@ char	*catch_expand(t_global *glo, char *input)
 	len_to_malloc = tmp;
 	if (!len_to_malloc)
 		return (input);
-	new_input = ft_calloc(sizeof(char), len_to_malloc);
+	new_input = ft_calloc(sizeof(char), len_to_malloc + 1);
 	if (!new_input)
 	{
 		free_double_str((char **)glo->personal_env.array);
@@ -91,5 +93,6 @@ char	*catch_expand(t_global *glo, char *input)
 	ft_memset(&exp, 0, sizeof(exp));
 	replace_variables(glo, &exp, input, new_input);
 	free(input);
+	// ft_just_raft(new_input);
 	return (new_input);
 }

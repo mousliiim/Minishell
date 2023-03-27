@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmourdal <mmourdal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 05:13:37 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:32:28 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 19:18:34 by mmourdal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	change_flags(char *input, int i, t_expand *expand)
 {
 	if (input[i] == '"' && expand->skip != -1)
 		expand->skip = 42;
-	if (input[i] == '\'')
+	if (input[i] == '\'' && expand->skip != 42)
 		expand->skip *= -1;
 }
 
