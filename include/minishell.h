@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 03:48:24 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 02:44:09 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 04:39:57 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,6 +192,7 @@ void					before_exec_to_positif(t_tab_struct *tab_struct, int j);
 
 /*********************** ENV **************************/
 int						print_env(t_global *glo, int j);
+int						identifier_last(int c, char *str);
 
 /******************* /BUILTINS ************************/
 int						cd(t_global *global, int i);

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 01:03:02 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 01:04:09 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:30:58 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	error_message_exit(char *str)
 {
 	ft_putstr_fd("miniboosted: exit: ", 2);
 	ft_putstr_fd(str, 2);
-	ft_putstr_fd(": numeric argument required", 2);
+	ft_putstr_fd(": numeric argument required\n", 2);
 }
 
 long long	ft_atoulld(const char *str)

@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:24:20 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:38:56 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:54:20 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,15 @@ void	ctrl_c(int sig)
 void	ctrl_antislash(int sig)
 {
 	if (sig == SIGQUIT)
+	{
+		g_status = 131;
 		exit(131);
+	}
 	if (sig == SIGINT)
+	{
+		g_status = 130;
 		exit(130);
+	}
 }
 
 void	quit_hd(int sign)

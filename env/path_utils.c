@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/09 03:00:29 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/25 18:09:11 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 04:13:12 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	**set_path(t_global *global)
 			if (ft_strnstr((char *)global->personal_env.array[i], "PATH=", 5))
 			{
 				path = ft_split((char *)global->personal_env.array[i] + 5, ':');
-				if (!path || !*path)
+				if (!path)
 				{
 					free_path_malloc(global);
 					return (0);

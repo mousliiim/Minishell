@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/25 19:30:44 by mparisse          #+#    #+#             */
-/*   Updated: 2023/03/27 02:00:37 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 03:56:31 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,18 @@ void	waiting(t_global *global, int size_wait)
 	i = 0;
 	status = 0;
 	check = 0;
-	signal(SIGINT, handle_signal_waiting);
-	signal(SIGQUIT, handle_signal_waiting);
 	while (i < size_wait)
 	{
+		signal(SIGINT, handle_signal_waiting);
+		signal(SIGQUIT, handle_signal_waiting);
 		waitpid(global->forkstates[i], &status, 0);
+		if (WIFEXITED(status))
+			g_status = WEXITSTATUS(status);
 		if (g_status == 131 && !check++)
 			ft_printf("Quit (core dumped)\n");
 		i++;
 	}
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	go_exec(t_global *global)

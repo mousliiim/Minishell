@@ -6,7 +6,7 @@
 /*   By: mparisse <mparisse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/10 00:51:53 by mmourdal          #+#    #+#             */
-/*   Updated: 2023/03/27 02:18:06 by mparisse         ###   ########.fr       */
+/*   Updated: 2023/03/27 04:42:08 by mparisse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,8 @@
 
 extern int	g_status;
 
-int	ft_identifier(int c, char *str)
+static int	ft_identifier(int c, char *str, int i)
 {
-	int	i;
-
-	i = -1;
 	if (ft_isdigit(c) || c == '\\')
 	{
 		while (str[++i] != '=')
@@ -39,6 +36,8 @@ int	ft_identifier(int c, char *str)
 	}
 	if (ft_isalpha(c) || c == '_' || c == '=')
 		return (1);
+	if (identifier_last(c, str))
+		return (1);
 	return (0);
 }
 
@@ -58,7 +57,13 @@ int	check_identifier(t_global *global, int j, int idx_args)
 	str = global->struct_id[j].split_command[idx_args];
 	while (global->struct_id[j].split_command[idx_args][i])
 	{
-		if (!ft_identifier(str[i], str))
+		if (str[i] == '=' && !str[i + 1] && i == 0)
+		{
+			export_error_message(global->struct_id[j].split_command[idx_args]);
+			g_status = 1;
+			return (0);
+		}
+		if (!ft_identifier(str[i], str, -1))
 		{
 			export_error_message(global->struct_id[j].split_command[idx_args]);
 			g_status = 1;
